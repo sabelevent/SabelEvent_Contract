@@ -98,7 +98,6 @@
                 color: #000 !important;
                 padding: 2px 0 !important;
             }
-            /* PDF Print Cleanups & Full View */
             .print-hide-extras {
                 display: none !important;
             }
@@ -354,7 +353,6 @@
 
             <!-- Section 5: Signature Method Selection -->
             <div class="mb-8">
-                <!-- Title changes to "ፊርማ" during PDF/Print -->
                 <h2 class="text-lg font-bold text-gold-400 border-l-4 border-gold-500 pl-3 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-signature"></i> <span class="no-print">፭. የፊርማ ዓይነት መረጣ <span class="text-red-400">*</span></span><span class="hidden print:inline">ፊርማ</span>
                 </h2>
@@ -371,8 +369,8 @@
                         </label>
                     </div>
 
-                    <!-- Digital Signature Pad Container -->
-                    <div id="digitalSigContainer" class="space-y-2 pt-2">
+                    <!-- Digital Signature & Representative Block (Shown on Screen and PDF for Digital) -->
+                    <div id="digitalSigContainer" class="space-y-4 pt-2">
                         <div class="flex justify-between items-center no-print">
                             <span class="text-xs text-gray-400">እባክዎን ከታች ባለው ሳጥን ላይ ይፈረሙ፡</span>
                             <button type="button" onclick="clearSignature()" class="text-xs text-red-400 hover:text-red-300 underline font-semibold">
@@ -387,10 +385,18 @@
                                 እዚህ ጋር ይፈረሙ...
                             </div>
                         </div>
-                        
-                        <!-- Digital Signature Label for PDF Print Only (No second line) -->
-                        <div id="digitalPrintLabel" class="hidden print:block text-sm text-black font-semibold pt-1">
-                            ፊርማ :-
+
+                        <!-- Digital Mode Output Format -->
+                        <div class="text-sm text-gray-200 print:text-black space-y-2 pt-2">
+                            <div>የደንበኛው/ዋ ስም:- <span id="printClientName" class="border-b border-dashed border-gray-500 px-2">_________________</span></div>
+                            <div>ቀን :- <span id="printDate" class="border-b border-dashed border-gray-500 px-2">_______________</span></div>
+                            <div class="font-semibold pt-1">ፊርማ :-</div>
+                        </div>
+
+                        <div class="border-t border-gray-700 print:border-gray-300 pt-3 mt-4 space-y-2 text-sm text-gray-200 print:text-black">
+                            <div>የሳቤል ሰብሳቢ :- ________________</div>
+                            <div>ቀን :- _________________</div>
+                            <div class="font-semibold pt-1">ፊርማ :- ________________</div>
                         </div>
                     </div>
 
@@ -399,9 +405,14 @@
                         <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም (Physical) ስለተመረጠ፣ ይህን ውል አትመው (Print አድርገው) በአካል በእጅዎ መፈረም ይችላሉ።
                     </div>
 
-                    <!-- Physical Signature Line for PDF Print (Only when physical is selected) -->
-                    <div id="physicalPrintLine" class="hidden text-sm text-black font-semibold pt-2">
-                        ፊርማ :- _________________
+                    <!-- Physical Signature Lines for PDF Print (Only when physical is selected) -->
+                    <div id="physicalPrintLines" class="hidden text-sm text-black font-semibold pt-2 space-y-3">
+                        <div>የደንበኛው/ዋ ስም:- _________________</div>
+                        <div>ቀን :-  _______________</div>
+                        <div>ፊርማ :-_________________</div>
+                        <div class="pt-2">የሳቤል ሰብሳቢ :- ________________</div>
+                        <div>ቀን :- _________________</div>
+                        <div>ፊርማ :- __________________</div>
                     </div>
                 </div>
             </div>
@@ -497,16 +508,16 @@
             const sigType = document.querySelector('input[name="sigType"]:checked').value;
             const digitalContainer = document.getElementById('digitalSigContainer');
             const physicalNotice = document.getElementById('physicalSigNotice');
-            const physicalPrintLine = document.getElementById('physicalPrintLine');
+            const physicalPrintLines = document.getElementById('physicalPrintLines');
 
             if (sigType === 'physical') {
                 digitalContainer.classList.add('hidden');
                 physicalNotice.classList.remove('hidden');
-                physicalPrintLine.classList.remove('hidden'); // Show line only for physical print
+                physicalPrintLines.classList.remove('hidden');
             } else {
                 digitalContainer.classList.remove('hidden');
                 physicalNotice.classList.add('hidden');
-                physicalPrintLine.classList.add('hidden'); // Hide line for digital print
+                physicalPrintLines.classList.add('hidden');
             }
         }
 
@@ -600,13 +611,11 @@
             const total = parseFloat(document.getElementById('totalPrice').value) || 0;
             const sigType = document.querySelector('input[name="sigType"]:checked').value;
 
-            // Check empty fields
             if (!name || !phone || !date || !location || !startTime || !endTime) {
                 alert("እባክዎን ሁሉንም አስፈላጊ የደንበኛ እና የዝግጅት መረጃዎች በትክክል ይሙሉ!");
                 return false;
             }
 
-            // Phone format validation (Ethiopian phone: 09... or 07... with 10 digits)
             const phoneRegex = /^(09|07)\d{8}$/;
             if (!phoneRegex.test(phone)) {
                 alert("እባክዎን ትክክለኛ ዋና ስልክ ቁጥር ያስገቡ (ለምሳሌ፦ 0911234567)");
@@ -623,6 +632,10 @@
                 alert("እባክዎን በፊርማ ሳጥኑ ውስጥ ዲጂታል ፊርማዎን ያስቀምጡ ወይም በአካል የሚለውን አማራጭ ይምረጡ!");
                 return false;
             }
+
+            // Update live preview for client name and date in digital mode
+            document.getElementById('printClientName').innerText = name;
+            document.getElementById('printDate').innerText = date;
 
             return true;
         }
