@@ -176,14 +176,14 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-gray-300 mb-1">ዋና ስልክ ቁጥር <span class="text-red-400">*</span></label>
-                        <input type="tel" id="clientPhone" required placeholder="0911XXXXXX"
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">ዋና ስልክ ቁጥር (09/07...) <span class="text-red-400">*</span></label>
+                        <input type="tel" id="clientPhone" required placeholder="0911XXXXXX" maxlength="10"
                             class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 mb-1">ሁለተኛ ስልክ ቁጥር (አማራጭ)</label>
-                        <input type="tel" id="clientPhone2" placeholder="0922XXXXXX"
+                        <input type="tel" id="clientPhone2" placeholder="0922XXXXXX" maxlength="10"
                             class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
                     </div>
 
@@ -236,10 +236,10 @@
                         <div id="weddingPackageWrapper" class="hidden pt-2 border-t border-gray-800">
                             <label class="block text-[11px] text-gray-400 mb-1">የሰርግ ፓኬጅ ይምረጡ:</label>
                             <select id="weddingPackage" onchange="calculateTotal()" class="w-full bg-navy-950 border border-gold-500/40 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-gold-500">
-                                <option value="25000">ሙሉ ቀን (25,000 ETB)</option>
-                                <option value="28000">ከሌሊት - ማታ (28,000 ETB)</option>
-                                <option value="23000">ከሌሊት - ግማሽ ቀን (23,000 ETB)</option>
-                                <option value="21000">ግማሽ ቀን (21,000 ETB)</option>
+                                <option value="15000">ሙሉ ቀን (15,000 ETB)</option>
+                                <option value="12000">ከሌሊት - ማታ (12,000 ETB)</option>
+                                <option value="10000">ከሌሊት - ግማሽ ቀን (10,000 ETB)</option>
+                                <option value="8000">ግማሽ ቀን (8,000 ETB)</option>
                             </select>
                         </div>
                     </div>
@@ -247,42 +247,42 @@
                     <!-- Other Services -->
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ልደት አጃቢ" data-price="20000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
+                            <input type="checkbox" name="service" value="ልደት አጃቢ" data-price="7000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
                             <span class="text-sm font-medium">ልደት አጃቢ</span>
                         </label>
-                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">20,000 ETB</span>
+                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">7,000 ETB</span>
                     </div>
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ክርስትና አጃቢ" data-price="20000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
+                            <input type="checkbox" name="service" value="ክርስትና አጃቢ" data-price="7000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
                             <span class="text-sm font-medium">ክርስትና አጃቢ</span>
                         </label>
-                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">20,000 ETB</span>
+                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">7,000 ETB</span>
                     </div>
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ሸምግልና ስነ-ስርዓት" data-price="20000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
+                            <input type="checkbox" name="service" value="ሸምግልና ስነ-ስርዓት" data-price="6000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
                             <span class="text-sm font-medium">ሸምግልና ስነ-ስርዓት</span>
                         </label>
-                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">20,000 ETB</span>
+                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">6,000 ETB</span>
                     </div>
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ምረቃ ፕሮግራም" data-price="20000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
+                            <input type="checkbox" name="service" value="ምረቃ ፕሮግራም" data-price="8000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
                             <span class="text-sm font-medium">ምረቃ ፕሮግራም</span>
                         </label>
-                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">20,000 ETB</span>
+                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">8,000 ETB</span>
                     </div>
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ሰርፕራይዝ ፕሮግራም" data-price="20000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
+                            <input type="checkbox" name="service" value="ሰርፕራይዝ ፕሮግራም" data-price="5000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
                             <span class="text-sm font-medium">ሰርፕራይዝ ፕሮግራም</span>
                         </label>
-                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">20,000 ETB</span>
+                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">5,000 ETB</span>
                     </div>
                 </div>
 
@@ -291,8 +291,8 @@
                     <i class="fa-solid fa-circle-exclamation text-amber-400 text-lg mt-0.5"></i>
                     <div class="text-xs sm:text-sm text-amber-200">
                         <strong class="font-bold text-amber-300">አስፈላጊ ማስታወሻ፡</strong> 
-                        ሳቤል EVENT የዝማሬ አጃቢነት አገልግሎት ብቻ ይሰጣል። 
-                        <span class="underline font-bold text-gold-300">ድርጅታችን የዲኮር  አገልግሎት እንደማይሰጥ</span> በውሉ እንገልጻለን።
+                        ሳቤል EVENT የዝግጅት ማስተባበር፣ የቀጥታ የሙዚቃ እና የድምፅ አጃቢነት አገልግሎት ብቻ ይሰጣል። 
+                        <span class="underline font-bold text-gold-300">ድርጅታችን የዲኮር (የጌጣጌጥ) አገልግሎት እንደማይሰጥ</span> በውሉ እንገልጻለን።
                     </div>
                 </div>
             </div>
@@ -332,7 +332,7 @@
                         <p><strong>አዋሽ ባንክ (Awash Bank):</strong> [XXXXXXXXXXXXX]</p>
                         <p class="sm:col-span-2"><strong>ቴሌብር (Telebirr):</strong> 0910328088 / 0921147693</p>
                     </div>
-                    <p class="text-xs text-yellow-300 italic pt-1">* ማሳሰቢያ፡ ክፍያ ሲፈጸሙ የደረሰኝ (Screenshot) በቴሌግራም በመላክ ውሉን ያረጋግጡ።</p>
+                    <p class="text-xs text-yellow-300 italic pt-1">* ማሳሰቢያ፡ ክፍያ ሲፈጸሙ የደረሰኝ (Screenshot) በቴሌግራም ወይም በስልክ በመላክ ውሉን ያረጋግጡ።</p>
                 </div>
             </div>
 
@@ -345,10 +345,10 @@
                 <div class="terms-box bg-navy-900/60 p-4 rounded-xl border border-gray-800 text-xs sm:text-sm text-gray-300 space-y-2.5 max-h-48 overflow-y-auto pr-2">
                     <p><strong>፩. ቅድመ ክፍያ እና ቀኑን ማስያዝ፡</strong> ውሉ ህጋዊ የሚሆነው የተስማሙበት ቅድመ ክፍያ (Deposit) ሲፈጸም እና በድርጅቱ በኩል ማረጋገጫ ሲሰጥ ብቻ ነው።</p>
                     <p><strong>፪. የሰዓት አከባበር፡</strong> አገልግሎት ሰጪው በተስማሙበት ቦታ እና ሰዓት ተገኝቶ አገልግሎት የመስጠት ግዴታ አለበት። ደንበኛውም ዝግጅቱን በተያዘለት ሰዓት የማስጀመር ኃላፊነት አለበት።</p>
-                    <p><strong>፫. የመጨረሻ ክፍያ ሰዓት ገደብ፡</strong> ቀሪው ክፍያ ዝግጅቱ ከመጀመሩ <strong>24 ሰዓት አስቀድሞ</strong> ሙሉ በሙሉ መጠናቀቅ አለበት።</p>
+                    <p><strong>፫. የመጨረሻ ክፍያ ሰዓት ገደብ፡</strong> ቀሪው ክፍያ ዝግጅቱ ከመጀመሩ <strong>1 ሰዓት አስቀድሞ</strong> ሙሉ በሙሉ መጠናቀቅ አለበት።</p>
                     <p><strong>፬. የማስተዋወቂያ መብት (Media Rights)፡</strong> ሳቤል EVENT በዝግጅቱ ወቅት የሚነሱ ፎቶ/ቪዲዮዎችን ለይፋዊ ማስታወቂያ እና ሶሻል ሚዲያ (<strong>@sabel_event</strong>) የመጠቀም መብት አለው።</p>
                     <p><strong>፭. የውል ስረዛ (Cancellation)፡</strong> ውሉ ከተፈረመ በኋላ ደንበኛው ፕሮግራሙን ቢሰርዝ ቅድመ ክፍያው አይመለስም።</p>
-                    <p><strong>፮. የአገልግሎት ወሰን፡</strong> ሳቤል EVENT የሙዚቃ፣ የዝማሬ አገልግሎቶችን ብቻ የሚሸፍን ሲሆን የዲኮር ስራዎችን አይጨምርም።</p>
+                    <p><strong>፮. የአገልግሎት ወሰን፡</strong> ሳቤል EVENT የሙዚቃ፣ የድምፅ እና የፕሮግራም ማስተባበር አገልግሎቶችን ብቻ የሚሸፍን ሲሆን የዲኮር እና የጌጣጌጥ ስራዎችን አይጨምርም።</p>
                 </div>
             </div>
 
@@ -388,7 +388,7 @@
                             </div>
                         </div>
                         
-                        <!-- Digital Signature Label for PDF Print Only -->
+                        <!-- Digital Signature Label for PDF Print Only (No second line) -->
                         <div id="digitalPrintLabel" class="hidden print:block text-sm text-black font-semibold pt-1">
                             ፊርማ :-
                         </div>
@@ -399,8 +399,8 @@
                         <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም (Physical) ስለተመረጠ፣ ይህን ውል አትመው (Print አድርገው) በአካል በእጅዎ መፈረም ይችላሉ።
                     </div>
 
-                    <!-- Physical Signature Line for PDF Print -->
-                    <div id="physicalPrintLine" class="hidden print:block text-sm text-black font-semibold pt-2">
+                    <!-- Physical Signature Line for PDF Print (Only when physical is selected) -->
+                    <div id="physicalPrintLine" class="hidden text-sm text-black font-semibold pt-2">
                         ፊርማ :- _________________
                     </div>
                 </div>
@@ -502,11 +502,11 @@
             if (sigType === 'physical') {
                 digitalContainer.classList.add('hidden');
                 physicalNotice.classList.remove('hidden');
-                physicalPrintLine.classList.remove('hidden');
+                physicalPrintLine.classList.remove('hidden'); // Show line only for physical print
             } else {
                 digitalContainer.classList.remove('hidden');
                 physicalNotice.classList.add('hidden');
-                physicalPrintLine.classList.add('hidden');
+                physicalPrintLine.classList.add('hidden'); // Hide line for digital print
             }
         }
 
@@ -590,10 +590,9 @@
             document.getElementById('remainingBalance').innerText = `${remaining.toLocaleString()} ETB`;
         }
 
-        function submitAgreement() {
+        function validateFormInputs() {
             const name = document.getElementById('clientName').value.trim();
             const phone = document.getElementById('clientPhone').value.trim();
-            const phone2 = document.getElementById('clientPhone2').value.trim();
             const date = document.getElementById('eventDate').value.trim();
             const location = document.getElementById('eventLocation').value.trim();
             const startTime = document.getElementById('startTime').value.trim();
@@ -601,21 +600,40 @@
             const total = parseFloat(document.getElementById('totalPrice').value) || 0;
             const sigType = document.querySelector('input[name="sigType"]:checked').value;
 
+            // Check empty fields
             if (!name || !phone || !date || !location || !startTime || !endTime) {
                 alert("እባክዎን ሁሉንም አስፈላጊ የደንበኛ እና የዝግጅት መረጃዎች በትክክል ይሙሉ!");
-                return;
+                return false;
+            }
+
+            // Phone format validation (Ethiopian phone: 09... or 07... with 10 digits)
+            const phoneRegex = /^(09|07)\d{8}$/;
+            if (!phoneRegex.test(phone)) {
+                alert("እባክዎን ትክክለኛ ዋና ስልክ ቁጥር ያስገቡ (ለምሳሌ፦ 0911234567)");
+                document.getElementById('clientPhone').focus();
+                return false;
             }
 
             if (total <= 0) {
                 alert("እባክዎን ቢያንስ አንድ የአገልግሎት ዓይነት ይምረጡ!");
-                return;
+                return false;
             }
 
             if (sigType === 'digital' && !hasSigned) {
                 alert("እባክዎን በፊርማ ሳጥኑ ውስጥ ዲጂታል ፊርማዎን ያስቀምጡ ወይም በአካል የሚለውን አማራጭ ይምረጡ!");
-                return;
+                return false;
             }
 
+            return true;
+        }
+
+        function submitAgreement() {
+            if (!validateFormInputs()) return;
+
+            const name = document.getElementById('clientName').value.trim();
+            const phone2 = document.getElementById('clientPhone2').value.trim();
+            const date = document.getElementById('eventDate').value.trim();
+            const total = parseFloat(document.getElementById('totalPrice').value) || 0;
             const remaining = Math.max(0, total - (parseFloat(document.getElementById('advancePayment').value) || 0));
             const refNo = "SABEL-" + Math.floor(100000 + Math.random() * 900000);
 
@@ -632,18 +650,7 @@
         }
 
         function printContract() {
-            const name = document.getElementById('clientName').value.trim();
-            const phone = document.getElementById('clientPhone').value.trim();
-            const date = document.getElementById('eventDate').value.trim();
-            const location = document.getElementById('eventLocation').value.trim();
-            const startTime = document.getElementById('startTime').value.trim();
-            const endTime = document.getElementById('endTime').value.trim();
-            const total = parseFloat(document.getElementById('totalPrice').value) || 0;
-
-            if (!name || !phone || !date || !location || !startTime || !endTime || total <= 0) {
-                alert("እባክዎን ላልተሟሉ መረጃዎች ህተም/PDF ከማድረግዎ በፊት ሁሉንም አስፈላጊ መስኮች ይሙሉ!");
-                return;
-            }
+            if (!validateFormInputs()) return;
             window.print();
         }
     </script>
