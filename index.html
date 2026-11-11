@@ -115,8 +115,8 @@
             }
             canvas {
                 border: none !important;
-                width: 160px !important;
-                height: 50px !important;
+                width: 150px !important;
+                height: 45px !important;
                 background: transparent !important;
             }
         }
@@ -369,34 +369,38 @@
                         </label>
                     </div>
 
-                    <!-- Digital Signature & Representative Block (Shown on Screen and PDF for Digital) -->
-                    <div id="digitalSigContainer" class="space-y-4 pt-2">
-                        <div class="flex justify-between items-center no-print">
+                    <!-- Digital Signature & Representative Block (Side by Side / Grid) -->
+                    <div id="digitalSigContainer" class="pt-2">
+                        <div class="flex justify-between items-center no-print mb-2">
                             <span class="text-xs text-gray-400">እባክዎን ከታች ባለው ሳጥን ላይ ይፈረሙ፡</span>
                             <button type="button" onclick="clearSignature()" class="text-xs text-red-400 hover:text-red-300 underline font-semibold">
                                 <i class="fa-solid fa-rotate-left"></i> ፊርማ አፅዳ
                             </button>
                         </div>
 
-                        <!-- Canvas container -->
-                        <div class="bg-white rounded-lg overflow-hidden touch-none relative inline-block border border-gold-500/30 print-border-none">
-                            <canvas id="sigCanvas" class="w-full sm:w-80 h-24 cursor-crosshair block bg-white"></canvas>
-                            <div id="sigPlaceholder" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">
-                                እዚህ ጋር ይፈረሙ...
+                        <!-- Side by Side Container for Digital Mode -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                            <!-- Left: Client Digital Signature -->
+                            <div class="space-y-2">
+                                <div class="bg-white rounded-lg overflow-hidden touch-none relative inline-block border border-gold-500/30 print-border-none">
+                                    <canvas id="sigCanvas" class="w-full h-24 cursor-crosshair block bg-white"></canvas>
+                                    <div id="sigPlaceholder" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">
+                                        እዚህ ጋር ይፈረሙ...
+                                    </div>
+                                </div>
+                                <div class="text-sm text-gray-200 print:text-black space-y-1.5 pt-1">
+                                    <div>የደንበኛው/ዋ ስም:- <span id="printClientName" class="border-b border-dashed border-gray-500 px-2">_________________</span></div>
+                                    <div>ቀን :- <span id="printDate" class="border-b border-dashed border-gray-500 px-2">_______________</span></div>
+                                    <div class="font-semibold pt-1">ፊርማ :-</div>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Digital Mode Output Format -->
-                        <div class="text-sm text-gray-200 print:text-black space-y-2 pt-2">
-                            <div>የደንበኛው/ዋ ስም:- <span id="printClientName" class="border-b border-dashed border-gray-500 px-2">_________________</span></div>
-                            <div>ቀን :- <span id="printDate" class="border-b border-dashed border-gray-500 px-2">_______________</span></div>
-                            <div class="font-semibold pt-1">ፊርማ :-</div>
-                        </div>
-
-                        <div class="border-t border-gray-700 print:border-gray-300 pt-3 mt-4 space-y-2 text-sm text-gray-200 print:text-black">
-                            <div>የሳቤል ሰብሳቢ :- ________________</div>
-                            <div>ቀን :- _________________</div>
-                            <div class="font-semibold pt-1">ፊርማ :- ________________</div>
+                            <!-- Right: Sabel Representative -->
+                            <div class="space-y-1.5 text-sm text-gray-200 print:text-black flex flex-col justify-end pt-4 sm:pt-0">
+                                <div>የሳቤል ሰብሳቢ :- ________________</div>
+                                <div>ቀን :- _________________</div>
+                                <div class="font-semibold pt-1">ፊርማ :- ________________</div>
+                            </div>
                         </div>
                     </div>
 
@@ -405,14 +409,22 @@
                         <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም (Physical) ስለተመረጠ፣ ይህን ውል አትመው (Print አድርገው) በአካል በእጅዎ መፈረም ይችላሉ።
                     </div>
 
-                    <!-- Physical Signature Lines for PDF Print (Only when physical is selected) -->
-                    <div id="physicalPrintLines" class="hidden text-sm text-black font-semibold pt-2 space-y-3">
-                        <div>የደንበኛው/ዋ ስም:- _________________</div>
-                        <div>ቀን :-  _______________</div>
-                        <div>ፊርማ :-_________________</div>
-                        <div class="pt-2">የሳቤል ሰብሳቢ :- ________________</div>
-                        <div>ቀን :- _________________</div>
-                        <div>ፊርማ :- __________________</div>
+                    <!-- Physical Signature Lines Side by Side for PDF Print -->
+                    <div id="physicalPrintLines" class="hidden text-sm text-black font-semibold pt-2">
+                        <div class="grid grid-cols-2 gap-6">
+                            <!-- Left: Client Physical -->
+                            <div class="space-y-3">
+                                <div>የደንበኛው/ዋ ስም:- _________________</div>
+                                <div>ቀን :-  _______________</div>
+                                <div>ፊርማ :-_________________</div>
+                            </div>
+                            <!-- Right: Sabel Representative Physical -->
+                            <div class="space-y-3">
+                                <div>የሳቤል ሰብሳቢ :- ________________</div>
+                                <div>ቀን :- _________________</div>
+                                <div>ፊርማ :- __________________</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -532,7 +544,7 @@
             if (!canvas) return;
             const rect = canvas.getBoundingClientRect();
             canvas.width = rect.width > 0 ? rect.width : 300;
-            canvas.height = rect.height > 0 ? rect.height : 95;
+            canvas.height = rect.height > 0 ? rect.height : 90;
             ctx.strokeStyle = "#0f1c3f";
             ctx.lineWidth = 2.5;
             ctx.lineCap = "round";
