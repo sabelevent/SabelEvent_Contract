@@ -98,19 +98,21 @@
                 color: #000 !important;
                 padding: 2px 0 !important;
             }
-            /* Hide border and clear button elements when printing/saving as PDF */
-            .print-hide-sig-extras {
+            /* PDF Print Cleanups */
+            .print-hide-extras {
+                display: none !important;
+            }
+            .print-border-none {
                 border: none !important;
                 background: transparent !important;
                 padding: 0 !important;
             }
-            .print-hide-extras {
-                display: none !important;
-            }
             canvas {
+                border: none !important;
                 border-bottom: 1px solid #333 !important;
-                width: 200px !important;
-                height: 60px !important;
+                width: 180px !important;
+                height: 50px !important;
+                background: transparent !important;
             }
         }
     </style>
@@ -219,7 +221,7 @@
                         <div class="flex items-center justify-between">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="weddingCheck" name="service" value="ሰርግ አጃቢ" onchange="toggleWeddingPackage()" class="accent-gold-500 w-4 h-4">
-                                <span class="text-sm font-medium text-gold-300 font-bold">ሰርግ አጃቢ</span>
+                                <span class="text-sm font-medium text-gold-300 font-bold">ሰርግ</span>
                             </label>
                             <span id="weddingDisplayPrice" class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">15,000 ETB</span>
                         </div>
@@ -228,10 +230,10 @@
                         <div id="weddingPackageWrapper" class="hidden pt-2 border-t border-gray-800">
                             <label class="block text-[11px] text-gray-400 mb-1">የሰርግ ፓኬጅ ይምረጡ:</label>
                             <select id="weddingPackage" onchange="calculateTotal()" class="w-full bg-navy-950 border border-gold-500/40 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-gold-500">
-                                <option value="15000">ሙሉ ቀን (15,000 ETB)</option>
-                                <option value="12000">ከሌሊት - ማታ (12,000 ETB)</option>
-                                <option value="10000">ከሌሊት - ግማሽ ቀን (10,000 ETB)</option>
-                                <option value="8000">ግማሽ ቀን (8,000 ETB)</option>
+                                <option value="15000">ሙሉ ቀን (27,000 ETB)</option>
+                                <option value="12000">ከሌሊት - ማታ (27,000 ETB)</option>
+                                <option value="10000">ከሌሊት - ግማሽ ቀን (25,000 ETB)</option>
+                                <option value="8000">ግማሽ ቀን (23,000 ETB)</option>
                             </select>
                         </div>
                     </div>
@@ -240,7 +242,7 @@
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" name="service" value="ልደት አጃቢ" data-price="7000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
-                            <span class="text-sm font-medium">ልደት አጃቢ</span>
+                            <span class="text-sm font-medium">ልደት</span>
                         </label>
                         <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">7,000 ETB</span>
                     </div>
@@ -248,7 +250,7 @@
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" name="service" value="ክርስትና አጃቢ" data-price="7000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
-                            <span class="text-sm font-medium">ክርስትና አጃቢ</span>
+                            <span class="text-sm font-medium">ክርስትና</span>
                         </label>
                         <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">7,000 ETB</span>
                     </div>
@@ -283,8 +285,8 @@
                     <i class="fa-solid fa-circle-exclamation text-amber-400 text-lg mt-0.5"></i>
                     <div class="text-xs sm:text-sm text-amber-200">
                         <strong class="font-bold text-amber-300">አስፈላጊ ማስታወሻ፡</strong> 
-                        ሳቤል EVENT የዝግጅት ማስተባበር፣ የቀጥታ የሙዚቃ እና የድምፅ አጃቢነት አገልግሎት ብቻ ይሰጣል። 
-                        <span class="underline font-bold text-gold-300">ድርጅታችን የዲኮር (የጌጣጌጥ) አገልግሎት እንደማይሰጥ</span> በውሉ እንገልጻለን።
+                        ሳቤል EVENT የዝማሬ አጃቢነት አገልግሎት ብቻ ይሰጣል። 
+                        <span class="underline font-bold text-gold-300">የዘማሪያን ቁጥር 15 ነው።</span> በውሉ እንገልጻለን።
                     </div>
                 </div>
             </div>
@@ -324,7 +326,7 @@
                         <p><strong>አዋሽ ባንክ (Awash Bank):</strong> [XXXXXXXXXXXXX]</p>
                         <p class="sm:col-span-2"><strong>ቴሌብር (Telebirr):</strong> 0910328088 / 0921147693</p>
                     </div>
-                    <p class="text-xs text-yellow-300 italic pt-1">* ማሳሰቢያ፡ ክፍያ ሲፈጸሙ የደረሰኝ (Screenshot) በቴሌግራም ወይም በስልክ በመላክ ውሉን ያረጋግጡ።</p>
+                    <p class="text-xs text-yellow-300 italic pt-1">* ማሳሰቢያ፡ ክፍያ ሲፈጸሙ የደረሰኝ (Screenshot) በቴሌግራም በመላክ ውሉን ያረጋግጡ።</p>
                 </div>
             </div>
 
@@ -335,22 +337,23 @@
                 </h2>
 
                 <div class="bg-navy-900/60 p-4 rounded-xl border border-gray-800 text-xs sm:text-sm text-gray-300 space-y-2.5 max-h-48 overflow-y-auto pr-2">
-                    <p><strong>፩. ቅድመ ክፍያ እና ቀኑን ማስያዝ፡</strong> ውሉ ህጋዊ የሚሆነው የተስማሙበት ቅድመ ክፍያ (Deposit) ሲፈጸም እና በድርጅቱ በኩል ማረጋገጫ ሲሰጥ ብቻ ነው።</p>
+                    <p><strong>፩. ቀኑን ማስያዝ፡</strong> ውሉ ህጋዊ የሚሆነው የተስማሙበት ቅድመ ክፍያ (Deposit) ሲፈጸም እና በድርጅቱ በኩል ማረጋገጫ ሲሰጥ ብቻ ነው።</p>
                     <p><strong>፪. የሰዓት አከባበር፡</strong> አገልግሎት ሰጪው በተስማሙበት ቦታ እና ሰዓት ተገኝቶ አገልግሎት የመስጠት ግዴታ አለበት። ደንበኛውም ዝግጅቱን በተያዘለት ሰዓት የማስጀመር ኃላፊነት አለበት።</p>
-                    <p><strong>፫. የመጨረሻ ክፍያ ሰዓት ገደብ፡</strong> ቀሪው ክፍያ ዝግጅቱ ከመጀመሩ <strong>1 ሰዓት አስቀድሞ</strong> ሙሉ በሙሉ መጠናቀቅ አለበት።</p>
+                    <p><strong>፫. የመጨረሻ ክፍያ ሰዓት ገደብ፡</strong> ቀሪው ክፍያ ዝግጅቱ ከመጀመሩ <strong>24 ሰዓት አስቀድሞ</strong> ሙሉ በሙሉ መጠናቀቅ አለበት።</p>
                     <p><strong>፬. የማስተዋወቂያ መብት (Media Rights)፡</strong> ሳቤል EVENT በዝግጅቱ ወቅት የሚነሱ ፎቶ/ቪዲዮዎችን ለይፋዊ ማስታወቂያ እና ሶሻል ሚዲያ (<strong>@sabel_event</strong>) የመጠቀም መብት አለው።</p>
                     <p><strong>፭. የውል ስረዛ (Cancellation)፡</strong> ውሉ ከተፈረመ በኋላ ደንበኛው ፕሮግራሙን ቢሰርዝ ቅድመ ክፍያው አይመለስም።</p>
-                    <p><strong>፮. የአገልግሎት ወሰን፡</strong> ሳቤል EVENT የሙዚቃ፣ የድምፅ እና የፕሮግራም ማስተባበር አገልግሎቶችን ብቻ የሚሸፍን ሲሆን የዲኮር እና የጌጣጌጥ ስራዎችን አይጨምርም።</p>
+                    <p><strong>፮. የአገልግሎት ወሰን፡</strong> ሳቤል EVENT የዝማሬ አገልግሎቶችን ብቻ የሚሸፍን ሲሆን የዲኮር ስራዎችን አይጨምርም።</p>
                 </div>
             </div>
 
             <!-- Section 5: Signature Method Selection -->
             <div class="mb-8">
+                <!-- Title changes to "ፊርማ" during PDF/Print -->
                 <h2 class="text-lg font-bold text-gold-400 border-l-4 border-gold-500 pl-3 mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-signature"></i> ፭. የፊርማ ዓይነት መረጣ (Signature Method) <span class="text-red-400">*</span>
+                    <i class="fa-solid fa-signature"></i> <span class="no-print">፭. የፊርማ ዓይነት መረጣ <span class="text-red-400">*</span></span><span class="hidden print:inline">ፊርማ</span>
                 </h2>
 
-                <div class="bg-navy-900 p-4 rounded-xl border border-gold-500/30 space-y-4">
+                <div class="bg-navy-900 p-4 rounded-xl border border-gold-500/30 space-y-4 print-border-none">
                     <div class="flex gap-6 text-sm no-print">
                         <label class="flex items-center gap-2 cursor-pointer font-semibold text-white">
                             <input type="radio" name="sigType" value="digital" checked onchange="toggleSigMode()" class="accent-gold-500 w-4 h-4">
@@ -362,26 +365,32 @@
                         </label>
                     </div>
 
-                    <!-- Digital Signature Pad Container (Borderless and clean for PDF) -->
-                    <div id="digitalSigContainer" class="space-y-2 pt-2 print-hide-sig-extras">
-                        <div class="flex justify-between items-center print-hide-extras">
+                    <!-- Digital Signature Pad Container -->
+                    <div id="digitalSigContainer" class="space-y-2 pt-2">
+                        <div class="flex justify-between items-center no-print">
                             <span class="text-xs text-gray-400">እባክዎን ከታች ባለው ሳጥን ላይ ይፈረሙ፡</span>
                             <button type="button" onclick="clearSignature()" class="text-xs text-red-400 hover:text-red-300 underline font-semibold">
                                 <i class="fa-solid fa-rotate-left"></i> ፊርማ አፅዳ
                             </button>
                         </div>
 
-                        <div class="bg-white rounded-lg overflow-hidden touch-none relative inline-block border border-gold-500/30">
-                            <canvas id="sigCanvas" class="w-full sm:w-80 h-28 cursor-crosshair block bg-white"></canvas>
-                            <div id="sigPlaceholder" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic">
+                        <!-- Canvas container -->
+                        <div class="bg-white rounded-lg overflow-hidden touch-none relative inline-block border border-gold-500/30 print-border-none">
+                            <canvas id="sigCanvas" class="w-full sm:w-80 h-24 cursor-crosshair block bg-white"></canvas>
+                            <div id="sigPlaceholder" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">
                                 እዚህ ጋር ይፈረሙ...
                             </div>
                         </div>
                     </div>
 
-                    <!-- Physical Signature Notice -->
-                    <div id="physicalSigNotice" class="hidden text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg">
+                    <!-- Physical Signature Notice (Only shown on screen when physical is selected, hidden in PDF) -->
+                    <div id="physicalSigNotice" class="hidden text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg no-print">
                         <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም (Physical) ስለተመረጠ፣ ይህን ውል አትመው (Print አድርገው) በአካል በእጅዎ መፈረም ይችላሉ።
+                    </div>
+
+                    <!-- Physical Signature Line for PDF Print -->
+                    <div id="physicalPrintLine" class="hidden print:block text-sm text-black font-semibold pt-2">
+                        ፊርማ :- _________________
                     </div>
                 </div>
             </div>
@@ -439,7 +448,6 @@
     </div>
 
     <script>
-        // Toggle Wedding Package visibility and calculate total
         function toggleWeddingPackage() {
             const checkbox = document.getElementById('weddingCheck');
             const wrapper = document.getElementById('weddingPackageWrapper');
@@ -451,7 +459,6 @@
             calculateTotal();
         }
 
-        // Auto calculate total price based on preset prices in code
         function calculateTotal() {
             let total = 0;
 
@@ -475,18 +482,20 @@
             calculateBalance();
         }
 
-        // Toggle Digital vs Physical Signature visibility
         function toggleSigMode() {
             const sigType = document.querySelector('input[name="sigType"]:checked').value;
             const digitalContainer = document.getElementById('digitalSigContainer');
             const physicalNotice = document.getElementById('physicalSigNotice');
+            const physicalPrintLine = document.getElementById('physicalPrintLine');
 
             if (sigType === 'physical') {
                 digitalContainer.classList.add('hidden');
                 physicalNotice.classList.remove('hidden');
+                physicalPrintLine.classList.remove('hidden');
             } else {
                 digitalContainer.classList.remove('hidden');
                 physicalNotice.classList.add('hidden');
+                physicalPrintLine.classList.add('hidden');
             }
         }
 
@@ -501,7 +510,7 @@
             if (!canvas) return;
             const rect = canvas.getBoundingClientRect();
             canvas.width = rect.width > 0 ? rect.width : 300;
-            canvas.height = rect.height > 0 ? rect.height : 110;
+            canvas.height = rect.height > 0 ? rect.height : 95;
             ctx.strokeStyle = "#0f1c3f";
             ctx.lineWidth = 2.5;
             ctx.lineCap = "round";
@@ -510,6 +519,7 @@
         window.addEventListener('load', () => {
             resizeCanvas();
             calculateTotal();
+            toggleSigMode();
         });
         window.addEventListener('resize', resizeCanvas);
 
@@ -580,7 +590,6 @@
             const total = parseFloat(document.getElementById('totalPrice').value) || 0;
             const sigType = document.querySelector('input[name="sigType"]:checked').value;
 
-            // Strict Validation Check
             if (!name || !phone || !date || !location || !startTime || !endTime) {
                 alert("እባክዎን ሁሉንም አስፈላጊ የደንበኛ እና የዝግጅት መረጃዎች በትክክል ይሙሉ!");
                 return;
