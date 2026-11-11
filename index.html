@@ -98,7 +98,7 @@
                 color: #000 !important;
                 padding: 2px 0 !important;
             }
-            /* PDF Print Cleanups */
+            /* PDF Print Cleanups & Full View */
             .print-hide-extras {
                 display: none !important;
             }
@@ -107,10 +107,16 @@
                 background: transparent !important;
                 padding: 0 !important;
             }
+            .terms-box {
+                max-height: none !important;
+                overflow: visible !important;
+                background: transparent !important;
+                border: 1px solid #ccc !important;
+                color: #000 !important;
+            }
             canvas {
                 border: none !important;
-                border-bottom: 1px solid #333 !important;
-                width: 180px !important;
+                width: 160px !important;
                 height: 50px !important;
                 background: transparent !important;
             }
@@ -221,7 +227,7 @@
                         <div class="flex items-center justify-between">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="weddingCheck" name="service" value="ሰርግ አጃቢ" onchange="toggleWeddingPackage()" class="accent-gold-500 w-4 h-4">
-                                <span class="text-sm font-medium text-gold-300 font-bold">ሰርግ</span>
+                                <span class="text-sm font-medium text-gold-300 font-bold">ሰርግ አጃቢ</span>
                             </label>
                             <span id="weddingDisplayPrice" class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">15,000 ETB</span>
                         </div>
@@ -230,10 +236,10 @@
                         <div id="weddingPackageWrapper" class="hidden pt-2 border-t border-gray-800">
                             <label class="block text-[11px] text-gray-400 mb-1">የሰርግ ፓኬጅ ይምረጡ:</label>
                             <select id="weddingPackage" onchange="calculateTotal()" class="w-full bg-navy-950 border border-gold-500/40 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-gold-500">
-                                <option value="15000">ሙሉ ቀን (27,000 ETB)</option>
-                                <option value="12000">ከሌሊት - ማታ (27,000 ETB)</option>
-                                <option value="10000">ከሌሊት - ግማሽ ቀን (25,000 ETB)</option>
-                                <option value="8000">ግማሽ ቀን (23,000 ETB)</option>
+                                <option value="15000">ሙሉ ቀን (15,000 ETB)</option>
+                                <option value="12000">ከሌሊት - ማታ (12,000 ETB)</option>
+                                <option value="10000">ከሌሊት - ግማሽ ቀን (10,000 ETB)</option>
+                                <option value="8000">ግማሽ ቀን (8,000 ETB)</option>
                             </select>
                         </div>
                     </div>
@@ -242,7 +248,7 @@
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" name="service" value="ልደት አጃቢ" data-price="7000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
-                            <span class="text-sm font-medium">ልደት</span>
+                            <span class="text-sm font-medium">ልደት አጃቢ</span>
                         </label>
                         <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">7,000 ETB</span>
                     </div>
@@ -250,7 +256,7 @@
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" name="service" value="ክርስትና አጃቢ" data-price="7000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
-                            <span class="text-sm font-medium">ክርስትና</span>
+                            <span class="text-sm font-medium">ክርስትና አጃቢ</span>
                         </label>
                         <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">7,000 ETB</span>
                     </div>
@@ -285,8 +291,8 @@
                     <i class="fa-solid fa-circle-exclamation text-amber-400 text-lg mt-0.5"></i>
                     <div class="text-xs sm:text-sm text-amber-200">
                         <strong class="font-bold text-amber-300">አስፈላጊ ማስታወሻ፡</strong> 
-                        ሳቤል EVENT የዝማሬ አጃቢነት አገልግሎት ብቻ ይሰጣል። 
-                        <span class="underline font-bold text-gold-300">የዘማሪያን ቁጥር 15 ነው።</span> በውሉ እንገልጻለን።
+                        ሳቤል EVENT የዝግጅት ማስተባበር፣ የቀጥታ የሙዚቃ እና የድምፅ አጃቢነት አገልግሎት ብቻ ይሰጣል። 
+                        <span class="underline font-bold text-gold-300">ድርጅታችን የዲኮር (የጌጣጌጥ) አገልግሎት እንደማይሰጥ</span> በውሉ እንገልጻለን።
                     </div>
                 </div>
             </div>
@@ -326,7 +332,7 @@
                         <p><strong>አዋሽ ባንክ (Awash Bank):</strong> [XXXXXXXXXXXXX]</p>
                         <p class="sm:col-span-2"><strong>ቴሌብር (Telebirr):</strong> 0910328088 / 0921147693</p>
                     </div>
-                    <p class="text-xs text-yellow-300 italic pt-1">* ማሳሰቢያ፡ ክፍያ ሲፈጸሙ የደረሰኝ (Screenshot) በቴሌግራም በመላክ ውሉን ያረጋግጡ።</p>
+                    <p class="text-xs text-yellow-300 italic pt-1">* ማሳሰቢያ፡ ክፍያ ሲፈጸሙ የደረሰኝ (Screenshot) በቴሌግራም ወይም በስልክ በመላክ ውሉን ያረጋግጡ።</p>
                 </div>
             </div>
 
@@ -336,13 +342,13 @@
                     <i class="fa-solid fa-file-contract"></i> ፬. የውል ህጎች እና ድንጋጌዎች
                 </h2>
 
-                <div class="bg-navy-900/60 p-4 rounded-xl border border-gray-800 text-xs sm:text-sm text-gray-300 space-y-2.5 max-h-48 overflow-y-auto pr-2">
-                    <p><strong>፩. ቀኑን ማስያዝ፡</strong> ውሉ ህጋዊ የሚሆነው የተስማሙበት ቅድመ ክፍያ (Deposit) ሲፈጸም እና በድርጅቱ በኩል ማረጋገጫ ሲሰጥ ብቻ ነው።</p>
+                <div class="terms-box bg-navy-900/60 p-4 rounded-xl border border-gray-800 text-xs sm:text-sm text-gray-300 space-y-2.5 max-h-48 overflow-y-auto pr-2">
+                    <p><strong>፩. ቅድመ ክፍያ እና ቀኑን ማስያዝ፡</strong> ውሉ ህጋዊ የሚሆነው የተስማሙበት ቅድመ ክፍያ (Deposit) ሲፈጸም እና በድርጅቱ በኩል ማረጋገጫ ሲሰጥ ብቻ ነው።</p>
                     <p><strong>፪. የሰዓት አከባበር፡</strong> አገልግሎት ሰጪው በተስማሙበት ቦታ እና ሰዓት ተገኝቶ አገልግሎት የመስጠት ግዴታ አለበት። ደንበኛውም ዝግጅቱን በተያዘለት ሰዓት የማስጀመር ኃላፊነት አለበት።</p>
-                    <p><strong>፫. የመጨረሻ ክፍያ ሰዓት ገደብ፡</strong> ቀሪው ክፍያ ዝግጅቱ ከመጀመሩ <strong>24 ሰዓት አስቀድሞ</strong> ሙሉ በሙሉ መጠናቀቅ አለበት።</p>
+                    <p><strong>፫. የመጨረሻ ክፍያ ሰዓት ገደብ፡</strong> ቀሪው ክፍያ ዝግጅቱ ከመጀመሩ <strong>1 ሰዓት አስቀድሞ</strong> ሙሉ በሙሉ መጠናቀቅ አለበት።</p>
                     <p><strong>፬. የማስተዋወቂያ መብት (Media Rights)፡</strong> ሳቤል EVENT በዝግጅቱ ወቅት የሚነሱ ፎቶ/ቪዲዮዎችን ለይፋዊ ማስታወቂያ እና ሶሻል ሚዲያ (<strong>@sabel_event</strong>) የመጠቀም መብት አለው።</p>
                     <p><strong>፭. የውል ስረዛ (Cancellation)፡</strong> ውሉ ከተፈረመ በኋላ ደንበኛው ፕሮግራሙን ቢሰርዝ ቅድመ ክፍያው አይመለስም።</p>
-                    <p><strong>፮. የአገልግሎት ወሰን፡</strong> ሳቤል EVENT የዝማሬ አገልግሎቶችን ብቻ የሚሸፍን ሲሆን የዲኮር ስራዎችን አይጨምርም።</p>
+                    <p><strong>፮. የአገልግሎት ወሰን፡</strong> ሳቤል EVENT የሙዚቃ፣ የድምፅ እና የፕሮግራም ማስተባበር አገልግሎቶችን ብቻ የሚሸፍን ሲሆን የዲኮር እና የጌጣጌጥ ስራዎችን አይጨምርም።</p>
                 </div>
             </div>
 
@@ -381,9 +387,14 @@
                                 እዚህ ጋር ይፈረሙ...
                             </div>
                         </div>
+                        
+                        <!-- Digital Signature Label for PDF Print Only -->
+                        <div id="digitalPrintLabel" class="hidden print:block text-sm text-black font-semibold pt-1">
+                            ፊርማ :-
+                        </div>
                     </div>
 
-                    <!-- Physical Signature Notice (Only shown on screen when physical is selected, hidden in PDF) -->
+                    <!-- Physical Signature Notice (Only shown on screen when physical is selected) -->
                     <div id="physicalSigNotice" class="hidden text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg no-print">
                         <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም (Physical) ስለተመረጠ፣ ይህን ውል አትመው (Print አድርገው) በአካል በእጅዎ መፈረም ይችላሉ።
                     </div>
