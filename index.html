@@ -98,9 +98,6 @@
                 color: #000 !important;
                 padding: 2px 0 !important;
             }
-            .print-hide-extras {
-                display: none !important;
-            }
             .print-border-none {
                 border: none !important;
                 background: transparent !important;
@@ -126,6 +123,16 @@
 
     <div class="max-w-4xl mx-auto print-container bg-navy-800 border gold-border rounded-2xl p-4 sm:p-8 card-shadow relative overflow-hidden">
         
+        <!-- Mode Banner (Customer vs Sabel Admin View) -->
+        <div id="modeBanner" class="no-print mb-4 p-3 rounded-lg bg-navy-900 border border-gold-500/40 text-xs sm:text-sm flex items-center justify-between">
+            <span id="modeBannerText" class="text-gold-300 font-bold">
+                <i class="fa-solid fa-user-pen mr-1"></i> [የደንበኛ መሙያ ገጽ - Customer Form Mode]
+            </span>
+            <span id="workflowStatusBadge" class="bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded border border-amber-500/30 text-xs font-semibold">
+                ደረጃ 1፡ ደንበኛ እየሞላ ነው
+            </span>
+        </div>
+
         <!-- Decorative Header Ornament & Logo -->
         <div class="text-center mb-6 border-b gold-border pb-6 relative">
             <div class="flex justify-center mb-3">
@@ -154,7 +161,7 @@
             </div>
             
             <div class="mt-3 inline-block bg-gold-500/10 text-gold-300 text-xs px-3 py-1 rounded-md border border-gold-500/30 font-semibold">
-                የዲጂታል አገልግሎት ውል እና ስምምነት ሰነድ
+                የዲጂታል አገልግሎት ውል እና ስምምነት ሰነድ (ርቀት ላይ ሆነው በጋራ የሚፈረም)
             </div>
         </div>
 
@@ -351,24 +358,14 @@
                 </div>
             </div>
 
-            <!-- Section 5: Signature Method Selection -->
+            <!-- Section 5: Signature Method & Remote Dual-Signatures -->
             <div class="mb-8">
                 <h2 class="text-lg font-bold text-gold-400 border-l-4 border-gold-500 pl-3 mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-signature"></i> <span class="no-print">፭. የፊርማ ዓይነት መረጣ <span class="text-red-400">*</span></span><span class="hidden print:inline">ፊርማ</span>
+                    <i class="fa-solid fa-signature"></i> <span class="no-print">፭. የፊርማ ክፍሎች (Customer & Sabel Signatures)</span><span class="hidden print:inline">ፊርማዎች</span>
                 </h2>
 
                 <div class="bg-navy-900 p-4 rounded-xl border border-gold-500/30 space-y-4 print-border-none">
-                    <div class="flex gap-6 text-sm no-print">
-                        <label class="flex items-center gap-2 cursor-pointer font-semibold text-white">
-                            <input type="radio" name="sigType" value="digital" checked onchange="toggleSigMode()" class="accent-gold-500 w-4 h-4">
-                            በዲጂታል መፈረም (Digital Signature)
-                        </label>
-                        <label class="flex items-center gap-2 cursor-pointer font-semibold text-white">
-                            <input type="radio" name="sigType" value="physical" onchange="toggleSigMode()" class="accent-gold-500 w-4 h-4">
-                            በአካል መፈረም (Physical / In-Person)
-                        </label>
-                    </div>
-
+                    
                     <!-- Digital Signatures Container (Side by Side) -->
                     <div id="digitalSigContainer" class="pt-2">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
@@ -376,8 +373,8 @@
                             <!-- Left: Client Digital Signature -->
                             <div class="space-y-2 bg-navy-950/40 p-3 rounded-lg border border-gray-800">
                                 <div class="flex justify-between items-center no-print">
-                                    <span class="text-xs text-gold-300 font-semibold">የደንበኛ ፊርማ ሳጥን:</span>
-                                    <button type="button" onclick="clearSignature('client')" class="text-xs text-red-400 hover:text-red-300 underline">
+                                    <span class="text-xs text-gold-300 font-semibold">1. የደንበኛ ፊርማ ሳጥን:</span>
+                                    <button type="button" id="clearClientBtn" onclick="clearSignature('client')" class="text-xs text-red-400 hover:text-red-300 underline">
                                         <i class="fa-solid fa-rotate-left"></i> አጽዳ
                                     </button>
                                 </div>
@@ -388,16 +385,16 @@
                                     </div>
                                 </div>
                                 <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-1 pt-1">
-                                    <div>የደንበኛው/ዋ ስም:- <span id="printClientName" class="border-b border-dashed border-gray-500 px-1">_________________</span></div>
+                                    <div>የደንበኛው/ዋ ስም:- <span id="printClientName" class="border-b border-dashed border-gray-500 px-1 font-bold">_________________</span></div>
                                     <div>ቀን :- <span id="printDate" class="border-b border-dashed border-gray-500 px-1">_______________</span></div>
                                 </div>
                             </div>
 
                             <!-- Right: Sabel Representative Digital Signature -->
-                            <div class="space-y-2 bg-navy-950/40 p-3 rounded-lg border border-gray-800">
+                            <div class="space-y-2 bg-navy-950/40 p-3 rounded-lg border border-gold-500/30">
                                 <div class="flex justify-between items-center no-print">
-                                    <span class="text-xs text-gold-300 font-semibold">የሳቤል ሰብሳቢ ፊርማ ሳጥን:</span>
-                                    <button type="button" onclick="clearSignature('sabel')" class="text-xs text-red-400 hover:text-red-300 underline">
+                                    <span class="text-xs text-gold-300 font-semibold">2. የሳቤል ሰብሳቢ ፊርማ ሳጥን:</span>
+                                    <button type="button" id="clearSabelBtn" onclick="clearSignature('sabel')" class="text-xs text-red-400 hover:text-red-300 underline">
                                         <i class="fa-solid fa-rotate-left"></i> አጽዳ
                                     </button>
                                 </div>
@@ -422,41 +419,21 @@
                         </div>
                     </div>
 
-                    <!-- Physical Signature Notice (Only shown on screen when physical is selected) -->
-                    <div id="physicalSigNotice" class="hidden text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg no-print">
-                        <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም (Physical) ስለተመረጠ፣ ይህን ውል አትመው (Print አድርገው) በአካል በእጅዎ መፈረም ይችላሉ።
-                    </div>
-
-                    <!-- Physical Signature Lines Side by Side for PDF Print -->
-                    <div id="physicalPrintLines" class="hidden text-sm text-black font-semibold pt-2">
-                        <div class="grid grid-cols-2 gap-6">
-                            <!-- Left: Client Physical -->
-                            <div class="space-y-3">
-                                <div>የደንበኛው/ዋ ስም:- _________________</div>
-                                <div>ቀን :-  _______________</div>
-                                <div>ፊርማ :-_________________</div>
-                            </div>
-                            <!-- Right: Sabel Representative Physical -->
-                            <div class="space-y-3">
-                                <div>የሳቤል ሰብሳቢ ስም:- ________________</div>
-                                <div>ቀን :- _________________</div>
-                                <div>ፊርማ :- __________________</div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
+            <!-- Action Buttons (Dynamic based on Step 1 or Step 2) -->
             <div class="no-print flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-800">
-                <button type="button" onclick="submitAgreement()" 
+                <!-- Step 1 Button: Send to Sabel -->
+                <button type="button" id="sendToSabelBtn" onclick="generateSabelLink()" 
                     class="flex-1 gold-gradient-bg text-navy-950 font-extrabold py-3.5 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 hover:opacity-95 transition">
-                    <i class="fa-solid fa-file-circle-check text-lg"></i> ውሉን አጽድቅ (Agree & Sign)
+                    <i class="fa-solid fa-paper-plane text-lg"></i> ውሉን ለሳቤል ሰብሳቢ ላክ (Share Draft)
                 </button>
 
-                <button type="button" onclick="printContract()" 
-                    class="bg-navy-700 hover:bg-navy-600 border border-gold-500/40 text-gold-300 font-bold py-3.5 px-6 rounded-xl flex items-center justify-center gap-2 transition">
-                    <i class="fa-solid fa-print"></i> ውሉን በ PDF አውርድ / ህተም
+                <!-- Step 2 Button: Finalize & Print (Only active for Sabel) -->
+                <button type="button" id="finalizePrintBtn" onclick="finalizeAndPrint()" 
+                    class="hidden flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold py-3.5 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-circle-check text-lg"></i> ውሉን ሙሉ በሙሉ አጽድቅ እና ፕሪንት / PDF አውርድ
                 </button>
             </div>
 
@@ -469,31 +446,28 @@
 
     </div>
 
-    <!-- Success Modal -->
-    <div id="successModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
-        <div class="bg-navy-800 border gold-border rounded-2xl max-w-md w-full p-6 text-center card-shadow relative">
-            <div class="w-16 h-16 bg-gold-500/20 text-gold-400 rounded-full flex items-center justify-center mx-auto mb-4 border border-gold-500">
-                <i class="fa-solid fa-check text-3xl"></i>
+    <!-- Share Link Modal -->
+    <div id="shareModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-navy-800 border gold-border rounded-2xl max-w-lg w-full p-6 card-shadow relative">
+            <div class="w-14 h-14 bg-gold-500/20 text-gold-400 rounded-full flex items-center justify-center mx-auto mb-3 border border-gold-500">
+                <i class="fa-solid fa-link text-2xl"></i>
             </div>
             
-            <h3 class="text-2xl font-bold gold-gradient-text mb-2">ውሉ በተሳካ ሁኔታ ጸድቋል!</h3>
-            <p class="text-gray-300 text-sm mb-4">
-                ስለ ሳቤል EVENT ስለመረጡ እናመሰግናለን። የውል መረጃዎ ተመዝግቧል።
+            <h3 class="text-xl font-bold gold-gradient-text text-center mb-1">የደንበኛ ፊርማ ተያይዟል!</h3>
+            <p class="text-gray-300 text-xs text-center mb-4">
+                ይህንን ሊንክ ኮፒ አድርገው በቴሌግራም ለሳቤል ሰብሳቢ ይላኩለት። ሰብሳቢው ይህንን ሊንክ ሲከፍተው የርስዎን መረጃ እና ፊርማ አግኝቶ የራሱን ፊርማ ጨርሶ ውሉን ያጠናቅቃል።
             </p>
 
-            <div class="bg-navy-900 p-3 rounded-lg text-left text-xs text-gray-300 mb-6 border border-gray-700 space-y-1">
-                <div><strong>የውል ቁጥር፡</strong> <span id="modalRef" class="text-gold-400"></span></div>
-                <div><strong>ደንበኛ፡</strong> <span id="modalName"></span></div>
-                <div><strong>ቀን፡</strong> <span id="modalDate"></span></div>
-                <div><strong>ቀሪ ክፍያ፡</strong> <span id="modalBalance" class="text-green-400 font-bold"></span></div>
+            <div class="bg-navy-900 p-3 rounded-lg text-xs text-gray-300 mb-4 border border-gray-700 flex items-center gap-2">
+                <input type="text" id="shareableLinkInput" readonly class="w-full bg-navy-950 border border-gray-700 rounded px-2 py-1.5 text-gold-300 font-mono text-xs focus:outline-none">
+                <button onclick="copyShareableLink()" class="gold-gradient-bg text-navy-950 font-bold px-3 py-1.5 rounded text-xs shrink-0">
+                    <i class="fa-solid fa-copy mr-1"></i> ኮፒ አድርግ
+                </button>
             </div>
 
-            <div class="flex gap-3">
-                <button onclick="closeModal()" class="flex-1 bg-navy-700 text-white font-semibold py-2.5 rounded-lg hover:bg-navy-600 text-sm">
-                    ዘጋ
-                </button>
-                <button onclick="closeModal(); printContract();" class="flex-1 gold-gradient-bg text-navy-950 font-bold py-2.5 rounded-lg text-sm">
-                    <i class="fa-solid fa-print mr-1"></i> ህተም / PDF
+            <div class="text-center">
+                <button onclick="closeShareModal()" class="bg-navy-700 text-white font-semibold py-2 px-6 rounded-lg hover:bg-navy-600 text-xs">
+                    ዝጋ
                 </button>
             </div>
         </div>
@@ -534,23 +508,6 @@
             calculateBalance();
         }
 
-        function toggleSigMode() {
-            const sigType = document.querySelector('input[name="sigType"]:checked').value;
-            const digitalContainer = document.getElementById('digitalSigContainer');
-            const physicalNotice = document.getElementById('physicalSigNotice');
-            const physicalPrintLines = document.getElementById('physicalPrintLines');
-
-            if (sigType === 'physical') {
-                digitalContainer.classList.add('hidden');
-                physicalNotice.classList.remove('hidden');
-                physicalPrintLines.classList.remove('hidden');
-            } else {
-                digitalContainer.classList.remove('hidden');
-                physicalNotice.classList.add('hidden');
-                physicalPrintLines.classList.add('hidden');
-            }
-        }
-
         // Canvas Setup for Client & Sabel
         const canvasClient = document.getElementById('sigCanvasClient');
         const ctxClient = canvasClient.getContext('2d');
@@ -586,7 +543,7 @@
         window.addEventListener('load', () => {
             resizeCanvases();
             calculateTotal();
-            toggleSigMode();
+            checkForIncomingData();
         });
         window.addEventListener('resize', resizeCanvases);
 
@@ -674,81 +631,167 @@
             document.getElementById('remainingBalance').innerText = `${remaining.toLocaleString()} ETB`;
         }
 
-        function validateFormInputs() {
+        // --- URL Data Encoding & Decoding for Remote Multi-Step Workflow ---
+        function generateSabelLink() {
             const name = document.getElementById('clientName').value.trim();
             const phone = document.getElementById('clientPhone').value.trim();
+            const phone2 = document.getElementById('clientPhone2').value.trim();
             const date = document.getElementById('eventDate').value.trim();
             const location = document.getElementById('eventLocation').value.trim();
             const startTime = document.getElementById('startTime').value.trim();
             const endTime = document.getElementById('endTime').value.trim();
+            const advance = document.getElementById('advancePayment').value;
             const total = parseFloat(document.getElementById('totalPrice').value) || 0;
-            const sigType = document.querySelector('input[name="sigType"]:checked').value;
 
             if (!name || !phone || !date || !location || !startTime || !endTime) {
                 alert("እባክዎን ሁሉንም አስፈላጊ የደንበኛ እና የዝግጅት መረጃዎች በትክክል ይሙሉ!");
-                return false;
+                return;
             }
 
             const phoneRegex = /^(09|07)\d{8}$/;
             if (!phoneRegex.test(phone)) {
                 alert("እባክዎን ትክክለኛ ዋና ስልክ ቁጥር ያስገቡ (ለምሳሌ፦ 0911234567)");
                 document.getElementById('clientPhone').focus();
-                return false;
+                return;
             }
 
             if (total <= 0) {
                 alert("እባክዎን ቢያንስ አንድ የአገልግሎት ዓይነት ይምረጡ!");
-                return false;
+                return;
             }
 
-            if (sigType === 'digital') {
-                if (!hasSignedClient) {
-                    alert("እባክዎን በደንበኛው ፊርማ ሳጥን ውስጥ ይፈረሙ!");
-                    return false;
-                }
-                if (!hasSignedSabel) {
-                    alert("እባክዎን በሳቤል ሰብሳቢ ፊርማ ሳጥን ውስጥ ይፈረሙ!");
-                    return false;
-                }
-                const sabelNameInput = document.getElementById('sabelRepName').value.trim();
-                const sabelDateInput = document.getElementById('sabelRepDate').value.trim();
-                if (!sabelNameInput || !sabelDateInput) {
-                    alert("እባክዎን የሳቤል ሰብሳቢ ስም እና ቀን ያስገቡ!");
-                    return false;
-                }
+            if (!hasSignedClient) {
+                alert("እባክዎን በመጀመሪያ በደንበኛው ፊርማ ሳጥን ውስጥ ይፈረሙ!");
+                return;
             }
 
-            // Update live preview for client name and date in digital mode
-            document.getElementById('printClientName').innerText = name;
-            document.getElementById('printDate').innerText = date;
+            // Gather selected services
+            const services = [];
+            const weddingCheck = document.getElementById('weddingCheck');
+            if (weddingCheck && weddingCheck.checked) {
+                const pkg = document.getElementById('weddingPackage').value;
+                services.push(`ሰርግ አጃቢ (${pkg})`);
+            }
+            document.querySelectorAll('input[name="service"]').forEach((box, idx) => {
+                if (idx > 0 && box.checked) services.push(box.value);
+            });
 
-            return true;
+            // Get Client Signature Base64 Image
+            const clientSigData = canvasClient.toDataURL();
+
+            const payload = {
+                n: name,
+                p: phone,
+                p2: phone2,
+                d: date,
+                l: location,
+                st: startTime,
+                et: endTime,
+                adv: advance,
+                srv: services.join(','),
+                csig: clientSigData
+            };
+
+            // Encode payload into Base64 URL parameter
+            const jsonStr = JSON.stringify(payload);
+            const encoded = btoa(encodeURIComponent(jsonStr));
+
+            const currentBaseUrl = window.location.href.split('?')[0];
+            const sabelLink = `${currentBaseUrl}?sabel_review=${encoded}`;
+
+            document.getElementById('shareableLinkInput').value = sabelLink;
+            document.getElementById('shareModal').classList.remove('hidden');
         }
 
-        function submitAgreement() {
-            if (!validateFormInputs()) return;
-
-            const name = document.getElementById('clientName').value.trim();
-            const phone2 = document.getElementById('clientPhone2').value.trim();
-            const date = document.getElementById('eventDate').value.trim();
-            const total = parseFloat(document.getElementById('totalPrice').value) || 0;
-            const remaining = Math.max(0, total - (parseFloat(document.getElementById('advancePayment').value) || 0));
-            const refNo = "SABEL-" + Math.floor(100000 + Math.random() * 900000);
-
-            document.getElementById('modalRef').innerText = refNo;
-            document.getElementById('modalName').innerText = name + (phone2 ? ` (2ኛ ስልክ: ${phone2})` : '');
-            document.getElementById('modalDate').innerText = date;
-            document.getElementById('modalBalance').innerText = `${remaining.toLocaleString()} ETB`;
-
-            document.getElementById('successModal').classList.remove('hidden');
+        function copyShareableLink() {
+            const input = document.getElementById('shareableLinkInput');
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value);
+            alert("ሊንኩ ተኮርጇል! አሁን በቴሌግራም ለሳቤል ሰብሳቢ መላክ ይችላሉ።");
         }
 
-        function closeModal() {
-            document.getElementById('successModal').classList.add('hidden');
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.add('hidden');
         }
 
-        function printContract() {
-            if (!validateFormInputs()) return;
+        // Check if URL has incoming data from client for Sabel Review Mode
+        function checkForIncomingData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const reviewData = urlParams.get('sabel_review');
+
+            if (reviewData) {
+                try {
+                    const jsonStr = decodeURIComponent(atob(reviewData));
+                    const data = JSON.parse(jsonStr);
+
+                    // Populate form fields
+                    document.getElementById('clientName').value = data.n || '';
+                    document.getElementById('clientPhone').value = data.p || '';
+                    document.getElementById('clientPhone2').value = data.p2 || '';
+                    document.getElementById('eventDate').value = data.d || '';
+                    document.getElementById('eventLocation').value = data.l || '';
+                    document.getElementById('startTime').value = data.st || '';
+                    document.getElementById('endTime').value = data.et || '';
+                    document.getElementById('advancePayment').value = data.adv || '0';
+
+                    // Lock client fields for Sabel mode
+                    document.getElementById('clientName').readOnly = true;
+                    document.getElementById('clientPhone').readOnly = true;
+                    document.getElementById('clientPhone2').readOnly = true;
+                    document.getElementById('eventDate').readOnly = true;
+                    document.getElementById('eventLocation').readOnly = true;
+                    document.getElementById('startTime').readOnly = true;
+                    document.getElementById('endTime').readOnly = true;
+                    document.getElementById('advancePayment').readOnly = true;
+
+                    // Draw Client signature onto canvas from Base64
+                    if (data.csig) {
+                        const img = new Image();
+                        img.onload = function() {
+                            ctxClient.drawImage(img, 0, 0);
+                            hasSignedClient = true;
+                            placeholderClient.style.display = 'none';
+                        };
+                        img.src = data.csig;
+                    }
+
+                    // Disable client canvas interaction
+                    canvasClient.style.pointerEvents = 'none';
+                    document.getElementById('clearClientBtn').style.display = 'none';
+
+                    // Update live print preview labels
+                    document.getElementById('printClientName').innerText = data.n;
+                    document.getElementById('printDate').innerText = data.d;
+
+                    // Switch Banner to Sabel Review Mode
+                    document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-shield text-gold-400 mr-1"></i> [የሳቤል ሰብሳቢ ማረጋገጫ ገጽ - Sabel Admin Review Mode]`;
+                    document.getElementById('workflowStatusBadge.className') = "bg-green-500/20 text-green-300 px-2.5 py-1 rounded border border-green-500/30 text-xs font-semibold";
+                    document.getElementById('workflowStatusBadge').innerText = "ደረጃ 2፡ ሳቤል ሰብሳቢ በመፈረም ላይ";
+
+                    // Switch Action Buttons
+                    document.getElementById('sendToSabelBtn').classList.add('hidden');
+                    document.getElementById('finalizePrintBtn').classList.remove('hidden');
+
+                } catch (e) {
+                    console.error("Invalid URL data payload", e);
+                }
+            }
+        }
+
+        function finalizeAndPrint() {
+            if (!hasSignedSabel) {
+                alert("እባክዎን በሳቤል ሰብሳቢ ፊርማ ሳጥን ውስጥ ይፈረሙ!");
+                return;
+            }
+            const sabelName = document.getElementById('sabelRepName').value.trim();
+            const sabelDate = document.getElementById('sabelRepDate').value.trim();
+            if (!sabelName || !sabelDate) {
+                alert("እባክዎን የሳቤል ሰብሳቢ ስም እና ቀን ያስገቡ!");
+                return;
+            }
+
+            // Trigger Print / PDF Export
             window.print();
         }
     </script>
