@@ -115,7 +115,7 @@
             }
             canvas {
                 border: none !important;
-                width: 150px !important;
+                width: 140px !important;
                 height: 45px !important;
                 background: transparent !important;
             }
@@ -369,38 +369,56 @@
                         </label>
                     </div>
 
-                    <!-- Digital Signature & Representative Block (Side by Side / Grid) -->
+                    <!-- Digital Signatures Container (Side by Side) -->
                     <div id="digitalSigContainer" class="pt-2">
-                        <div class="flex justify-between items-center no-print mb-2">
-                            <span class="text-xs text-gray-400">እባክዎን ከታች ባለው ሳጥን ላይ ይፈረሙ፡</span>
-                            <button type="button" onclick="clearSignature()" class="text-xs text-red-400 hover:text-red-300 underline font-semibold">
-                                <i class="fa-solid fa-rotate-left"></i> ፊርማ አፅዳ
-                            </button>
-                        </div>
-
-                        <!-- Side by Side Container for Digital Mode -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                            
                             <!-- Left: Client Digital Signature -->
-                            <div class="space-y-2">
-                                <div class="bg-white rounded-lg overflow-hidden touch-none relative inline-block border border-gold-500/30 print-border-none">
-                                    <canvas id="sigCanvas" class="w-full h-24 cursor-crosshair block bg-white"></canvas>
-                                    <div id="sigPlaceholder" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">
+                            <div class="space-y-2 bg-navy-950/40 p-3 rounded-lg border border-gray-800">
+                                <div class="flex justify-between items-center no-print">
+                                    <span class="text-xs text-gold-300 font-semibold">የደንበኛ ፊርማ ሳጥን:</span>
+                                    <button type="button" onclick="clearSignature('client')" class="text-xs text-red-400 hover:text-red-300 underline">
+                                        <i class="fa-solid fa-rotate-left"></i> አጽዳ
+                                    </button>
+                                </div>
+                                <div class="bg-white rounded-lg overflow-hidden touch-none relative block border border-gold-500/30 print-border-none">
+                                    <canvas id="sigCanvasClient" class="w-full h-20 cursor-crosshair block bg-white"></canvas>
+                                    <div id="sigPlaceholderClient" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">
                                         እዚህ ጋር ይፈረሙ...
                                     </div>
                                 </div>
-                                <div class="text-sm text-gray-200 print:text-black space-y-1.5 pt-1">
-                                    <div>የደንበኛው/ዋ ስም:- <span id="printClientName" class="border-b border-dashed border-gray-500 px-2">_________________</span></div>
-                                    <div>ቀን :- <span id="printDate" class="border-b border-dashed border-gray-500 px-2">_______________</span></div>
-                                    <div class="font-semibold pt-1">ፊርማ :-</div>
+                                <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-1 pt-1">
+                                    <div>የደንበኛው/ዋ ስም:- <span id="printClientName" class="border-b border-dashed border-gray-500 px-1">_________________</span></div>
+                                    <div>ቀን :- <span id="printDate" class="border-b border-dashed border-gray-500 px-1">_______________</span></div>
                                 </div>
                             </div>
 
-                            <!-- Right: Sabel Representative -->
-                            <div class="space-y-1.5 text-sm text-gray-200 print:text-black flex flex-col justify-end pt-4 sm:pt-0">
-                                <div>የሳቤል ሰብሳቢ :- ________________</div>
-                                <div>ቀን :- _________________</div>
-                                <div class="font-semibold pt-1">ፊርማ :- ________________</div>
+                            <!-- Right: Sabel Representative Digital Signature -->
+                            <div class="space-y-2 bg-navy-950/40 p-3 rounded-lg border border-gray-800">
+                                <div class="flex justify-between items-center no-print">
+                                    <span class="text-xs text-gold-300 font-semibold">የሳቤል ሰብሳቢ ፊርማ ሳጥን:</span>
+                                    <button type="button" onclick="clearSignature('sabel')" class="text-xs text-red-400 hover:text-red-300 underline">
+                                        <i class="fa-solid fa-rotate-left"></i> አጽዳ
+                                    </button>
+                                </div>
+                                <div class="bg-white rounded-lg overflow-hidden touch-none relative block border border-gold-500/30 print-border-none">
+                                    <canvas id="sigCanvasSabel" class="w-full h-20 cursor-crosshair block bg-white"></canvas>
+                                    <div id="sigPlaceholderSabel" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">
+                                        የሳቤል ሰብሳቢ እዚህ ይፈረም...
+                                    </div>
+                                </div>
+                                <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-1 pt-1">
+                                    <div class="flex items-center gap-1">
+                                        <span>የሳቤል ሰብሳቢ ስም:-</span>
+                                        <input type="text" id="sabelRepName" placeholder="ስም ያስገቡ" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-32">
+                                    </div>
+                                    <div class="flex items-center gap-1">
+                                        <span>ቀን :-</span>
+                                        <input type="text" id="sabelRepDate" placeholder="ቀን ያስገቡ" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-32">
+                                    </div>
+                                </div>
                             </div>
+
                         </div>
                     </div>
 
@@ -420,7 +438,7 @@
                             </div>
                             <!-- Right: Sabel Representative Physical -->
                             <div class="space-y-3">
-                                <div>የሳቤል ሰብሳቢ :- ________________</div>
+                                <div>የሳቤል ሰብሳቢ ስም:- ________________</div>
                                 <div>ቀን :- _________________</div>
                                 <div>ፊርማ :- __________________</div>
                             </div>
@@ -533,52 +551,81 @@
             }
         }
 
-        // Canvas Drawing Setup
-        const canvas = document.getElementById('sigCanvas');
-        const ctx = canvas.getContext('2d');
-        const placeholder = document.getElementById('sigPlaceholder');
-        let isDrawing = false;
-        let hasSigned = false;
+        // Canvas Setup for Client & Sabel
+        const canvasClient = document.getElementById('sigCanvasClient');
+        const ctxClient = canvasClient.getContext('2d');
+        const placeholderClient = document.getElementById('sigPlaceholderClient');
+        let isDrawingClient = false;
+        let hasSignedClient = false;
 
-        function resizeCanvas() {
-            if (!canvas) return;
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width > 0 ? rect.width : 300;
-            canvas.height = rect.height > 0 ? rect.height : 90;
-            ctx.strokeStyle = "#0f1c3f";
-            ctx.lineWidth = 2.5;
-            ctx.lineCap = "round";
+        const canvasSabel = document.getElementById('sigCanvasSabel');
+        const ctxSabel = canvasSabel.getContext('2d');
+        const placeholderSabel = document.getElementById('sigPlaceholderSabel');
+        let isDrawingSabel = false;
+        let hasSignedSabel = false;
+
+        function resizeCanvases() {
+            if (canvasClient) {
+                const rect = canvasClient.getBoundingClientRect();
+                canvasClient.width = rect.width > 0 ? rect.width : 280;
+                canvasClient.height = 80;
+                ctxClient.strokeStyle = "#0f1c3f";
+                ctxClient.lineWidth = 2.5;
+                ctxClient.lineCap = "round";
+            }
+            if (canvasSabel) {
+                const rect = canvasSabel.getBoundingClientRect();
+                canvasSabel.width = rect.width > 0 ? rect.width : 280;
+                canvasSabel.height = 80;
+                ctxSabel.strokeStyle = "#0f1c3f";
+                ctxSabel.lineWidth = 2.5;
+                ctxSabel.lineCap = "round";
+            }
         }
 
         window.addEventListener('load', () => {
-            resizeCanvas();
+            resizeCanvases();
             calculateTotal();
             toggleSigMode();
         });
-        window.addEventListener('resize', resizeCanvas);
+        window.addEventListener('resize', resizeCanvases);
 
-        function startDrawing(e) {
-            isDrawing = true;
-            hasSigned = true;
-            placeholder.style.display = 'none';
-            ctx.beginPath();
-            const pos = getPos(e);
-            ctx.moveTo(pos.x, pos.y);
+        // Client Canvas Events
+        function startDrawingClient(e) {
+            isDrawingClient = true;
+            hasSignedClient = true;
+            placeholderClient.style.display = 'none';
+            ctxClient.beginPath();
+            const pos = getPos(e, canvasClient);
+            ctxClient.moveTo(pos.x, pos.y);
         }
-
-        function draw(e) {
-            if (!isDrawing) return;
-            const pos = getPos(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
+        function drawClient(e) {
+            if (!isDrawingClient) return;
+            const pos = getPos(e, canvasClient);
+            ctxClient.lineTo(pos.x, pos.y);
+            ctxClient.stroke();
         }
+        function stopDrawingClient() { isDrawingClient = false; }
 
-        function stopDrawing() {
-            isDrawing = false;
+        // Sabel Canvas Events
+        function startDrawingSabel(e) {
+            isDrawingSabel = true;
+            hasSignedSabel = true;
+            placeholderSabel.style.display = 'none';
+            ctxSabel.beginPath();
+            const pos = getPos(e, canvasSabel);
+            ctxSabel.moveTo(pos.x, pos.y);
         }
+        function drawSabel(e) {
+            if (!isDrawingSabel) return;
+            const pos = getPos(e, canvasSabel);
+            ctxSabel.lineTo(pos.x, pos.y);
+            ctxSabel.stroke();
+        }
+        function stopDrawingSabel() { isDrawingSabel = false; }
 
-        function getPos(e) {
-            const rect = canvas.getBoundingClientRect();
+        function getPos(e, cvs) {
+            const rect = cvs.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             return {
@@ -587,22 +634,36 @@
             };
         }
 
-        if (canvas) {
-            canvas.addEventListener('mousedown', startDrawing);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDrawing);
-            canvas.addEventListener('mouseleave', stopDrawing);
-
-            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawing(e); }, { passive: false });
-            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, { passive: false });
-            canvas.addEventListener('touchend', stopDrawing);
+        if (canvasClient) {
+            canvasClient.addEventListener('mousedown', startDrawingClient);
+            canvasClient.addEventListener('mousemove', drawClient);
+            canvasClient.addEventListener('mouseup', stopDrawingClient);
+            canvasClient.addEventListener('mouseleave', stopDrawingClient);
+            canvasClient.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawingClient(e); }, { passive: false });
+            canvasClient.addEventListener('touchmove', (e) => { e.preventDefault(); drawClient(e); }, { passive: false });
+            canvasClient.addEventListener('touchend', stopDrawingClient);
         }
 
-        function clearSignature() {
-            if (!canvas) return;
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            hasSigned = false;
-            placeholder.style.display = 'flex';
+        if (canvasSabel) {
+            canvasSabel.addEventListener('mousedown', startDrawingSabel);
+            canvasSabel.addEventListener('mousemove', drawSabel);
+            canvasSabel.addEventListener('mouseup', stopDrawingSabel);
+            canvasSabel.addEventListener('mouseleave', stopDrawingSabel);
+            canvasSabel.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawingSabel(e); }, { passive: false });
+            canvasSabel.addEventListener('touchmove', (e) => { e.preventDefault(); drawSabel(e); }, { passive: false });
+            canvasSabel.addEventListener('touchend', stopDrawingSabel);
+        }
+
+        function clearSignature(target) {
+            if (target === 'client') {
+                ctxClient.clearRect(0, 0, canvasClient.width, canvasClient.height);
+                hasSignedClient = false;
+                placeholderClient.style.display = 'flex';
+            } else if (target === 'sabel') {
+                ctxSabel.clearRect(0, 0, canvasSabel.width, canvasSabel.height);
+                hasSignedSabel = false;
+                placeholderSabel.style.display = 'flex';
+            }
         }
 
         function calculateBalance() {
@@ -640,9 +701,21 @@
                 return false;
             }
 
-            if (sigType === 'digital' && !hasSigned) {
-                alert("እባክዎን በፊርማ ሳጥኑ ውስጥ ዲጂታል ፊርማዎን ያስቀምጡ ወይም በአካል የሚለውን አማራጭ ይምረጡ!");
-                return false;
+            if (sigType === 'digital') {
+                if (!hasSignedClient) {
+                    alert("እባክዎን በደንበኛው ፊርማ ሳጥን ውስጥ ይፈረሙ!");
+                    return false;
+                }
+                if (!hasSignedSabel) {
+                    alert("እባክዎን በሳቤል ሰብሳቢ ፊርማ ሳጥን ውስጥ ይፈረሙ!");
+                    return false;
+                }
+                const sabelNameInput = document.getElementById('sabelRepName').value.trim();
+                const sabelDateInput = document.getElementById('sabelRepDate').value.trim();
+                if (!sabelNameInput || !sabelDateInput) {
+                    alert("እባክዎን የሳቤል ሰብሳቢ ስም እና ቀን ያስገቡ!");
+                    return false;
+                }
             }
 
             // Update live preview for client name and date in digital mode
