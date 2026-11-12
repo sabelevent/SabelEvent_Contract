@@ -62,10 +62,6 @@
 
         <!-- Decorative Header Ornament & Logo -->
         <div class="text-center mb-6 border-b gold-border pb-6 relative">
-            <div class="flex justify-center mb-3">
-                <img src="sabel_logo.png" alt="ሳቤል EVENT Logo" class="w-32 h-32 sm:w-36 sm:h-36 object-contain rounded-full border-2 border-gold-500 shadow-xl bg-black">
-            </div>
-
             <h1 class="text-3xl sm:text-4xl font-extrabold gold-gradient-text tracking-wider uppercase font-cinzel">
                 ሳቤል EVENT
             </h1>
@@ -365,35 +361,34 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
+    <!-- Application JavaScript Logic & Firebase Integration -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // ---- YOUR FIREBASE CONFIG (Firebase ኮንሶል ውስጥ ከሚገኘው Project Settings የምታገኛቸው) ----
+        // ---- YOUR FIREBASE CONFIG ----
         const firebaseConfig = {
-            apiKey: "YOUR_FIREBASE_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyCFUxUytoTiHmprzlKZ-yUk64",
+            authDomain: "sabel-event.firebaseapp.com",
+            projectId: "sabel-event",
+            storageBucket: "sabel-event.appspot.com",
+            messagingSenderId: "147139920339",
+            appId: "1:147139920339:web:4a0fdaaadfd7..."
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Make globally available
         window.db = db;
         window.collection = collection;
         window.addDoc = addDoc;
         window.doc = doc;
         window.getDoc = getDoc;
+        window.updateDoc = updateDoc;
     </script>
 
-    <!-- Application JavaScript Logic -->
     <script>
+        // Calculations
         function toggleWeddingPackage() {
             const checkbox = document.getElementById('weddingCheck');
             const wrapper = document.getElementById('weddingPackageWrapper');
@@ -422,7 +417,7 @@
             document.getElementById('remainingBalance').innerText = `${Math.max(0, total - advance).toLocaleString()} ETB`;
         }
 
-        // Canvas Signatures
+        // Canvas Touch and Mouse Signatures Setup
         const canvasClient = document.getElementById('sigCanvasClient');
         const ctxClient = canvasClient.getContext('2d');
         const placeholderClient = document.getElementById('sigPlaceholderClient');
@@ -444,26 +439,77 @@
             checkUrlForContract();
         });
 
-        // Drawing events
-        canvasClient.addEventListener('mousedown', (e) => { isDrawingClient = true; placeholderClient.style.display = 'none'; ctxClient.beginPath(); const p = getPos(e, canvasClient); ctxClient.moveTo(p.x, p.y); });
-        canvasClient.addEventListener('mousemove', (e) => { if (!isDrawingClient) return; const p = getPos(e, canvasClient); ctxClient.lineTo(p.x, p.y); ctxClient.stroke(); });
-        canvasClient.addEventListener('mouseup', () => isDrawingClient = false);
+        window.addEventListener('resize', resizeCanvases);
 
-        canvasSabel.addEventListener('mousedown', (e) => { isDrawingSabel = true; placeholderSabel.style.display = 'none'; ctxSabel.beginPath(); const p = getPos(e, canvasSabel); ctxSabel.moveTo(p.x, p.y); });
-        canvasSabel.addEventListener('mousemove', (e) => { if (!isDrawingSabel) return; const p = getPos(e, canvasSabel); ctxSabel.lineTo(p.x, p.y); ctxSabel.stroke(); });
-        canvasSabel.addEventListener('mouseup', () => isDrawingSabel = false);
+        // Client Drawing Listeners (Mouse & Touch)
+        canvasClient.addEventListener('mousedown', startDrawClient);
+        canvasClient.addEventListener('mousemove', drawClient);
+        canvasClient.addEventListener('mouseup', stopDrawClient);
+        canvasClient.addEventListener('mouseleave', stopDrawClient);
+
+        canvasClient.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawClient(e.touches[0]); }, {passive: false});
+        canvasClient.addEventListener('touchmove', (e) => { e.preventDefault(); drawClient(e.touches[0]); }, {passive: false});
+        canvasClient.addEventListener('touchend', stopDrawClient);
+
+        function startDrawClient(e) {
+            isDrawingClient = true;
+            placeholderClient.style.display = 'none';
+            ctxClient.beginPath();
+            const p = getPos(e, canvasClient);
+            ctxClient.moveTo(p.x, p.y);
+        }
+        function drawClient(e) {
+            if (!isDrawingClient) return;
+            const p = getPos(e, canvasClient);
+            ctxClient.lineTo(p.x, p.y);
+            ctxClient.stroke();
+        }
+        function stopDrawClient() { isDrawingClient = false; }
+
+        // Sabel Drawing Listeners (Mouse & Touch)
+        canvasSabel.addEventListener('mousedown', startDrawSabel);
+        canvasSabel.addEventListener('mousemove', drawSabel);
+        canvasSabel.addEventListener('mouseup', stopDrawSabel);
+        canvasSabel.addEventListener('mouseleave', stopDrawSabel);
+
+        canvasSabel.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawSabel(e.touches[0]); }, {passive: false});
+        canvasSabel.addEventListener('touchmove', (e) => { e.preventDefault(); drawSabel(e.touches[0]); }, {passive: false});
+        canvasSabel.addEventListener('touchend', stopDrawSabel);
+
+        function startDrawSabel(e) {
+            isDrawingSabel = true;
+            placeholderSabel.style.display = 'none';
+            ctxSabel.beginPath();
+            const p = getPos(e, canvasSabel);
+            ctxSabel.moveTo(p.x, p.y);
+        }
+        function drawSabel(e) {
+            if (!isDrawingSabel) return;
+            const p = getPos(e, canvasSabel);
+            ctxSabel.lineTo(p.x, p.y);
+            ctxSabel.stroke();
+        }
+        function stopDrawSabel() { isDrawingSabel = false; }
 
         function getPos(e, cvs) {
             const rect = cvs.getBoundingClientRect();
-            return { x: (e.clientX || e.touches[0].clientX) - rect.left, y: (e.clientY || e.touches[0].clientY) - rect.top };
+            return { 
+                x: (e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0)) - rect.left, 
+                y: (e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0)) - rect.top 
+            };
         }
 
         function clearSignature(target) {
-            if (target === 'client') { ctxClient.clearRect(0, 0, canvasClient.width, canvasClient.height); placeholderClient.style.display = 'flex'; }
-            else { ctxSabel.clearRect(0, 0, canvasSabel.width, canvasSabel.height); placeholderSabel.style.display = 'flex'; }
+            if (target === 'client') { 
+                ctxClient.clearRect(0, 0, canvasClient.width, canvasClient.height); 
+                placeholderClient.style.display = 'flex'; 
+            } else { 
+                ctxSabel.clearRect(0, 0, canvasSabel.width, canvasSabel.height); 
+                placeholderSabel.style.display = 'flex'; 
+            }
         }
 
-        // Save Contract to Firebase Cloud Firestore
+        // Save or Update Contract to Firebase Cloud Firestore
         async function saveContractToFirebase() {
             const name = document.getElementById('clientName').value.trim();
             const phone = document.getElementById('clientPhone').value.trim();
@@ -472,32 +518,53 @@
             const total = document.getElementById('totalPrice').value;
 
             if (!name || !phone || !date || !location) {
-                alert("እባክዎን ሁሉንም የደንበኛ መረጃዎች በቅንፍ የተጠየቁትን ይሙሉ!");
+                alert("እባክዎን ሁሉንም የደንበኛ መረጃዎች (በቅንፍ የተጠየቁትን) በግዴታ ይሙሉ!");
                 return;
             }
 
             const clientSig = canvasClient.toDataURL();
-            const contractData = {
-                clientName: name,
-                clientPhone: phone,
-                clientPhone2: document.getElementById('clientPhone2').value,
-                eventDate: date,
-                eventLocation: location,
-                startTime: document.getElementById('startTime').value,
-                endTime: document.getElementById('endTime').value,
-                totalPrice: total,
-                advancePayment: document.getElementById('advancePayment').value,
-                clientSignature: clientSig,
-                createdAt: new Date().toISOString()
-            };
+            const sabelSig = canvasSabel.toDataURL();
+            
+            const params = new URLSearchParams(window.location.search);
+            const contractId = params.get('id');
 
             try {
-                const docRef = await window.addDoc(window.collection(window.db, "contracts"), contractData);
-                const contractId = docRef.id;
-                const shareLink = `${window.location.origin}${window.location.pathname}?id=${contractId}`;
-                
-                document.getElementById('contractLinkInput').value = shareLink;
-                document.getElementById('linkModal').classList.remove('hidden');
+                if (contractId) {
+                    // Sabel mode updating contract with Sabel signature
+                    const docRef = window.doc(window.db, "contracts", contractId);
+                    await window.updateDoc(docRef, {
+                        sabelSignature: sabelSig,
+                        sabelRepName: document.getElementById('sabelRepName').value,
+                        sabelRepDate: document.getElementById('sabelRepDate').value,
+                        status: "Fully Signed"
+                    });
+                    alert("የሳቤል ፊርማ በተሳካ ሁኔታ ተመዝግቧል! አሁን ፕሪንት ማድረግ ይችላሉ።");
+                    window.print();
+                } else {
+                    // Customer mode saving new contract
+                    const contractData = {
+                        clientName: name,
+                        clientPhone: phone,
+                        clientPhone2: document.getElementById('clientPhone2').value,
+                        eventDate: date,
+                        eventLocation: location,
+                        startTime: document.getElementById('startTime').value,
+                        endTime: document.getElementById('endTime').value,
+                        totalPrice: total,
+                        advancePayment: document.getElementById('advancePayment').value,
+                        clientSignature: clientSig,
+                        sabelSignature: "",
+                        status: "Waiting for Sabel",
+                        createdAt: new Date().toISOString()
+                    };
+
+                    const docRef = await window.addDoc(window.collection(window.db, "contracts"), contractData);
+                    const newId = docRef.id;
+                    const shareLink = `${window.location.origin}${window.location.pathname}?id=${newId}`;
+                    
+                    document.getElementById('contractLinkInput').value = shareLink;
+                    document.getElementById('linkModal').classList.remove('hidden');
+                }
             } catch (error) {
                 alert("መረጃውን ማስቀመጥ አልተቻለም: " + error.message);
             }
@@ -516,7 +583,6 @@
             const contractId = params.get('id');
             if (!contractId) return;
 
-            // Wait until window.db is initialized
             const checkDb = setInterval(async () => {
                 if (window.db) {
                     clearInterval(checkDb);
@@ -546,11 +612,21 @@
                                 img.src = data.clientSignature;
                             }
 
+                            if (data.sabelSignature) {
+                                const imgSabel = new Image();
+                                imgSabel.onload = () => { ctxSabel.drawImage(imgSabel, 0, 0); placeholderSabel.style.display = 'none'; };
+                                imgSabel.src = data.sabelSignature;
+                            }
+
                             // Update UI for Sabel Review Mode
                             document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-shield text-gold-400 mr-1"></i> [የሳቤል ሰብሳቢ ማረጋገጫ ገጽ - Step 2: Sabel Mode]`;
                             document.getElementById('workflowStatusBadge').className = "bg-green-500/20 text-green-300 px-2.5 py-1 rounded border border-green-500/30 text-xs font-semibold";
-                            document.getElementById('workflowStatusBadge').innerText = "ደንበኛ ፈርሟል - እባክዎን ይፈርሙ";
-                            document.getElementById('saveDraftBtn').style.display = 'none';
+                            document.getElementById('workflowStatusBadge').innerText = "ደንበኛ ፈርሟል - እባክዎን የሳቤልን ፊርማ ጨርሰው ይፈርሙ";
+                            
+                            // Change button text for Sabel to sign and save
+                            const saveBtn = document.getElementById('saveDraftBtn');
+                            saveBtn.innerHTML = `<i class="fa-solid fa-file-signature text-lg"></i> የሳቤልን ፊርማ አስቀምጥ እና ፕሪንት አድርግ`;
+                            saveBtn.setAttribute("onclick", "saveContractToFirebase()");
                         }
                     } catch (e) {
                         console.error("Error loading contract:", e);
