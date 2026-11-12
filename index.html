@@ -375,7 +375,7 @@
                 </div>
             </div>
 
-            <!-- Section 5: Signatures (Horizontal Grid with Print Helper classes) -->
+            <!-- Section 5: Signatures -->
             <div class="mb-8">
                 <h2 class="text-lg font-bold text-gold-400 border-l-4 border-gold-500 pl-3 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-signature"></i> ፭. ፊርማዎች (Signatures) <span class="text-red-400">*</span>
@@ -607,7 +607,7 @@
             }
         }
 
-        // Canvas Setup
+        // Canvas Setup with Persistence to prevent wiping out signatures
         const canvasClient = document.getElementById('sigCanvasClient');
         const ctxClient = canvasClient.getContext('2d');
         const placeholderClient = document.getElementById('sigPlaceholderClient');
@@ -618,20 +618,27 @@
         const placeholderSabel = document.getElementById('sigPlaceholderSabel');
         let hasSignedSabel = false;
 
-        function setupCanvas(canvas) {
+        function setupCanvas(canvas, ctx, isClient) {
+            const existingData = canvas.toDataURL();
             const rect = canvas.getBoundingClientRect();
             canvas.width = rect.width || 300;
             canvas.height = 85;
-            const ctx = canvas.getContext('2d');
             ctx.strokeStyle = "#070c1b";
             ctx.lineWidth = 2.5;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
+
+            // Restore existing drawing if canvas had content
+            if ((isClient && hasSignedClient) || (!isClient && hasSignedSabel)) {
+                const img = new Image();
+                img.onload = () => { ctx.drawImage(img, 0, 0); };
+                img.src = existingData;
+            }
         }
 
         window.addEventListener('load', () => {
-            setupCanvas(canvasClient);
-            setupCanvas(canvasSabel);
+            setupCanvas(canvasClient, ctxClient, true);
+            setupCanvas(canvasSabel, ctxSabel, false);
             calculateTotal();
             toggleSigMode();
             checkUrlForContract();
@@ -643,9 +650,25 @@
             }
         });
 
+        // Prevent resizing from clearing out the signature
         window.addEventListener('resize', () => {
-            setupCanvas(canvasClient);
-            setupCanvas(canvasSabel);
+            // Keep current signatures in memory before resize
+            const clientData = hasSignedClient ? canvasClient.toDataURL() : null;
+            const sabelData = hasSignedSabel ? canvasSabel.toDataURL() : null;
+
+            setupCanvas(canvasClient, ctxClient, true);
+            setupCanvas(canvasSabel, ctxSabel, false);
+
+            if (clientData && hasSignedClient) {
+                const img1 = new Image();
+                img1.onload = () => { ctxClient.drawImage(img1, 0, 0); };
+                img1.src = clientData;
+            }
+            if (sabelData && hasSignedSabel) {
+                const img2 = new Image();
+                img2.onload = () => { ctxSabel.drawImage(img2, 0, 0); };
+                img2.src = sabelData;
+            }
         });
 
         function attachDrawingEvents(canvas, ctx, placeholder, isClient) {
@@ -699,7 +722,6 @@
         }
 
         function validateInputs() {
-            // Strict Validation for all required fields except clientPhone2
             const fields = [
                 { id: 'clientName', name: 'የደንበኛው ሙሉ ስም' },
                 { id: 'clientPhone', name: 'ዋና ስልክ ቁጥር' },
@@ -998,85 +1020,5 @@
                             document.getElementById('eventDate').value = data.eventDate || '';
                             document.getElementById('eventLocation').value = data.eventLocation || '';
                             
-                            // Parse start time period and value
                             if (data.startTime) {
-                                const parts = data.startTime.split(' ');
-                                if (parts.length >= 2) {
-                                    document.getElementById('startPeriod').value = parts[0];
-                                    document.getElementById('startTimeVal').value = parts.slice(1).join(' ');
-                                } else {
-                                    document.getElementById('startTimeVal').value = data.startTime;
-                                }
-                            }
-
-                            // Parse end time period and value
-                            if (data.endTime) {
-                                const parts = data.endTime.split(' ');
-                                if (parts.length >= 2) {
-                                    document.getElementById('endPeriod').value = parts[0];
-                                    document.getElementById('endTimeVal').value = parts.slice(1).join(' ');
-                                } else {
-                                    document.getElementById('endTimeVal').value = data.endTime;
-                                }
-                            }
-
-                            document.getElementById('advancePayment').value = data.advancePayment || '';
-
-                            if (data.services && Array.isArray(data.services)) {
-                                data.services.forEach(srv => {
-                                    if (srv.name === "ሰርግ አጃቢ") {
-                                        const weddingChk = document.getElementById('weddingCheck');
-                                        weddingChk.checked = true;
-                                        toggleWeddingPackage();
-                                        if (srv.packagePrice) {
-                                            document.getElementById('weddingPackage').value = srv.packagePrice;
-                                        }
-                                    } else {
-                                        document.querySelectorAll('input[name="service"]').forEach(box => {
-                                            if (box.value === srv.name) {
-                                                box.checked = true;
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                            calculateTotal();
-                            syncPrintNames();
-
-                            if (data.clientSignature) {
-                                const img = new Image();
-                                img.onload = () => { ctxClient.drawImage(img, 0, 0); placeholderClient.style.display = 'none'; hasSignedClient = true; };
-                                img.src = data.clientSignature;
-                            }
-
-                            if (data.sabelSignature) {
-                                const img2 = new Image();
-                                img2.onload = () => { ctxSabel.drawImage(img2, 0, 0); placeholderSabel.style.display = 'none'; hasSignedSabel = true; };
-                                img2.src = data.sabelSignature;
-                            }
-
-                            if (data.sabelRepName) {
-                                document.getElementById('sabelRepName').value = data.sabelRepName;
-                            }
-
-                            document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-shield text-gold-400 mr-1"></i> [የሳቤል ሰብሳቢ ማረጋገጫ ገጽ]`;
-                            document.getElementById('workflowStatusBadge').className = "bg-green-500/20 text-green-300 px-2.5 py-1 rounded border border-green-500/30 text-xs font-semibold";
-                            document.getElementById('workflowStatusBadge').innerText = data.status;
-
-                            document.getElementById('saveDraftBtn').style.display = 'none';
-                            document.getElementById('backToDashBtn').style.display = 'inline-block';
-                            
-                            if (window.auth.currentUser) {
-                                document.getElementById('sabelLockOverlay').style.display = 'none';
-                                document.getElementById('sabelApproveBtn').style.display = 'flex';
-                            }
-                        }
-                    } catch (e) {
-                        console.error(e);
-                    }
-                }
-            }, 100);
-        }
-    </script>
-</body>
-</html>
+                                const parts
