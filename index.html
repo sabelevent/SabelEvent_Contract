@@ -34,6 +34,7 @@
         .gold-gradient-bg { background: linear-gradient(135deg, #d4af37 0%, #b89228 100%); }
         .gold-gradient-bg:hover { background: linear-gradient(135deg, #ebd06a 0%, #d4af37 100%); }
         .card-shadow { box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 0 15px 0 rgba(212, 175, 55, 0.1); }
+        canvas { touch-action: none; background: #ffffff; width: 100%; height: 90px; display: block; cursor: crosshair; }
         @media print {
             body { background: #ffffff !important; color: #000000 !important; }
             .no-print { display: none !important; }
@@ -42,7 +43,6 @@
             input, select, textarea { border: none !important; border-bottom: 1px solid #333 !important; background: transparent !important; color: #000 !important; padding: 2px 0 !important; }
             .print-border-none { border: none !important; background: transparent !important; padding: 0 !important; }
             .terms-box { max-height: none !important; overflow: visible !important; background: transparent !important; border: 1px solid #ccc !important; color: #000 !important; }
-            canvas { border: none !important; width: 140px !important; height: 45px !important; background: transparent !important; }
         }
     </style>
 </head>
@@ -53,7 +53,7 @@
         <!-- Workflow Header Banner -->
         <div id="modeBanner" class="no-print mb-4 p-3 rounded-lg bg-navy-900 border border-gold-500/40 text-xs sm:text-sm flex items-center justify-between">
             <span id="modeBannerText" class="text-gold-300 font-bold">
-                <i class="fa-solid fa-user-pen mr-1"></i> [የደንበኛ መሙያ ገጽ - Step 1: Customer Mode]
+                <i class="fa-solid fa-user-pen mr-1"></i> [የሳቤል EVENT ዲጂታል እና በአካል መፈረሚያ ስርአት]
             </span>
             <span id="workflowStatusBadge" class="bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded border border-amber-500/30 text-xs font-semibold">
                 እየተሞላ ነው...
@@ -83,7 +83,7 @@
             </div>
             
             <div class="mt-3 inline-block bg-gold-500/10 text-gold-300 text-xs px-3 py-1 rounded-md border border-gold-500/30 font-semibold">
-                የዲጂታል አገልግሎት ውል እና ስምምነት ሰነድ (Firebase Cloud System)
+                የዲጂታል እና በአካል አገልግሎት ውል እና ስምምነት ሰነድ
             </div>
         </div>
 
@@ -271,10 +271,10 @@
                 </div>
             </div>
 
-            <!-- Section 5: Dual-Signatures (Customer & Sabel Side by Side) -->
+            <!-- Section 5: Dual-Signatures (Customer & Sabel Side by Side - Face to Face or Remote) -->
             <div class="mb-8">
                 <h2 class="text-lg font-bold text-gold-400 border-l-4 border-gold-500 pl-3 mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-signature"></i> ፭. የፊርማ ክፍሎች
+                    <i class="fa-solid fa-signature"></i> ፭. የፊርማ ክፍሎች (በአካል ወይም በዲጂታል)
                 </h2>
 
                 <div class="bg-navy-900 p-4 rounded-xl border border-gold-500/30 space-y-4 print-border-none">
@@ -284,11 +284,11 @@
                         <div class="space-y-2 bg-navy-950/40 p-3 rounded-lg border border-gray-800">
                             <div class="flex justify-between items-center no-print">
                                 <span class="text-xs text-gold-300 font-semibold">1. የደንበኛ ፊርማ ሳጥን:</span>
-                                <button type="button" onclick="clearSignature('client')" class="text-xs text-red-400 underline no-print">አጽዳ</button>
+                                <button type="button" onclick="clearSignature('client')" class="text-xs text-red-400 underline no-print cursor-pointer">አጽዳ</button>
                             </div>
-                            <div class="bg-white rounded-lg overflow-hidden touch-none relative block border border-gold-500/30 print-border-none">
-                                <canvas id="sigCanvasClient" class="w-full h-20 cursor-crosshair block bg-white"></canvas>
-                                <div id="sigPlaceholderClient" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">እዚህ ጋር ይፈረሙ...</div>
+                            <div class="bg-white rounded-lg overflow-hidden relative border border-gold-500/30">
+                                <canvas id="sigCanvasClient"></canvas>
+                                <div id="sigPlaceholderClient" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">ደንበኛ እዚህ ጋር ይፈረም...</div>
                             </div>
                             <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-1 pt-1">
                                 <div>የደንበኛ ስም:- <span id="printClientName" class="border-b border-dashed border-gray-500 px-1 font-bold">_________________</span></div>
@@ -299,11 +299,11 @@
                         <!-- Right: Sabel Representative Signature -->
                         <div class="space-y-2 bg-navy-950/40 p-3 rounded-lg border border-gray-800">
                             <div class="flex justify-between items-center no-print">
-                                <span class="text-xs text-gold-300 font-semibold">2. የሳቤል ሰብሳቢ ፊርማ ሳጥን:</span>
-                                <button type="button" onclick="clearSignature('sabel')" class="text-xs text-red-400 underline no-print">አጽዳ</button>
+                                <span class="text-xs text-gold-300 font-semibold">2. የሳቤል ሰብሳቢ ፊርማ ሳጥን (በአካል / በሊንክ):</span>
+                                <button type="button" onclick="clearSignature('sabel')" class="text-xs text-red-400 underline no-print cursor-pointer">አጽዳ</button>
                             </div>
-                            <div class="bg-white rounded-lg overflow-hidden touch-none relative block border border-gold-500/30 print-border-none">
-                                <canvas id="sigCanvasSabel" class="w-full h-20 cursor-crosshair block bg-white"></canvas>
+                            <div class="bg-white rounded-lg overflow-hidden relative border border-gold-500/30">
+                                <canvas id="sigCanvasSabel"></canvas>
                                 <div id="sigPlaceholderSabel" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">የሳቤል ሰብሳቢ እዚህ ይፈረም...</div>
                             </div>
                             <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-1 pt-1">
@@ -324,16 +324,16 @@
 
             <!-- Action Buttons -->
             <div class="no-print flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-800">
-                <!-- Customer Button: Save Draft to Firebase Cloud -->
+                <!-- Button 1: Save & Generate Link (For Remote or Draft) -->
                 <button type="button" id="saveDraftBtn" onclick="saveContractToFirebase()" 
-                    class="flex-1 gold-gradient-bg text-navy-950 font-extrabold py-3.5 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 hover:opacity-95 transition">
-                    <i class="fa-solid fa-cloud-arrow-up text-lg"></i> ውሉን ለሳቤል ላክ (Save & Send Draft)
+                    class="flex-1 gold-gradient-bg text-navy-950 font-extrabold py-3.5 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 hover:opacity-95 transition cursor-pointer">
+                    <i class="fa-solid fa-cloud-arrow-up text-lg"></i> ውሉን መዝገብና ሊንክ አመንጭ (Save & Share)
                 </button>
 
-                <!-- Sabel Admin Button: Final Print -->
-                <button type="button" id="printFinalBtn" onclick="window.print()" 
-                    class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 text-white font-extrabold py-3.5 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 transition">
-                    <i class="fa-solid fa-print text-lg"></i> ፕሪንት / PDF አውርድ (Final Print)
+                <!-- Button 2: Direct Print / Face-to-Face Completion -->
+                <button type="button" id="printFinalBtn" onclick="faceToFacePrint()" 
+                    class="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 text-white font-extrabold py-3.5 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 transition cursor-pointer">
+                    <i class="fa-solid fa-print text-lg"></i> በአካል ተፈርሞ ፕሪንት / PDF አድርግ (Face-to-Face)
                 </button>
             </div>
 
@@ -352,21 +352,20 @@
                 <i class="fa-solid fa-check text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold gold-gradient-text mb-1">ውሉ ተቀምጧል!</h3>
-            <p class="text-gray-300 text-xs mb-4">ይህንን ሊንክ ኮፒ አድርገው ለሳቤል ሰብሳቢ ይላኩለት። ሰብሳቢው ሲከፍተው የርስዎን መረጃ አግኝቶ ይፈርምበታል።</p>
+            <p class="text-gray-300 text-xs mb-4">ይህንን ሊንክ ኮፒ አድርገው ለሳቤል ሰብሳቢ ወይም ለደንበኛ ይላኩት።</p>
             <div class="bg-navy-900 p-2 rounded mb-4 flex items-center gap-2">
                 <input type="text" id="contractLinkInput" readonly class="w-full bg-navy-950 text-gold-300 text-xs px-2 py-1.5 rounded border border-gray-700">
-                <button onclick="copyLink()" class="gold-gradient-bg text-navy-950 text-xs px-3 py-1.5 rounded font-bold">ኮፒ</button>
+                <button onclick="copyLink()" class="gold-gradient-bg text-navy-950 text-xs px-3 py-1.5 rounded font-bold cursor-pointer">ኮፒ</button>
             </div>
-            <button onclick="document.getElementById('linkModal').classList.add('hidden')" class="bg-navy-700 text-white text-xs px-6 py-2 rounded">ዝጋ</button>
+            <button onclick="document.getElementById('linkModal').classList.add('hidden')" class="bg-navy-700 text-white text-xs px-6 py-2 rounded cursor-pointer">ዝጋ</button>
         </div>
     </div>
 
-    <!-- Application JavaScript Logic & Firebase Integration -->
+    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // ---- YOUR FIREBASE CONFIG ----
         const firebaseConfig = {
             apiKey: "AIzaSyCFUxUytoTiHmprzlKZ-yUk64",
             authDomain: "sabel-event.firebaseapp.com",
@@ -387,8 +386,8 @@
         window.updateDoc = updateDoc;
     </script>
 
+    <!-- JavaScript Application Logic -->
     <script>
-        // Calculations
         function toggleWeddingPackage() {
             const checkbox = document.getElementById('weddingCheck');
             const wrapper = document.getElementById('weddingPackageWrapper');
@@ -417,131 +416,141 @@
             document.getElementById('remainingBalance').innerText = `${Math.max(0, total - advance).toLocaleString()} ETB`;
         }
 
-        // Canvas Touch and Mouse Signatures Setup
+        // Perfect Canvas Drawing Setup for Mobile & PC
         const canvasClient = document.getElementById('sigCanvasClient');
         const ctxClient = canvasClient.getContext('2d');
         const placeholderClient = document.getElementById('sigPlaceholderClient');
-        let isDrawingClient = false;
 
         const canvasSabel = document.getElementById('sigCanvasSabel');
         const ctxSabel = canvasSabel.getContext('2d');
         const placeholderSabel = document.getElementById('sigPlaceholderSabel');
-        let isDrawingSabel = false;
 
-        function resizeCanvases() {
-            if (canvasClient) { canvasClient.width = canvasClient.parentElement.clientWidth || 280; canvasClient.height = 80; ctxClient.strokeStyle = "#0f1c3f"; ctxClient.lineWidth = 2.5; ctxClient.lineCap = "round"; }
-            if (canvasSabel) { canvasSabel.width = canvasSabel.parentElement.clientWidth || 280; canvasSabel.height = 80; ctxSabel.strokeStyle = "#0f1c3f"; ctxSabel.lineWidth = 2.5; ctxSabel.lineCap = "round"; }
+        function setupCanvas(canvas) {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width || 300;
+            canvas.height = 90;
+            const ctx = canvas.getContext('2d');
+            ctx.strokeStyle = "#070c1b";
+            ctx.lineWidth = 2.5;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
         }
 
         window.addEventListener('load', () => {
-            resizeCanvases();
+            setupCanvas(canvasClient);
+            setupCanvas(canvasSabel);
             calculateTotal();
             checkUrlForContract();
+            
+            // Set default date fields
+            const todayStr = new Date().toLocaleDateString();
+            if(!document.getElementById('sabelRepDate').value) {
+                document.getElementById('sabelRepDate').value = todayStr;
+            }
         });
 
-        window.addEventListener('resize', resizeCanvases);
+        window.addEventListener('resize', () => {
+            setupCanvas(canvasClient);
+            setupCanvas(canvasSabel);
+        });
 
-        // Client Drawing Listeners (Mouse & Touch)
-        canvasClient.addEventListener('mousedown', startDrawClient);
-        canvasClient.addEventListener('mousemove', drawClient);
-        canvasClient.addEventListener('mouseup', stopDrawClient);
-        canvasClient.addEventListener('mouseleave', stopDrawClient);
+        // Universal Drawing Controller
+        function attachDrawingEvents(canvas, ctx, placeholder) {
+            let isDrawing = false;
 
-        canvasClient.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawClient(e.touches[0]); }, {passive: false});
-        canvasClient.addEventListener('touchmove', (e) => { e.preventDefault(); drawClient(e.touches[0]); }, {passive: false});
-        canvasClient.addEventListener('touchend', stopDrawClient);
+            function getCoordinates(e) {
+                const rect = canvas.getBoundingClientRect();
+                const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
+                const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
+                return {
+                    x: clientX - rect.left,
+                    y: clientY - rect.top
+                };
+            }
 
-        function startDrawClient(e) {
-            isDrawingClient = true;
-            placeholderClient.style.display = 'none';
-            ctxClient.beginPath();
-            const p = getPos(e, canvasClient);
-            ctxClient.moveTo(p.x, p.y);
+            function startDraw(e) {
+                isDrawing = true;
+                placeholder.style.display = 'none';
+                const pos = getCoordinates(e);
+                ctx.beginPath();
+                ctx.moveTo(pos.x, pos.y);
+            }
+
+            function draw(e) {
+                if (!isDrawing) return;
+                const pos = getCoordinates(e);
+                ctx.lineTo(pos.x, pos.y);
+                ctx.stroke();
+            }
+
+            function stopDraw() {
+                isDrawing = false;
+            }
+
+            canvas.addEventListener('mousedown', startDraw);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDraw);
+            canvas.addEventListener('mouseleave', stopDraw);
+
+            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDraw(e.touches[0]); }, { passive: false });
+            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); }, { passive: false });
+            canvas.addEventListener('touchend', stopDraw);
         }
-        function drawClient(e) {
-            if (!isDrawingClient) return;
-            const p = getPos(e, canvasClient);
-            ctxClient.lineTo(p.x, p.y);
-            ctxClient.stroke();
-        }
-        function stopDrawClient() { isDrawingClient = false; }
 
-        // Sabel Drawing Listeners (Mouse & Touch)
-        canvasSabel.addEventListener('mousedown', startDrawSabel);
-        canvasSabel.addEventListener('mousemove', drawSabel);
-        canvasSabel.addEventListener('mouseup', stopDrawSabel);
-        canvasSabel.addEventListener('mouseleave', stopDrawSabel);
-
-        canvasSabel.addEventListener('touchstart', (e) => { e.preventDefault(); startDrawSabel(e.touches[0]); }, {passive: false});
-        canvasSabel.addEventListener('touchmove', (e) => { e.preventDefault(); drawSabel(e.touches[0]); }, {passive: false});
-        canvasSabel.addEventListener('touchend', stopDrawSabel);
-
-        function startDrawSabel(e) {
-            isDrawingSabel = true;
-            placeholderSabel.style.display = 'none';
-            ctxSabel.beginPath();
-            const p = getPos(e, canvasSabel);
-            ctxSabel.moveTo(p.x, p.y);
-        }
-        function drawSabel(e) {
-            if (!isDrawingSabel) return;
-            const p = getPos(e, canvasSabel);
-            ctxSabel.lineTo(p.x, p.y);
-            ctxSabel.stroke();
-        }
-        function stopDrawSabel() { isDrawingSabel = false; }
-
-        function getPos(e, cvs) {
-            const rect = cvs.getBoundingClientRect();
-            return { 
-                x: (e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0)) - rect.left, 
-                y: (e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0)) - rect.top 
-            };
-        }
+        attachDrawingEvents(canvasClient, ctxClient, placeholderClient);
+        attachDrawingEvents(canvasSabel, ctxSabel, placeholderSabel);
 
         function clearSignature(target) {
-            if (target === 'client') { 
-                ctxClient.clearRect(0, 0, canvasClient.width, canvasClient.height); 
-                placeholderClient.style.display = 'flex'; 
-            } else { 
-                ctxSabel.clearRect(0, 0, canvasSabel.width, canvasSabel.height); 
-                placeholderSabel.style.display = 'flex'; 
+            if (target === 'client') {
+                ctxClient.clearRect(0, 0, canvasClient.width, canvasClient.height);
+                placeholderClient.style.display = 'flex';
+            } else {
+                ctxSabel.clearRect(0, 0, canvasSabel.width, canvasSabel.height);
+                placeholderSabel.style.display = 'flex';
             }
         }
 
-        // Save or Update Contract to Firebase Cloud Firestore
+        // Face-to-Face Print Option
+        function faceToFacePrint() {
+            const name = document.getElementById('clientName').value.trim();
+            const phone = document.getElementById('clientPhone').value.trim();
+            if (!name || !phone) {
+                alert("እባክዎን የደንበኛውን ስም እና ስልክ ቁጥር ይሙሉ!");
+                return;
+            }
+            document.getElementById('printClientName').innerText = name;
+            document.getElementById('printDate').innerText = document.getElementById('eventDate').value || new Date().toLocaleDateString();
+            window.print();
+        }
+
+        // Save to Firebase Cloud
         async function saveContractToFirebase() {
             const name = document.getElementById('clientName').value.trim();
             const phone = document.getElementById('clientPhone').value.trim();
             const date = document.getElementById('eventDate').value.trim();
             const location = document.getElementById('eventLocation').value.trim();
-            const total = document.getElementById('totalPrice').value;
 
             if (!name || !phone || !date || !location) {
-                alert("እባክዎን ሁሉንም የደንበኛ መረጃዎች (በቅንፍ የተጠየቁትን) በግዴታ ይሙሉ!");
+                alert("እባክዎን ሁሉንም አስፈላጊ የደንበኛ እና የዝግጅት መረጃዎች ይሙሉ!");
                 return;
             }
 
             const clientSig = canvasClient.toDataURL();
             const sabelSig = canvasSabel.toDataURL();
-            
             const params = new URLSearchParams(window.location.search);
             const contractId = params.get('id');
 
             try {
-                if (contractId) {
-                    // Sabel mode updating contract with Sabel signature
+                if (contractId && window.updateDoc) {
                     const docRef = window.doc(window.db, "contracts", contractId);
                     await window.updateDoc(docRef, {
                         sabelSignature: sabelSig,
                         sabelRepName: document.getElementById('sabelRepName').value,
-                        sabelRepDate: document.getElementById('sabelRepDate').value,
                         status: "Fully Signed"
                     });
-                    alert("የሳቤል ፊርማ በተሳካ ሁኔታ ተመዝግቧል! አሁን ፕሪንት ማድረግ ይችላሉ።");
+                    alert("የሳቤል ፊርማ ተመዝግቧል!");
                     window.print();
-                } else {
-                    // Customer mode saving new contract
+                } else if (window.addDoc) {
                     const contractData = {
                         clientName: name,
                         clientPhone: phone,
@@ -550,23 +559,21 @@
                         eventLocation: location,
                         startTime: document.getElementById('startTime').value,
                         endTime: document.getElementById('endTime').value,
-                        totalPrice: total,
+                        totalPrice: document.getElementById('totalPrice').value,
                         advancePayment: document.getElementById('advancePayment').value,
                         clientSignature: clientSig,
-                        sabelSignature: "",
-                        status: "Waiting for Sabel",
+                        sabelSignature: sabelSig,
+                        status: "Saved",
                         createdAt: new Date().toISOString()
                     };
 
                     const docRef = await window.addDoc(window.collection(window.db, "contracts"), contractData);
-                    const newId = docRef.id;
-                    const shareLink = `${window.location.origin}${window.location.pathname}?id=${newId}`;
-                    
+                    const shareLink = `${window.location.origin}${window.location.pathname}?id=${docRef.id}`;
                     document.getElementById('contractLinkInput').value = shareLink;
                     document.getElementById('linkModal').classList.remove('hidden');
                 }
             } catch (error) {
-                alert("መረጃውን ማስቀመጥ አልተቻለም: " + error.message);
+                alert("ስህተት አጋጥሟል: " + error.message);
             }
         }
 
@@ -577,59 +584,44 @@
             alert("ሊንኩ ተኮርጇል!");
         }
 
-        // Load Contract from Firebase if ID is in URL (For Sabel Admin Mode)
         async function checkUrlForContract() {
             const params = new URLSearchParams(window.location.search);
             const contractId = params.get('id');
             if (!contractId) return;
 
-            const checkDb = setInterval(async () => {
-                if (window.db) {
-                    clearInterval(checkDb);
+            const checkInterval = setInterval(async () => {
+                if (window.db && window.getDoc) {
+                    clearInterval(checkInterval);
                     try {
-                        const docRef = window.doc(window.db, "contracts", contractId);
-                        const docSnap = await window.getDoc(docRef);
-
+                        const docSnap = await window.getDoc(window.doc(window.db, "contracts", contractId));
                         if (docSnap.exists()) {
                             const data = docSnap.data();
-
-                            document.getElementById('clientName').value = data.clientName;
-                            document.getElementById('clientPhone').value = data.clientPhone;
+                            document.getElementById('clientName').value = data.clientName || '';
+                            document.getElementById('clientPhone').value = data.clientPhone || '';
                             document.getElementById('clientPhone2').value = data.clientPhone2 || '';
-                            document.getElementById('eventDate').value = data.eventDate;
-                            document.getElementById('eventLocation').value = data.eventLocation;
-                            document.getElementById('startTime').value = data.startTime;
-                            document.getElementById('endTime').value = data.endTime;
-                            document.getElementById('advancePayment').value = data.advancePayment;
+                            document.getElementById('eventDate').value = data.eventDate || '';
+                            document.getElementById('eventLocation').value = data.eventLocation || '';
+                            document.getElementById('startTime').value = data.startTime || '';
+                            document.getElementById('endTime').value = data.endTime || '';
+                            document.getElementById('advancePayment').value = data.advancePayment || '';
                             calculateTotal();
 
-                            document.getElementById('printClientName').innerText = data.clientName;
-                            document.getElementById('printDate').innerText = data.eventDate;
+                            document.getElementById('printClientName').innerText = data.clientName || '';
+                            document.getElementById('printDate').innerText = data.eventDate || '';
 
                             if (data.clientSignature) {
                                 const img = new Image();
                                 img.onload = () => { ctxClient.drawImage(img, 0, 0); placeholderClient.style.display = 'none'; };
                                 img.src = data.clientSignature;
                             }
-
                             if (data.sabelSignature) {
                                 const imgSabel = new Image();
                                 imgSabel.onload = () => { ctxSabel.drawImage(imgSabel, 0, 0); placeholderSabel.style.display = 'none'; };
                                 imgSabel.src = data.sabelSignature;
                             }
-
-                            // Update UI for Sabel Review Mode
-                            document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-shield text-gold-400 mr-1"></i> [የሳቤል ሰብሳቢ ማረጋገጫ ገጽ - Step 2: Sabel Mode]`;
-                            document.getElementById('workflowStatusBadge').className = "bg-green-500/20 text-green-300 px-2.5 py-1 rounded border border-green-500/30 text-xs font-semibold";
-                            document.getElementById('workflowStatusBadge').innerText = "ደንበኛ ፈርሟል - እባክዎን የሳቤልን ፊርማ ጨርሰው ይፈርሙ";
-                            
-                            // Change button text for Sabel to sign and save
-                            const saveBtn = document.getElementById('saveDraftBtn');
-                            saveBtn.innerHTML = `<i class="fa-solid fa-file-signature text-lg"></i> የሳቤልን ፊርማ አስቀምጥ እና ፕሪንት አድርግ`;
-                            saveBtn.setAttribute("onclick", "saveContractToFirebase()");
                         }
                     } catch (e) {
-                        console.error("Error loading contract:", e);
+                        console.error(e);
                     }
                 }
             }, 100);
