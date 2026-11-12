@@ -40,7 +40,8 @@
             .no-print { display: none !important; }
             .print-container { box-shadow: none !important; border: none !important; background: #ffffff !important; color: #000000 !important; padding: 0 !important; max-width: 100% !important; }
             .gold-gradient-text { -webkit-text-fill-color: #94721a !important; color: #94721a !important; }
-            input, select, textarea { border: none !important; border-bottom: 1px solid #333 !important; background: transparent !important; color: #000 !important; padding: 2px 0 !important; }
+            input, select, textarea { border: none !important; border-bottom: 1px solid #333 !important; background: transparent !important; color: #000 !important; padding: 2px 0 !important; outline: none !important; box-shadow: none !important; }
+            input::placeholder { color: transparent !important; }
             .print-border-none { border: none !important; background: transparent !important; padding: 0 !important; }
             .terms-box { max-height: none !important; overflow: visible !important; background: transparent !important; border: 1px solid #ccc !important; color: #000 !important; }
             .print-logo { display: block !important; margin: 0 auto 15px auto !important; width: 100px !important; height: 100px !important; object-fit: contain !important; }
@@ -352,7 +353,7 @@
                 </div>
             </div>
 
-            <!-- Section 5: Signatures (Horizontal Layout as Requested) -->
+            <!-- Section 5: Signatures (Horizontal Layout) -->
             <div class="mb-8">
                 <h2 class="text-lg font-bold text-gold-400 border-l-4 border-gold-500 pl-3 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-signature"></i> ፭. ፊርማዎች (Signatures) <span class="text-red-400">*</span>
@@ -390,7 +391,7 @@
                             <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-2 pt-1">
                                 <div>የደንበኛው/ዋ ስም፡- <span id="printClientName" class="font-bold underline">_________________</span></div>
                                 <div>ቀን ፡- <span id="printDate" class="underline">_______________</span></div>
-                                <!-- Physical Signature Line (Appears in Physical mode or Print) -->
+                                <!-- Physical Signature Line -->
                                 <div id="physicalClientLine" class="hidden font-bold pt-1">
                                     ፊርማ፡- _________________________________
                                 </div>
@@ -676,6 +677,26 @@
         }
 
         function validateInputs() {
+            // Strict Validation for all required fields except clientPhone2
+            const fields = [
+                { id: 'clientName', name: 'የደንበኛው ሙሉ ስም' },
+                { id: 'clientPhone', name: 'ዋና ስልክ ቁጥር' },
+                { id: 'eventDate', name: 'የዝግጅቱ ቀን' },
+                { id: 'eventLocation', name: 'የዝግጅቱ ቦታ / አድራሻ' },
+                { id: 'startTime', name: 'ፕሮግራሙ የሚጀምርበት ሰዓት' },
+                { id: 'endTime', name: 'ፕሮግራሙ የሚያልቅበት ሰዓት' },
+                { id: 'advancePayment', name: 'ቅድመ ክፍያ' }
+            ];
+
+            for (let field of fields) {
+                const val = document.getElementById(field.id).value.trim();
+                if (!val) {
+                    alert(`እባክዎን "${field.name}" የሚለውን ባዶ ቦታ ይሙሉ!`);
+                    document.getElementById(field.id).focus();
+                    return false;
+                }
+            }
+
             const dateInput = document.getElementById('eventDate').value.trim();
             const dateMatch = dateInput.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
 
