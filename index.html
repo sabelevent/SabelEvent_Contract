@@ -443,19 +443,19 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
+    <!-- Firebase SDKs with Correct Config -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
-            apiKey: "AIzaSyCFUxUytoTiHmprzlKZ-yUk64",
+            apiKey: "AIzaSyCFUxUytoTiHMprzlKZ-yUk64XtIA3Q0zs",
             authDomain: "sabel-event.firebaseapp.com",
             projectId: "sabel-event",
-            storageBucket: "sabel-event.appspot.com",
+            storageBucket: "sabel-event.firebasestorage.app",
             messagingSenderId: "147139920339",
-            appId: "1:147139920339:web:4a0fdaaadfd7..."
+            appId: "1:147139920339:web:4a0fdaaadfd7d2d6ab2f26"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -693,7 +693,6 @@
                 return;
             }
 
-            // Gather all selected services and packages
             const selectedServices = [];
             const weddingCheck = document.getElementById('weddingCheck');
             let weddingPkgVal = "";
@@ -728,7 +727,7 @@
                     endTime: document.getElementById('endTime').value,
                     totalPrice: document.getElementById('totalPrice').value,
                     advancePayment: document.getElementById('advancePayment').value,
-                    services: selectedServices, // Saved to Firebase
+                    services: selectedServices,
                     clientSignature: clientSig,
                     sabelSignature: "",
                     sabelRepName: "",
@@ -811,7 +810,6 @@
                             document.getElementById('endTime').value = data.endTime || '';
                             document.getElementById('advancePayment').value = data.advancePayment || '';
 
-                            // Restore selected services and packages from Firebase
                             if (data.services && Array.isArray(data.services)) {
                                 data.services.forEach(srv => {
                                     if (srv.name === "ሰርግ አጃቢ") {
@@ -835,14 +833,12 @@
                             document.getElementById('printClientName').innerText = data.clientName || '';
                             document.getElementById('printDate').innerText = data.eventDate || '';
 
-                            // Load Client Signature
                             if (data.clientSignature) {
                                 const img = new Image();
                                 img.onload = () => { ctxClient.drawImage(img, 0, 0); placeholderClient.style.display = 'none'; };
                                 img.src = data.clientSignature;
                             }
 
-                            // Switch UI to Sabel Approval View
                             document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-shield text-gold-400 mr-1"></i> [የሳቤል ሰብሳቢ ማረጋገጫ ገጽ - Step 2: Sabel Mode]`;
                             document.getElementById('workflowStatusBadge').className = "bg-green-500/20 text-green-300 px-2.5 py-1 rounded border border-green-500/30 text-xs font-semibold";
                             document.getElementById('workflowStatusBadge').innerText = "ደንበኛ ፈርሟል - እባክዎን አድሚን ገብተው ያጸድቁ";
