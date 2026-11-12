@@ -40,11 +40,13 @@
             .no-print { display: none !important; }
             .print-container { box-shadow: none !important; border: none !important; background: #ffffff !important; color: #000000 !important; padding: 0 !important; max-width: 100% !important; }
             .gold-gradient-text { -webkit-text-fill-color: #94721a !important; color: #94721a !important; }
-            input, select, textarea { border: none !important; border-bottom: 1px solid #333 !important; background: transparent !important; color: #000 !important; padding: 2px 0 !important; outline: none !important; box-shadow: none !important; }
-            input::placeholder { color: transparent !important; }
+            input, select, textarea { border: none !important; border-bottom: 1px solid #333 !important; background: transparent !important; color: #000 !important; padding: 2px 0 !important; outline: none !important; box-shadow: none !important; -webkit-appearance: none; appearance: none; }
+            input::placeholder, select::placeholder { color: transparent !important; }
             .print-border-none { border: none !important; background: transparent !important; padding: 0 !important; }
             .terms-box { max-height: none !important; overflow: visible !important; background: transparent !important; border: 1px solid #ccc !important; color: #000 !important; }
             .print-logo { display: block !important; margin: 0 auto 15px auto !important; width: 100px !important; height: 100px !important; object-fit: contain !important; }
+            .print-grid-horizontal { display: flex !important; flex-direction: row !important; gap: 20px !important; width: 100% !important; }
+            .print-col-half { flex: 1 !important; width: 50% !important; }
         }
     </style>
 </head>
@@ -209,16 +211,36 @@
                             class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
                     </div>
 
+                    <!-- Start Time with Dropdown -->
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 mb-1">ፕሮግራሙ የሚጀምርበት ሰዓት <span class="text-red-400">*</span></label>
-                        <input type="text" id="startTime" required placeholder="ለምሳሌ፡ ከቀን 7:00 ሰዓት"
-                            class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
+                        <div class="flex gap-2">
+                            <select id="startPeriod" class="bg-navy-900 border border-gray-700 rounded-lg px-2 py-2 text-gold-300 text-xs focus:outline-none focus:border-gold-500">
+                                <option value="ከጠዋቱ">ከጠዋቱ</option>
+                                <option value="ከረፋዱ">ከረፋዱ</option>
+                                <option value="ከሰዓት">ከሰዓት</option>
+                                <option value="ከምሽቱ">ከምሽቱ</option>
+                                <option value="ከሌሊቱ">ከሌሊቱ</option>
+                            </select>
+                            <input type="text" id="startTimeVal" required placeholder="ለምሳሌ፡ 7:00 ሰዓት"
+                                class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition text-sm">
+                        </div>
                     </div>
 
+                    <!-- End Time with Dropdown -->
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 mb-1">ፕሮግራሙ የሚያልቅበት ሰዓት <span class="text-red-400">*</span></label>
-                        <input type="text" id="endTime" required placeholder="ለምሳሌ፡ ከምሽቱ 11:30 ሰዓት"
-                            class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
+                        <div class="flex gap-2">
+                            <select id="endPeriod" class="bg-navy-900 border border-gray-700 rounded-lg px-2 py-2 text-gold-300 text-xs focus:outline-none focus:border-gold-500">
+                                <option value="ከጠዋቱ">ከጠዋቱ</option>
+                                <option value="ከረፋዱ">ከረፋዱ</option>
+                                <option value="ከሰዓት">ከሰዓት</option>
+                                <option value="ከምሽቱ" selected>ከምሽቱ</option>
+                                <option value="ከሌሊቱ">ከሌሊቱ</option>
+                            </select>
+                            <input type="text" id="endTimeVal" required placeholder="ለምሳሌ፡ 11:30 ሰዓት"
+                                class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition text-sm">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -353,7 +375,7 @@
                 </div>
             </div>
 
-            <!-- Section 5: Signatures (Horizontal Layout) -->
+            <!-- Section 5: Signatures (Horizontal Grid with Print Helper classes) -->
             <div class="mb-8">
                 <h2 class="text-lg font-bold text-gold-400 border-l-4 border-gold-500 pl-3 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-signature"></i> ፭. ፊርማዎች (Signatures) <span class="text-red-400">*</span>
@@ -372,10 +394,10 @@
                     </div>
 
                     <!-- Horizontal Grid Container for Both Signatures -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 print-grid-horizontal">
                         
-                        <!-- Client Signature Box / Physical Lines -->
-                        <div class="space-y-3 bg-navy-950/50 p-3 rounded-lg border border-gray-800">
+                        <!-- Client Signature Box -->
+                        <div class="space-y-3 bg-navy-950/50 p-3 rounded-lg border border-gray-800 print-col-half">
                             <div class="flex justify-between items-center no-print">
                                 <span class="text-xs text-gold-300 font-semibold"><i class="fa-solid fa-user mr-1"></i> የደንበኛ ፊርማ:</span>
                                 <button type="button" onclick="clearSignature('client')" class="text-xs text-red-400 underline no-print cursor-pointer digital-only">አጽዳ</button>
@@ -398,8 +420,8 @@
                             </div>
                         </div>
 
-                        <!-- Sabel Representative Signature Box / Physical Lines -->
-                        <div id="sabelSectionWrapper" class="space-y-3 bg-navy-950/50 p-3 rounded-lg border border-amber-500/30 relative">
+                        <!-- Sabel Representative Signature Box -->
+                        <div id="sabelSectionWrapper" class="space-y-3 bg-navy-950/50 p-3 rounded-lg border border-amber-500/30 relative print-col-half">
                             <div id="sabelLockOverlay" class="absolute inset-0 bg-navy-950/85 z-10 flex flex-col items-center justify-center text-center p-4 rounded-lg no-print">
                                 <i class="fa-solid fa-lock text-amber-400 text-2xl mb-1"></i>
                                 <p class="text-xs text-amber-200 font-semibold">ይህ የሳቤል ሰብሳቢ ፊርማ ሳጥን የተቆለፈ ነው። አድሚን ገብቶ ለማጽደቅ ከላይ ያለውን <span class="text-gold-300 underline cursor-pointer" onclick="openLoginModal()">"አድሚን ግባ"</span> የሚለውን ይጫኑ።</p>
@@ -683,8 +705,8 @@
                 { id: 'clientPhone', name: 'ዋና ስልክ ቁጥር' },
                 { id: 'eventDate', name: 'የዝግጅቱ ቀን' },
                 { id: 'eventLocation', name: 'የዝግጅቱ ቦታ / አድራሻ' },
-                { id: 'startTime', name: 'ፕሮግራሙ የሚጀምርበት ሰዓት' },
-                { id: 'endTime', name: 'ፕሮግራሙ የሚያልቅበት ሰዓት' },
+                { id: 'startTimeVal', name: 'ፕሮግራሙ የሚጀምርበት ሰዓት' },
+                { id: 'endTimeVal', name: 'ፕሮግራሙ የሚያልቅበት ሰዓት' },
                 { id: 'advancePayment', name: 'ቅድመ ክፍያ' }
             ];
 
@@ -857,6 +879,9 @@
             const phone = document.getElementById('clientPhone').value.trim();
             const date = document.getElementById('eventDate').value.trim();
             const location = document.getElementById('eventLocation').value.trim();
+            
+            const fullStartTime = `${document.getElementById('startPeriod').value} ${document.getElementById('startTimeVal').value.trim()}`;
+            const fullEndTime = `${document.getElementById('endPeriod').value} ${document.getElementById('endTimeVal').value.trim()}`;
 
             if (!hasSignedClient) {
                 alert("እባክዎን በደንበኛው ፊርማ ሳጥን ውስጥ በመፈረም ውሉን ያረጋግጡ!");
@@ -891,8 +916,8 @@
                     clientPhone2: document.getElementById('clientPhone2').value,
                     eventDate: date,
                     eventLocation: location,
-                    startTime: document.getElementById('startTime').value,
-                    endTime: document.getElementById('endTime').value,
+                    startTime: fullStartTime,
+                    endTime: fullEndTime,
                     totalPrice: document.getElementById('totalPrice').value,
                     advancePayment: document.getElementById('advancePayment').value,
                     services: selectedServices,
@@ -972,8 +997,29 @@
                             document.getElementById('clientPhone2').value = data.clientPhone2 || '';
                             document.getElementById('eventDate').value = data.eventDate || '';
                             document.getElementById('eventLocation').value = data.eventLocation || '';
-                            document.getElementById('startTime').value = data.startTime || '';
-                            document.getElementById('endTime').value = data.endTime || '';
+                            
+                            // Parse start time period and value
+                            if (data.startTime) {
+                                const parts = data.startTime.split(' ');
+                                if (parts.length >= 2) {
+                                    document.getElementById('startPeriod').value = parts[0];
+                                    document.getElementById('startTimeVal').value = parts.slice(1).join(' ');
+                                } else {
+                                    document.getElementById('startTimeVal').value = data.startTime;
+                                }
+                            }
+
+                            // Parse end time period and value
+                            if (data.endTime) {
+                                const parts = data.endTime.split(' ');
+                                if (parts.length >= 2) {
+                                    document.getElementById('endPeriod').value = parts[0];
+                                    document.getElementById('endTimeVal').value = parts.slice(1).join(' ');
+                                } else {
+                                    document.getElementById('endTimeVal').value = data.endTime;
+                                }
+                            }
+
                             document.getElementById('advancePayment').value = data.advancePayment || '';
 
                             if (data.services && Array.isArray(data.services)) {
