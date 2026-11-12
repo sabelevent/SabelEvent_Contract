@@ -34,7 +34,7 @@
         .gold-gradient-bg { background: linear-gradient(135deg, #d4af37 0%, #b89228 100%); }
         .gold-gradient-bg:hover { background: linear-gradient(135deg, #ebd06a 0%, #d4af37 100%); }
         .card-shadow { box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 0 15px 0 rgba(212, 175, 55, 0.1); }
-        canvas { touch-action: none; background: #ffffff; width: 100%; height: 90px; display: block; cursor: crosshair; }
+        canvas { touch-action: none; background: #ffffff; width: 100%; height: 85px; display: block; cursor: crosshair; }
         @media print {
             body { background: #ffffff !important; color: #000000 !important; }
             .no-print { display: none !important; }
@@ -180,7 +180,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 mb-1">የደንበኛው ሙሉ ስም <span class="text-red-400">*</span></label>
-                        <input type="text" id="clientName" required placeholder="ለምሳሌ፡ አበበ ከበደ"
+                        <input type="text" id="clientName" required placeholder="ለምሳሌ፡ አበበ ከበደ" oninput="syncPrintNames()"
                             class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
                     </div>
 
@@ -198,7 +198,7 @@
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 mb-1">የዝግጅቱ ቀን (የኢትዮጵያ ካላንደር) <span class="text-red-400">*</span></label>
-                        <input type="text" id="eventDate" required placeholder="ለምሳሌ፡ 20/03/2018 ዓ.ም"
+                        <input type="text" id="eventDate" required placeholder="ለምሳሌ፡ 20/03/2018 ዓ.ም" oninput="syncPrintNames()"
                             class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
                     </div>
 
@@ -352,7 +352,7 @@
                 </div>
             </div>
 
-            <!-- Section 5: Signatures -->
+            <!-- Section 5: Signatures (Horizontal Layout as Requested) -->
             <div class="mb-8">
                 <h2 class="text-lg font-bold text-gold-400 border-l-4 border-gold-500 pl-3 mb-3 flex items-center gap-2">
                     <i class="fa-solid fa-signature"></i> ፭. ፊርማዎች (Signatures) <span class="text-red-400">*</span>
@@ -370,44 +370,64 @@
                         </label>
                     </div>
 
-                    <!-- Digital Signatures Container -->
-                    <div id="digitalSigContainer" class="pt-2 space-y-6">
+                    <!-- Horizontal Grid Container for Both Signatures -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         
-                        <!-- Client Signature Box -->
-                        <div class="space-y-2 bg-navy-950/40 p-3 rounded-lg border border-gray-800">
+                        <!-- Client Signature Box / Physical Lines -->
+                        <div class="space-y-3 bg-navy-950/50 p-3 rounded-lg border border-gray-800">
                             <div class="flex justify-between items-center no-print">
-                                <span class="text-xs text-gold-300 font-semibold"><i class="fa-solid fa-user mr-1"></i> የደንበኛ ፊርማ ሳጥን:</span>
-                                <button type="button" onclick="clearSignature('client')" class="text-xs text-red-400 underline no-print cursor-pointer">አጽዳ</button>
+                                <span class="text-xs text-gold-300 font-semibold"><i class="fa-solid fa-user mr-1"></i> የደንበኛ ፊርማ:</span>
+                                <button type="button" onclick="clearSignature('client')" class="text-xs text-red-400 underline no-print cursor-pointer digital-only">አጽዳ</button>
                             </div>
-                            <div class="bg-white rounded-lg overflow-hidden relative border border-gold-500/30">
+                            
+                            <!-- Digital Canvas View -->
+                            <div id="digitalClientBox" class="bg-white rounded-lg overflow-hidden relative border border-gold-500/30 digital-only">
                                 <canvas id="sigCanvasClient"></canvas>
-                                <div id="sigPlaceholderClient" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">ደንበኛ እዚህ ጋር ይፈረም...</div>
+                                <div id="sigPlaceholderClient" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">ደንበኛ እዚህ ይፈረም...</div>
+                            </div>
+
+                            <!-- Text & Details -->
+                            <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-2 pt-1">
+                                <div>የደንበኛው/ዋ ስም፡- <span id="printClientName" class="font-bold underline">_________________</span></div>
+                                <div>ቀን ፡- <span id="printDate" class="underline">_______________</span></div>
+                                <!-- Physical Signature Line (Appears in Physical mode or Print) -->
+                                <div id="physicalClientLine" class="hidden font-bold pt-1">
+                                    ፊርማ፡- _________________________________
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Sabel Representative Signature Box -->
-                        <div id="sabelSectionWrapper" class="space-y-2 bg-navy-950/60 p-3 rounded-lg border border-amber-500/30 relative">
-                            <div id="sabelLockOverlay" class="absolute inset-0 bg-navy-950/85 z-10 flex flex-col items-center justify-center text-center p-4 rounded-lg">
+                        <!-- Sabel Representative Signature Box / Physical Lines -->
+                        <div id="sabelSectionWrapper" class="space-y-3 bg-navy-950/50 p-3 rounded-lg border border-amber-500/30 relative">
+                            <div id="sabelLockOverlay" class="absolute inset-0 bg-navy-950/85 z-10 flex flex-col items-center justify-center text-center p-4 rounded-lg no-print">
                                 <i class="fa-solid fa-lock text-amber-400 text-2xl mb-1"></i>
                                 <p class="text-xs text-amber-200 font-semibold">ይህ የሳቤል ሰብሳቢ ፊርማ ሳጥን የተቆለፈ ነው። አድሚን ገብቶ ለማጽደቅ ከላይ ያለውን <span class="text-gold-300 underline cursor-pointer" onclick="openLoginModal()">"አድሚን ግባ"</span> የሚለውን ይጫኑ።</p>
                             </div>
 
                             <div class="flex justify-between items-center no-print">
-                                <span class="text-xs text-gold-300 font-semibold"><i class="fa-solid fa-user-shield mr-1"></i> የሳቤል ሰብሳቢ ማረጋገጫ እና ፊርማ:</span>
-                                <button type="button" onclick="clearSignature('sabel')" class="text-xs text-red-400 underline no-print cursor-pointer">አጽዳ</button>
+                                <span class="text-xs text-gold-300 font-semibold"><i class="fa-solid fa-user-shield mr-1"></i> የሳቤል ሰብሳቢ ፊርማ:</span>
+                                <button type="button" onclick="clearSignature('sabel')" class="text-xs text-red-400 underline no-print cursor-pointer digital-only">አጽዳ</button>
                             </div>
-                            <div class="bg-white rounded-lg overflow-hidden relative border border-gold-500/30">
+
+                            <!-- Digital Canvas View -->
+                            <div id="digitalSabelBox" class="bg-white rounded-lg overflow-hidden relative border border-gold-500/30 digital-only">
                                 <canvas id="sigCanvasSabel"></canvas>
                                 <div id="sigPlaceholderSabel" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">የሳቤል ሰብሳቢ እዚህ ይፈረም...</div>
                             </div>
-                            <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-1 pt-1">
+
+                            <!-- Text & Details -->
+                            <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-2 pt-1">
                                 <div class="flex items-center gap-1">
-                                    <span>የሳቤል ሰብሳቢ ስም:-</span>
+                                    <span>የሳቤል ሰብሳቢ ስም፡-</span>
                                     <input type="text" id="sabelRepName" value="ሳቤል EVENT ሰብሳቢ" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36">
                                 </div>
                                 <div class="flex items-center gap-1">
-                                    <span>ቀን :-</span>
+                                    <span>ቀን ፡-</span>
                                     <input type="text" id="sabelRepDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36">
+                                </div>
+                                <!-- Physical Signature Line -->
+                                <div id="physicalSabelLine" class="hidden font-bold pt-1">
+                                    ፊርማ፡- _________________________________
                                 </div>
                             </div>
                         </div>
@@ -416,7 +436,7 @@
 
                     <!-- Physical Notice -->
                     <div id="physicalSigNotice" class="hidden text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg no-print">
-                        <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም ስለተመረጠ፣ ፎርሙን ሞልተው በቀጥታ ፕሪንት (Print) አድርገው በወረቀት ላይ በእጅ መፈረም ይችላሉ።
+                        <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም ስለተመረጠ፣ ዲጂታል ፊርማው ተደብቆ በወረቀት ላይ በእጅ ለመፈረም የሚያስችል መስመር ታይቷል።
                     </div>
                 </div>
             </div>
@@ -493,14 +513,11 @@
         window.updateDoc = updateDoc;
         window.getDocs = getDocs;
 
-        // Auth state monitor
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // Admin is logged in
                 const params = new URLSearchParams(window.location.search);
                 const contractId = params.get('id');
                 if (!contractId) {
-                    // Show Dashboard
                     showAdminDashboard();
                 }
             }
@@ -537,19 +554,32 @@
             document.getElementById('remainingBalance').innerText = `${Math.max(0, total - advance).toLocaleString()} ETB`;
         }
 
+        function syncPrintNames() {
+            const name = document.getElementById('clientName').value.trim() || '_________________';
+            const date = document.getElementById('eventDate').value.trim() || '_______________';
+            document.getElementById('printClientName').innerText = name;
+            document.getElementById('printDate').innerText = date;
+        }
+
         function toggleSigMode() {
             const sigType = document.querySelector('input[name="sigType"]:checked').value;
-            const digitalContainer = document.getElementById('digitalSigContainer');
+            const digitalElements = document.querySelectorAll('.digital-only');
             const physicalNotice = document.getElementById('physicalSigNotice');
+            const physicalClientLine = document.getElementById('physicalClientLine');
+            const physicalSabelLine = document.getElementById('physicalSabelLine');
             const saveDraftBtn = document.getElementById('saveDraftBtn');
 
             if (sigType === 'physical') {
-                digitalContainer.classList.add('hidden');
+                digitalElements.forEach(el => el.classList.add('hidden'));
                 physicalNotice.classList.remove('hidden');
+                physicalClientLine.classList.remove('hidden');
+                physicalSabelLine.classList.remove('hidden');
                 saveDraftBtn.style.display = 'none';
             } else {
-                digitalContainer.classList.remove('hidden');
+                digitalElements.forEach(el => el.classList.remove('hidden'));
                 physicalNotice.classList.add('hidden');
+                physicalClientLine.classList.add('hidden');
+                physicalSabelLine.classList.add('hidden');
                 saveDraftBtn.style.display = 'flex';
             }
         }
@@ -568,7 +598,7 @@
         function setupCanvas(canvas) {
             const rect = canvas.getBoundingClientRect();
             canvas.width = rect.width || 300;
-            canvas.height = 90;
+            canvas.height = 85;
             const ctx = canvas.getContext('2d');
             ctx.strokeStyle = "#070c1b";
             ctx.lineWidth = 2.5;
@@ -582,6 +612,7 @@
             calculateTotal();
             toggleSigMode();
             checkUrlForContract();
+            syncPrintNames();
             
             const todayStr = new Date().toLocaleDateString();
             if(!document.getElementById('sabelRepDate').value) {
@@ -682,6 +713,7 @@
 
         function faceToFacePrint() {
             if (!validateInputs()) return;
+            syncPrintNames();
             window.print();
         }
 
@@ -705,7 +737,7 @@
 
         async function logoutAdmin() {
             await window.signOut(window.auth);
-            window.location.href = window.location.pathname; // Reload clean
+            window.location.href = window.location.pathname;
         }
 
         let allContractsData = [];
@@ -797,7 +829,6 @@
             });
         }
 
-        // Step 1: Customer saves contract to Firebase
         async function saveContractToFirebase() {
             if (!validateInputs()) return;
 
@@ -846,7 +877,7 @@
                     services: selectedServices,
                     clientSignature: clientSig,
                     sabelSignature: "",
-                    sabelRepName: "",
+                    sabelRepName: document.getElementById('sabelRepName').value,
                     status: "Waiting for Sabel Approval",
                     createdAt: new Date().toISOString()
                 };
@@ -867,7 +898,6 @@
             alert("ሊንኩ ተኮርጇል!");
         }
 
-        // Step 2: Sabel Admin Approve & Sign
         async function sabelApproveContract() {
             if (!window.auth.currentUser) {
                 alert("እባክዎን መጀመሪያ 'አድሚን ግባ' የሚለውን በመጫን ይግቡ!");
@@ -904,7 +934,6 @@
             }
         }
 
-        // Load specific Contract for View via ID
         async function checkUrlForContract() {
             const params = new URLSearchParams(window.location.search);
             const contractId = params.get('id');
@@ -945,6 +974,7 @@
                                 });
                             }
                             calculateTotal();
+                            syncPrintNames();
 
                             if (data.clientSignature) {
                                 const img = new Image();
@@ -958,6 +988,10 @@
                                 img2.src = data.sabelSignature;
                             }
 
+                            if (data.sabelRepName) {
+                                document.getElementById('sabelRepName').value = data.sabelRepName;
+                            }
+
                             document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-shield text-gold-400 mr-1"></i> [የሳቤል ሰብሳቢ ማረጋገጫ ገጽ]`;
                             document.getElementById('workflowStatusBadge').className = "bg-green-500/20 text-green-300 px-2.5 py-1 rounded border border-green-500/30 text-xs font-semibold";
                             document.getElementById('workflowStatusBadge').innerText = data.status;
@@ -965,7 +999,6 @@
                             document.getElementById('saveDraftBtn').style.display = 'none';
                             document.getElementById('backToDashBtn').style.display = 'inline-block';
                             
-                            // If logged in as admin, unlock sabel section
                             if (window.auth.currentUser) {
                                 document.getElementById('sabelLockOverlay').style.display = 'none';
                                 document.getElementById('sabelApproveBtn').style.display = 'flex';
