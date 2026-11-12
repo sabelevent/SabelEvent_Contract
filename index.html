@@ -57,7 +57,7 @@
                     <i class="fa-solid fa-lock text-2xl"></i>
                 </div>
                 <h3 class="text-xl font-bold gold-gradient-text">የሳቤል አድሚን መግቢያ (Login)</h3>
-                <p class="text-gray-300 text-xs mt-1">ውሉን ለማጽደቅ በኢሜይል እና የይለፍ ቃል ይግቡ።</p>
+                <p class="text-gray-300 text-xs mt-1">የውል ዝርዝሮችን በካርድ ለማየት እና ለማጽደቅ ይግቡ።</p>
             </div>
             
             <form id="loginForm" onsubmit="event.preventDefault(); handleAdminLogin();" class="space-y-4">
@@ -81,7 +81,43 @@
         </div>
     </div>
 
-    <div class="max-w-4xl mx-auto print-container bg-navy-800 border gold-border rounded-2xl p-4 sm:p-8 card-shadow relative overflow-hidden">
+    <!-- Sabel Admin Dashboard View (Cards List) -->
+    <div id="adminDashboardView" class="max-w-5xl mx-auto hidden no-print">
+        <div class="bg-navy-800 border gold-border rounded-2xl p-6 card-shadow mb-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center pb-6 border-b gold-border gap-4">
+                <div>
+                    <h1 class="text-2xl font-bold gold-gradient-text font-cinzel">ሳቤል EVENT - አድሚን ዳሽቦርድ</h1>
+                    <p class="text-xs text-gray-300 mt-1">የመጡ ውሎች ማስተዳደሪያ (Pending & Approved Contracts)</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="loadAdminContracts()" class="bg-navy-700 text-gold-300 px-4 py-2 rounded-lg text-xs font-bold border border-gold-500/30 hover:bg-navy-600">
+                        <i class="fa-solid fa-rotate mr-1"></i> አድስ (Refresh)
+                    </button>
+                    <button onclick="logoutAdmin()" class="bg-red-500/20 text-red-300 px-4 py-2 rounded-lg text-xs font-bold border border-red-500/30 hover:bg-red-500/30">
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> ውጣ (Logout)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tabs Filter -->
+            <div class="flex gap-4 mt-6 mb-6">
+                <button onclick="switchAdminTab('pending')" id="tabPendingBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md">
+                    ገና ያልተፈረሙላቸው (Pending)
+                </button>
+                <button onclick="switchAdminTab('approved')" id="tabApprovedBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700">
+                    ጸድቀው የተፈረሙ (Approved)
+                </button>
+            </div>
+
+            <!-- Cards Container -->
+            <div id="contractsCardsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Cards will be injected here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Contract Form View -->
+    <div id="contractFormView" class="max-w-4xl mx-auto print-container bg-navy-800 border gold-border rounded-2xl p-4 sm:p-8 card-shadow relative overflow-hidden">
         
         <!-- Workflow Header Banner -->
         <div id="modeBanner" class="no-print mb-4 p-3 rounded-lg bg-navy-900 border border-gold-500/40 text-xs sm:text-sm flex items-center justify-between">
@@ -89,10 +125,13 @@
                 <i class="fa-solid fa-user-pen mr-1"></i> [የደንበኛ መሙያ ገጽ]
             </span>
             <div class="flex items-center gap-3">
+                <button type="button" onclick="backToDashboard()" id="backToDashBtn" style="display: none;" class="text-xs bg-navy-700 text-gold-300 px-2.5 py-1 rounded border border-gold-500/30 hover:bg-navy-600">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> ወደ ዳሽቦርድ ተመለስ
+                </button>
                 <span id="workflowStatusBadge" class="bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded border border-amber-500/30 text-xs font-semibold">
                     እየተሞላ ነው...
                 </span>
-                <button type="button" onclick="openLoginModal()" class="text-xs bg-gold-500/20 text-gold-300 px-2 py-1 rounded border border-gold-500/40 hover:bg-gold-500/30">
+                <button type="button" onclick="openLoginModal()" id="openLoginBtn" class="text-xs bg-gold-500/20 text-gold-300 px-2 py-1 rounded border border-gold-500/40 hover:bg-gold-500/30">
                     <i class="fa-solid fa-right-to-bracket mr-1"></i> አድሚን ግባ
                 </button>
             </div>
@@ -337,24 +376,20 @@
                         <!-- Client Signature Box -->
                         <div class="space-y-2 bg-navy-950/40 p-3 rounded-lg border border-gray-800">
                             <div class="flex justify-between items-center no-print">
-                                <span class="text-xs text-gold-300 font-semibold"><i class="fa-solid fa-user mr-1"></i> የደንበኛ ብቻ ፊርማ ሳጥን:</span>
+                                <span class="text-xs text-gold-300 font-semibold"><i class="fa-solid fa-user mr-1"></i> የደንበኛ ፊርማ ሳጥን:</span>
                                 <button type="button" onclick="clearSignature('client')" class="text-xs text-red-400 underline no-print cursor-pointer">አጽዳ</button>
                             </div>
                             <div class="bg-white rounded-lg overflow-hidden relative border border-gold-500/30">
                                 <canvas id="sigCanvasClient"></canvas>
-                                <div id="sigPlaceholderClient" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">ደንበኛ እዚህ ጋር ብቻ ይፈረም...</div>
-                            </div>
-                            <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-1 pt-1">
-                                <div>የደንበኛ ስም:- <span id="printClientName" class="border-b border-dashed border-gray-500 px-1 font-bold">_________________</span></div>
-                                <div>ቀን :- <span id="printDate" class="border-b border-dashed border-gray-500 px-1">_______________</span></div>
+                                <div id="sigPlaceholderClient" class="absolute inset-0 flex items-center justify-center pointer-events-none text-gray-400 text-xs italic no-print">ደንበኛ እዚህ ጋር ይፈረም...</div>
                             </div>
                         </div>
 
-                        <!-- Sabel Representative Signature Box (Locked for Customer until Login) -->
+                        <!-- Sabel Representative Signature Box -->
                         <div id="sabelSectionWrapper" class="space-y-2 bg-navy-950/60 p-3 rounded-lg border border-amber-500/30 relative">
                             <div id="sabelLockOverlay" class="absolute inset-0 bg-navy-950/85 z-10 flex flex-col items-center justify-center text-center p-4 rounded-lg">
                                 <i class="fa-solid fa-lock text-amber-400 text-2xl mb-1"></i>
-                                <p class="text-xs text-amber-200 font-semibold">ይህ የሳቤል ሰብሳቢ ፊርማ ሳጥን የተቆለፈ ነው። ሳቤል ለማጽደቅ ከላይ ያለውን <span class="text-gold-300 underline cursor-pointer" onclick="openLoginModal()">"አድሚን ግባ"</span> የሚለውን በመጫን በኢሜይል እና ፓስዎርድ ይግቡ።</p>
+                                <p class="text-xs text-amber-200 font-semibold">ይህ የሳቤል ሰብሳቢ ፊርማ ሳጥን የተቆለፈ ነው። አድሚን ገብቶ ለማጽደቅ ከላይ ያለውን <span class="text-gold-300 underline cursor-pointer" onclick="openLoginModal()">"አድሚን ግባ"</span> የሚለውን ይጫኑ።</p>
                             </div>
 
                             <div class="flex justify-between items-center no-print">
@@ -382,21 +417,6 @@
                     <!-- Physical Notice -->
                     <div id="physicalSigNotice" class="hidden text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg no-print">
                         <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም ስለተመረጠ፣ ፎርሙን ሞልተው በቀጥታ ፕሪንት (Print) አድርገው በወረቀት ላይ በእጅ መፈረም ይችላሉ።
-                    </div>
-
-                    <div id="physicalPrintLines" class="hidden text-sm text-black font-semibold pt-2">
-                        <div class="grid grid-cols-2 gap-6">
-                            <div class="space-y-3">
-                                <div>የደንበኛው/ዋ ስም:- <span id="printPhysicalClientName" class="underline">_________________</span></div>
-                                <div>ቀን :- <span id="printPhysicalDate" class="underline">_______________</span></div>
-                                <div>ፊርማ :- _________________</div>
-                            </div>
-                            <div class="space-y-3">
-                                <div>የሳቤል ሰብሳቢ ስም:- ________________</div>
-                                <div>ቀን :- _________________</div>
-                                <div>ፊርማ :- __________________</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -443,11 +463,11 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs with Correct Config -->
+    <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCFUxUytoTiHMprzlKZ-yUk64XtIA3Q0zs",
@@ -465,11 +485,26 @@
         window.db = db;
         window.auth = auth;
         window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.signOut = signOut;
         window.collection = collection;
         window.addDoc = addDoc;
         window.doc = doc;
         window.getDoc = getDoc;
         window.updateDoc = updateDoc;
+        window.getDocs = getDocs;
+
+        // Auth state monitor
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Admin is logged in
+                const params = new URLSearchParams(window.location.search);
+                const contractId = params.get('id');
+                if (!contractId) {
+                    // Show Dashboard
+                    showAdminDashboard();
+                }
+            }
+        });
     </script>
 
     <!-- JavaScript Logic -->
@@ -506,18 +541,15 @@
             const sigType = document.querySelector('input[name="sigType"]:checked').value;
             const digitalContainer = document.getElementById('digitalSigContainer');
             const physicalNotice = document.getElementById('physicalSigNotice');
-            const physicalPrintLines = document.getElementById('physicalPrintLines');
             const saveDraftBtn = document.getElementById('saveDraftBtn');
 
             if (sigType === 'physical') {
                 digitalContainer.classList.add('hidden');
                 physicalNotice.classList.remove('hidden');
-                physicalPrintLines.classList.remove('hidden');
                 saveDraftBtn.style.display = 'none';
             } else {
                 digitalContainer.classList.remove('hidden');
                 physicalNotice.classList.add('hidden');
-                physicalPrintLines.classList.add('hidden');
                 saveDraftBtn.style.display = 'flex';
             }
         }
@@ -650,11 +682,6 @@
 
         function faceToFacePrint() {
             if (!validateInputs()) return;
-            const name = document.getElementById('clientName').value.trim();
-            document.getElementById('printClientName').innerText = name;
-            document.getElementById('printDate').innerText = document.getElementById('eventDate').value;
-            document.getElementById('printPhysicalClientName').innerText = name;
-            document.getElementById('printPhysicalDate').innerText = document.getElementById('eventDate').value;
             window.print();
         }
 
@@ -668,18 +695,109 @@
 
             try {
                 await window.signInWithEmailAndPassword(window.auth, email, password);
-                alert("በተሳካ ሁኔታ ገብተዋል! አሁን የሳቤልን ፊርማ ማጽደቅ ይችላሉ።");
+                alert("በተሳካ ሁኔታ ገብተዋል!");
                 document.getElementById('loginModal').classList.add('hidden');
-                
-                document.getElementById('sabelLockOverlay').style.display = 'none';
-                document.getElementById('sabelSectionWrapper').classList.remove('bg-navy-950/60');
-                document.getElementById('sabelSectionWrapper').classList.add('bg-navy-900', 'border-gold-500');
+                showAdminDashboard();
             } catch (error) {
                 alert("ግባ ማለት አልተቻለም: ኢሜይል ወይም ፓስዎርድ ስህተት ነው። (" + error.message + ")");
             }
         }
 
-        // Step 1: Customer saves contract & selected services/packages to Firebase
+        async function logoutAdmin() {
+            await window.signOut(window.auth);
+            window.location.href = window.location.pathname; // Reload clean
+        }
+
+        let allContractsData = [];
+        let currentAdminTab = 'pending';
+
+        async function showAdminDashboard() {
+            document.getElementById('contractFormView').classList.add('hidden');
+            document.getElementById('adminDashboardView').classList.remove('hidden');
+            await loadAdminContracts();
+        }
+
+        function backToDashboard() {
+            window.location.href = window.location.pathname;
+        }
+
+        async function loadAdminContracts() {
+            const container = document.getElementById('contractsCardsContainer');
+            container.innerHTML = '<p class="text-xs text-gold-300 col-span-2 text-center py-6">መረጃዎችን በመጫን ላይ...</p>';
+
+            try {
+                const querySnapshot = await window.getDocs(window.collection(window.db, "contracts"));
+                allContractsData = [];
+                querySnapshot.forEach((docSnap) => {
+                    allContractsData.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                renderAdminCards();
+            } catch (e) {
+                container.innerHTML = `<p class="text-xs text-red-400 col-span-2 text-center py-6">መረጃዎችን ማምጣት አልተቻለም: ${e.message}</p>`;
+            }
+        }
+
+        function switchAdminTab(tab) {
+            currentAdminTab = tab;
+            const pendingBtn = document.getElementById('tabPendingBtn');
+            const approvedBtn = document.getElementById('tabApprovedBtn');
+
+            if (tab === 'pending') {
+                pendingBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md";
+                approvedBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700";
+            } else {
+                approvedBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md";
+                pendingBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700";
+            }
+            renderAdminCards();
+        }
+
+        function renderAdminCards() {
+            const container = document.getElementById('contractsCardsContainer');
+            container.innerHTML = '';
+
+            const filtered = allContractsData.filter(item => {
+                const isApproved = item.status === "Fully Approved & Signed";
+                if (currentAdminTab === 'approved') return isApproved;
+                return !isApproved;
+            });
+
+            if (filtered.length === 0) {
+                container.innerHTML = `<div class="col-span-2 text-center py-10 bg-navy-900/60 rounded-xl border border-gray-800 text-xs text-gray-400">ምንም ውል አልተገኘም።</div>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const isApproved = item.status === "Fully Approved & Signed";
+                const badgeColor = isApproved ? "bg-green-500/20 text-green-300 border-green-500/30" : "bg-amber-500/20 text-amber-300 border-amber-500/30";
+                const badgeText = isApproved ? "ጸድቋል (Approved)" : "መፈረም ይጠበቅበታል (Pending)";
+
+                const card = document.createElement('div');
+                card.className = "bg-navy-900 border border-gray-700 rounded-xl p-4 space-y-3 card-shadow flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-bold text-gold-300 text-sm">${item.clientName || 'ስም የሌለው'}</h3>
+                            <span class="px-2 py-0.5 rounded border text-[10px] font-semibold ${badgeColor}">${badgeText}</span>
+                        </div>
+                        <div class="text-xs text-gray-300 space-y-1">
+                            <p><i class="fa-solid fa-phone mr-1 text-gold-400"></i> ስልክ: ${item.clientPhone || '-'}</p>
+                            <p><i class="fa-solid fa-calendar mr-1 text-gold-400"></i> ቀን: ${item.eventDate || '-'}</p>
+                            <p><i class="fa-solid fa-location-dot mr-1 text-gold-400"></i> ቦታ: ${item.eventLocation || '-'}</p>
+                            <p><i class="fa-solid fa-money-bill mr-1 text-gold-400"></i> ጠቅላላ ዋጋ: <span class="text-gold-300 font-bold">${item.totalPrice || '0'} ETB</span></p>
+                        </div>
+                    </div>
+                    <div class="pt-3 border-t border-gray-800 flex justify-end gap-2">
+                        <a href="${window.location.pathname}?id=${item.id}" class="gold-gradient-bg text-navy-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1">
+                            <i class="fa-solid fa-eye"></i> ውሉን ከፍተው ይመልከቱ
+                        </a>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Step 1: Customer saves contract to Firebase
         async function saveContractToFirebase() {
             if (!validateInputs()) return;
 
@@ -695,12 +813,10 @@
 
             const selectedServices = [];
             const weddingCheck = document.getElementById('weddingCheck');
-            let weddingPkgVal = "";
             
             if (weddingCheck && weddingCheck.checked) {
                 const pkgSelect = document.getElementById('weddingPackage');
-                weddingPkgVal = pkgSelect.value;
-                selectedServices.push({ name: "ሰርግ አጃቢ", packagePrice: weddingPkgVal });
+                selectedServices.push({ name: "ሰርግ አጃቢ", packagePrice: pkgSelect.value });
             }
 
             document.querySelectorAll('input[name="service"]').forEach((box, index) => {
@@ -754,7 +870,7 @@
         // Step 2: Sabel Admin Approve & Sign
         async function sabelApproveContract() {
             if (!window.auth.currentUser) {
-                alert("እባክዎን መጀመሪያ 'አድሚን ግባ' የሚለውን በመጫን በኢሜይል እና ፓስዎርድ ይግቡ!");
+                alert("እባክዎን መጀመሪያ 'አድሚን ግባ' የሚለውን በመጫን ይግቡ!");
                 openLoginModal();
                 return;
             }
@@ -781,14 +897,14 @@
                     status: "Fully Approved & Signed"
                 });
 
-                alert("ውሉ በሳቤል ሰብሳቢ ጸድቆ ተፈርሟል! አሁን ፕሪንት ማድረግ ይችላሉ።");
+                alert("ውሉ በሳቤል ሰብሳቢ ጸድቆ ተፈርሟል!");
                 window.print();
             } catch (error) {
                 alert("ማጽደቅ አልተቻለም: " + error.message);
             }
         }
 
-        // Load specific Contract for Sabel Admin View via ID
+        // Load specific Contract for View via ID
         async function checkUrlForContract() {
             const params = new URLSearchParams(window.location.search);
             const contractId = params.get('id');
@@ -830,21 +946,30 @@
                             }
                             calculateTotal();
 
-                            document.getElementById('printClientName').innerText = data.clientName || '';
-                            document.getElementById('printDate').innerText = data.eventDate || '';
-
                             if (data.clientSignature) {
                                 const img = new Image();
-                                img.onload = () => { ctxClient.drawImage(img, 0, 0); placeholderClient.style.display = 'none'; };
+                                img.onload = () => { ctxClient.drawImage(img, 0, 0); placeholderClient.style.display = 'none'; hasSignedClient = true; };
                                 img.src = data.clientSignature;
                             }
 
-                            document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-shield text-gold-400 mr-1"></i> [የሳቤል ሰብሳቢ ማረጋገጫ ገጽ - Step 2: Sabel Mode]`;
+                            if (data.sabelSignature) {
+                                const img2 = new Image();
+                                img2.onload = () => { ctxSabel.drawImage(img2, 0, 0); placeholderSabel.style.display = 'none'; hasSignedSabel = true; };
+                                img2.src = data.sabelSignature;
+                            }
+
+                            document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-shield text-gold-400 mr-1"></i> [የሳቤል ሰብሳቢ ማረጋገጫ ገጽ]`;
                             document.getElementById('workflowStatusBadge').className = "bg-green-500/20 text-green-300 px-2.5 py-1 rounded border border-green-500/30 text-xs font-semibold";
-                            document.getElementById('workflowStatusBadge').innerText = "ደንበኛ ፈርሟል - እባክዎን አድሚን ገብተው ያጸድቁ";
+                            document.getElementById('workflowStatusBadge').innerText = data.status;
 
                             document.getElementById('saveDraftBtn').style.display = 'none';
-                            document.getElementById('sabelApproveBtn').style.display = 'flex';
+                            document.getElementById('backToDashBtn').style.display = 'inline-block';
+                            
+                            // If logged in as admin, unlock sabel section
+                            if (window.auth.currentUser) {
+                                document.getElementById('sabelLockOverlay').style.display = 'none';
+                                document.getElementById('sabelApproveBtn').style.display = 'flex';
+                            }
                         }
                     } catch (e) {
                         console.error(e);
