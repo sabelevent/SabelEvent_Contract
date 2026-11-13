@@ -118,8 +118,8 @@
                 <div class="w-14 h-14 bg-gold-500/20 text-gold-400 rounded-full flex items-center justify-center mx-auto mb-3 border border-gold-500">
                     <i class="fa-solid fa-lock text-2xl"></i>
                 </div>
-                <h3 class="text-xl font-bold gold-gradient-text">የሳቤል አድሚን መግቢያ (Login)</h3>
-                <p class="text-gray-300 text-xs mt-1">የውል ዝርዝሮችን በካርድ ለማየት እና ለማጽደቅ ይግቡ።</p>
+                <h3 class="text-xl font-bold gold-gradient-text"> Admin Login</h3>
+                <p class="text-gray-300 text-xs mt-1">የውል ዝርዝሮችን ለማየት እና ለማጽደቅ ይግቡ።</p>
             </div>
             
             <form id="loginForm" onsubmit="event.preventDefault(); handleAdminLogin();" class="space-y-4">
@@ -164,10 +164,10 @@
             <!-- Tabs Filter -->
             <div class="flex gap-4 mt-6 mb-6">
                 <button type="button" onclick="switchAdminTab('pending')" id="tabPendingBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md cursor-pointer">
-                    ገና ያልተፈረሙላቸው (Pending)
+                    Pending
                 </button>
                 <button type="button" onclick="switchAdminTab('approved')" id="tabApprovedBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700 cursor-pointer">
-                    ጸድቀው የተፈረሙ (Approved)
+                    Approved
                 </button>
             </div>
 
@@ -188,11 +188,9 @@
             </span>
             <div class="flex items-center gap-3">
                 <button type="button" onclick="backToDashboard()" id="backToDashBtn" style="display: none;" class="text-xs bg-navy-700 text-gold-300 px-2.5 py-1 rounded border border-gold-500/30 hover:bg-navy-600 cursor-pointer">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> ወደ ዳሽቦርድ ተመለስ
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Dashboard 
                 </button>
-                <span id="workflowStatusBadge" class="bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded border border-amber-500/30 text-xs font-semibold">
-                    እየተሞላ ነው...
-                </span>
+                
                 <button type="button" onclick="openLoginModal()" id="openLoginBtn" class="text-xs bg-gold-500/20 text-gold-300 px-2 py-1 rounded border border-gold-500/40 hover:bg-gold-500/30 cursor-pointer">
                     <i class="fa-solid fa-right-to-bracket mr-1"></i> admin
                 </button>
@@ -471,7 +469,7 @@
                             <!-- Text & Details -->
                             <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-2 pt-1">
                                 <div>የደንበኛው/ዋ ስም፡- <input type="text" id="clientNameInputDisplay" readonly class="bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36 font-bold" placeholder="ስም ይገባል..."></div>
-                                <div>ቀን (የተፈረመበት)፡- <input type="text" id="clientSignDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36" placeholder="ለምሳሌ፡ 22/07/2018"></div>
+                                <div>ቀን ፡- <input type="text" id="clientSignDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36" placeholder="ለምሳሌ፡ 22/07/2018"></div>
                                 <!-- Physical Signature Line -->
                                 <div id="physicalClientLine" class="hidden font-bold pt-1">
                                     ፊርማ፡- _________________________________
@@ -501,10 +499,10 @@
                             <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-2 pt-1">
                                 <div class="flex items-center gap-1">
                                     <span>የሳቤል ሰብሳቢ ስም፡-</span>
-                                    <input type="text" id="sabelRepName" value="ሳቤል EVENT ሰብሳቢ" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36">
+                                    <input type="text" id="sabelRepName" value="ህይወት ተስፋዬ" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36">
                                 </div>
                                 <div class="flex items-center gap-1">
-                                    <span>ቀን (የተፈረመበት)፡-</span>
+                                    <span>ቀን ፡-</span>
                                     <input type="text" id="sabelRepDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36" placeholder="ለምሳሌ፡ 22/07/2018">
                                 </div>
                                 <!-- Physical Signature Line -->
