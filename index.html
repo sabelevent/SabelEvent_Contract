@@ -183,7 +183,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 mb-1">የደንበኛው ሙሉ ስም <span class="text-red-400">*</span></label>
-                        <input type="text" id="clientName" required placeholder="ለምሳሌ፡ አበበ ከበደ" oninput="syncPrintNames()"
+                        <input type="text" id="clientName" required placeholder="ለምሳሌ፡ አበበ ከበደ"
                             class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
                     </div>
 
@@ -201,7 +201,7 @@
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 mb-1">የዝግጅቱ ቀን (የኢትዮጵያ ካላንደር) <span class="text-red-400">*</span></label>
-                        <input type="text" id="eventDate" required placeholder="ለምሳሌ፡ 20/03/2018 ዓ.ም" oninput="syncPrintNames()"
+                        <input type="text" id="eventDate" required placeholder="ለምሳሌ፡ 20/03/2018 ዓ.ም"
                             class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
                     </div>
 
@@ -411,8 +411,8 @@
 
                             <!-- Text & Details -->
                             <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-2 pt-1">
-                                <div>የደንበኛው/ዋ ስም፡- <span id="printClientName" class="font-bold underline">_________________</span></div>
-                                <div>ቀን ፡- <span id="printDate" class="underline">_______________</span></div>
+                                <div>የደንበኛው/ዋ ስም፡- <input type="text" id="clientNameInputDisplay" readonly class="bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36 font-bold" placeholder="ስም ይገባል..."></div>
+                                <div>ቀን (የተፈረመበት)፡- <input type="text" id="clientSignDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36" placeholder="ለምሳሌ፡ 22/07/2018"></div>
                                 <!-- Physical Signature Line -->
                                 <div id="physicalClientLine" class="hidden font-bold pt-1">
                                     ፊርማ፡- _________________________________
@@ -445,8 +445,8 @@
                                     <input type="text" id="sabelRepName" value="ሳቤል EVENT ሰብሳቢ" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36">
                                 </div>
                                 <div class="flex items-center gap-1">
-                                    <span>ቀን ፡-</span>
-                                    <input type="text" id="sabelRepDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36">
+                                    <span>ቀን (የተፈረመበት)፡-</span>
+                                    <input type="text" id="sabelRepDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36" placeholder="ለምሳሌ፡ 22/07/2018">
                                 </div>
                                 <!-- Physical Signature Line -->
                                 <div id="physicalSabelLine" class="hidden font-bold pt-1">
@@ -577,12 +577,10 @@
             document.getElementById('remainingBalance').innerText = `${Math.max(0, total - advance).toLocaleString()} ETB`;
         }
 
-        function syncPrintNames() {
-            const name = document.getElementById('clientName').value.trim() || '_________________';
-            const date = document.getElementById('eventDate').value.trim() || '_______________';
-            document.getElementById('printClientName').innerText = name;
-            document.getElementById('printDate').innerText = date;
-        }
+        document.getElementById('clientName').addEventListener('input', function() {
+            const val = this.value.trim();
+            document.getElementById('clientNameInputDisplay').value = val ? val : '';
+        });
 
         function toggleSigMode() {
             const sigType = document.querySelector('input[name="sigType"]:checked').value;
@@ -634,9 +632,12 @@
             calculateTotal();
             toggleSigMode();
             checkUrlForContract();
-            syncPrintNames();
             
+            // Set current signature dates automatically on load
             const todayStr = new Date().toLocaleDateString();
+            if(!document.getElementById('clientSignDate').value) {
+                document.getElementById('clientSignDate').value = todayStr;
+            }
             if(!document.getElementById('sabelRepDate').value) {
                 document.getElementById('sabelRepDate').value = todayStr;
             }
@@ -760,7 +761,6 @@
 
         function faceToFacePrint() {
             if (!validateInputs()) return;
-            syncPrintNames();
             window.print();
         }
 
@@ -916,6 +916,7 @@
             }
 
             const clientSig = canvasClient.toDataURL();
+            const clientSignDateVal = document.getElementById('clientSignDate').value.trim();
 
             try {
                 const contractData = {
@@ -930,8 +931,10 @@
                     advancePayment: document.getElementById('advancePayment').value,
                     services: selectedServices,
                     clientSignature: clientSig,
+                    clientSignDate: clientSignDateVal,
                     sabelSignature: "",
                     sabelRepName: document.getElementById('sabelRepName').value,
+                    sabelRepDate: document.getElementById('sabelRepDate').value.trim(),
                     status: "Waiting for Sabel Approval",
                     createdAt: new Date().toISOString()
                 };
@@ -1001,6 +1004,7 @@
                         if (docSnap.exists()) {
                             const data = docSnap.data();
                             document.getElementById('clientName').value = data.clientName || '';
+                            document.getElementById('clientNameInputDisplay').value = data.clientName || '';
                             document.getElementById('clientPhone').value = data.clientPhone || '';
                             document.getElementById('clientPhone2').value = data.clientPhone2 || '';
                             document.getElementById('eventDate').value = data.eventDate || '';
@@ -1047,7 +1051,6 @@
                                 });
                             }
                             calculateTotal();
-                            syncPrintNames();
 
                             if (data.clientSignature) {
                                 const img = new Image();
@@ -1057,6 +1060,10 @@
                                     hasSignedClient = true; 
                                 };
                                 img.src = data.clientSignature;
+                            }
+
+                            if (data.clientSignDate) {
+                                document.getElementById('clientSignDate').value = data.clientSignDate;
                             }
 
                             if (data.sabelSignature) {
@@ -1071,6 +1078,10 @@
 
                             if (data.sabelRepName) {
                                 document.getElementById('sabelRepName').value = data.sabelRepName;
+                            }
+
+                            if (data.sabelRepDate) {
+                                document.getElementById('sabelRepDate').value = data.sabelRepDate;
                             }
 
                             document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-shield text-gold-400 mr-1"></i> [የሳቤል ሰብሳቢ ማረጋገጫ ገጽ]`;
