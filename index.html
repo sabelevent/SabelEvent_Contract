@@ -34,7 +34,7 @@
         .gold-gradient-bg { background: linear-gradient(135deg, #d4af37 0%, #b89228 100%); }
         .gold-gradient-bg:hover { background: linear-gradient(135deg, #ebd06a 0%, #d4af37 100%); }
         .card-shadow { box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 0 15px 0 rgba(212, 175, 55, 0.1); }
-        canvas { touch-action: none; background: #ffffff; width: 100%; height: 85px; display: block; cursor: crosshair; }
+        canvas { touch-action: none; background: #ffffff; width: 100%; height: 95px; display: block; cursor: crosshair; }
         @media print {
             body { background: #ffffff !important; color: #000000 !important; }
             .no-print { display: none !important; }
@@ -78,7 +78,7 @@
                     ግባ (Login)
                 </button>
             </form>
-            <button onclick="document.getElementById('loginModal').classList.add('hidden')" class="mt-3 w-full bg-navy-700 text-gray-300 text-xs py-2 rounded-lg hover:bg-navy-600">
+            <button type="button" onclick="closeLoginModal()" class="mt-3 w-full bg-navy-700 text-gray-300 text-xs py-2 rounded-lg hover:bg-navy-600 cursor-pointer">
                 ይቅር (ዝጋ)
             </button>
         </div>
@@ -93,10 +93,10 @@
                     <p class="text-xs text-gray-300 mt-1">የመጡ ውሎች ማስተዳደሪያ (Pending & Approved Contracts)</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button onclick="loadAdminContracts()" class="bg-navy-700 text-gold-300 px-4 py-2 rounded-lg text-xs font-bold border border-gold-500/30 hover:bg-navy-600">
+                    <button type="button" onclick="loadAdminContracts()" class="bg-navy-700 text-gold-300 px-4 py-2 rounded-lg text-xs font-bold border border-gold-500/30 hover:bg-navy-600 cursor-pointer">
                         <i class="fa-solid fa-rotate mr-1"></i> አድስ (Refresh)
                     </button>
-                    <button onclick="logoutAdmin()" class="bg-red-500/20 text-red-300 px-4 py-2 rounded-lg text-xs font-bold border border-red-500/30 hover:bg-red-500/30">
+                    <button type="button" onclick="logoutAdmin()" class="bg-red-500/20 text-red-300 px-4 py-2 rounded-lg text-xs font-bold border border-red-500/30 hover:bg-red-500/30 cursor-pointer">
                         <i class="fa-solid fa-right-from-bracket mr-1"></i> ውጣ (Logout)
                     </button>
                 </div>
@@ -104,10 +104,10 @@
 
             <!-- Tabs Filter -->
             <div class="flex gap-4 mt-6 mb-6">
-                <button onclick="switchAdminTab('pending')" id="tabPendingBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md">
+                <button type="button" onclick="switchAdminTab('pending')" id="tabPendingBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md cursor-pointer">
                     ገና ያልተፈረሙላቸው (Pending)
                 </button>
-                <button onclick="switchAdminTab('approved')" id="tabApprovedBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700">
+                <button type="button" onclick="switchAdminTab('approved')" id="tabApprovedBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700 cursor-pointer">
                     ጸድቀው የተፈረሙ (Approved)
                 </button>
             </div>
@@ -128,13 +128,13 @@
                 <i class="fa-solid fa-user-pen mr-1"></i> [የደንበኛ መሙያ ገጽ]
             </span>
             <div class="flex items-center gap-3">
-                <button type="button" onclick="backToDashboard()" id="backToDashBtn" style="display: none;" class="text-xs bg-navy-700 text-gold-300 px-2.5 py-1 rounded border border-gold-500/30 hover:bg-navy-600">
+                <button type="button" onclick="backToDashboard()" id="backToDashBtn" style="display: none;" class="text-xs bg-navy-700 text-gold-300 px-2.5 py-1 rounded border border-gold-500/30 hover:bg-navy-600 cursor-pointer">
                     <i class="fa-solid fa-arrow-left mr-1"></i> ወደ ዳሽቦርድ ተመለስ
                 </button>
                 <span id="workflowStatusBadge" class="bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded border border-amber-500/30 text-xs font-semibold">
                     እየተሞላ ነው...
                 </span>
-                <button type="button" onclick="openLoginModal()" id="openLoginBtn" class="text-xs bg-gold-500/20 text-gold-300 px-2 py-1 rounded border border-gold-500/40 hover:bg-gold-500/30">
+                <button type="button" onclick="openLoginModal()" id="openLoginBtn" class="text-xs bg-gold-500/20 text-gold-300 px-2 py-1 rounded border border-gold-500/40 hover:bg-gold-500/30 cursor-pointer">
                     <i class="fa-solid fa-right-to-bracket mr-1"></i> አድሚን ግባ
                 </button>
             </div>
@@ -500,9 +500,9 @@
             <p class="text-gray-300 text-xs mb-4">ይህንን ሊንክ ኮፒ አድርገው ለሳቤል ሰብሳቢ ይላኩለት።</p>
             <div class="bg-navy-900 p-2 rounded mb-4 flex items-center gap-2">
                 <input type="text" id="contractLinkInput" readonly class="w-full bg-navy-950 text-gold-300 text-xs px-2 py-1.5 rounded border border-gray-700">
-                <button onclick="copyLink()" class="gold-gradient-bg text-navy-950 text-xs px-3 py-1.5 rounded font-bold cursor-pointer">ኮፒ</button>
+                <button type="button" onclick="copyLink()" class="gold-gradient-bg text-navy-950 text-xs px-3 py-1.5 rounded font-bold cursor-pointer">ኮፒ</button>
             </div>
-            <button onclick="document.getElementById('linkModal').classList.add('hidden')" class="bg-navy-700 text-white text-xs px-6 py-2 rounded cursor-pointer">ዝጋ</button>
+            <button type="button" onclick="document.getElementById('linkModal').classList.add('hidden')" class="bg-navy-700 text-white text-xs px-6 py-2 rounded cursor-pointer">ዝጋ</button>
         </div>
     </div>
 
@@ -607,7 +607,7 @@
             }
         }
 
-        // Canvas Setup with Persistence to prevent wiping out signatures
+        // Canvas Setup & Drawing Logic
         const canvasClient = document.getElementById('sigCanvasClient');
         const ctxClient = canvasClient.getContext('2d');
         const placeholderClient = document.getElementById('sigPlaceholderClient');
@@ -618,27 +618,19 @@
         const placeholderSabel = document.getElementById('sigPlaceholderSabel');
         let hasSignedSabel = false;
 
-        function setupCanvas(canvas, ctx, isClient) {
-            const existingData = canvas.toDataURL();
+        function initCanvas(canvas, ctx) {
             const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width || 300;
-            canvas.height = 85;
+            canvas.width = rect.width > 0 ? rect.width : 350;
+            canvas.height = 95;
             ctx.strokeStyle = "#070c1b";
             ctx.lineWidth = 2.5;
             ctx.lineCap = "round";
             ctx.lineJoin = "round";
-
-            // Restore existing drawing if canvas had content
-            if ((isClient && hasSignedClient) || (!isClient && hasSignedSabel)) {
-                const img = new Image();
-                img.onload = () => { ctx.drawImage(img, 0, 0); };
-                img.src = existingData;
-            }
         }
 
         window.addEventListener('load', () => {
-            setupCanvas(canvasClient, ctxClient, true);
-            setupCanvas(canvasSabel, ctxSabel, false);
+            initCanvas(canvasClient, ctxClient);
+            initCanvas(canvasSabel, ctxSabel);
             calculateTotal();
             toggleSigMode();
             checkUrlForContract();
@@ -650,60 +642,50 @@
             }
         });
 
-        // Prevent resizing from clearing out the signature
-        window.addEventListener('resize', () => {
-            // Keep current signatures in memory before resize
-            const clientData = hasSignedClient ? canvasClient.toDataURL() : null;
-            const sabelData = hasSignedSabel ? canvasSabel.toDataURL() : null;
-
-            setupCanvas(canvasClient, ctxClient, true);
-            setupCanvas(canvasSabel, ctxSabel, false);
-
-            if (clientData && hasSignedClient) {
-                const img1 = new Image();
-                img1.onload = () => { ctxClient.drawImage(img1, 0, 0); };
-                img1.src = clientData;
-            }
-            if (sabelData && hasSignedSabel) {
-                const img2 = new Image();
-                img2.onload = () => { ctxSabel.drawImage(img2, 0, 0); };
-                img2.src = sabelData;
-            }
-        });
-
         function attachDrawingEvents(canvas, ctx, placeholder, isClient) {
             let isDrawing = false;
-            function getCoordinates(e) {
+
+            function getPos(e) {
                 const rect = canvas.getBoundingClientRect();
-                const clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-                const clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-                return { x: clientX - rect.left, y: clientY - rect.top };
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: clientX - rect.left,
+                    y: clientY - rect.top
+                };
             }
-            function startDraw(e) {
+
+            function start(e) {
+                e.preventDefault();
                 isDrawing = true;
                 if (isClient) hasSignedClient = true;
                 else hasSignedSabel = true;
-
                 placeholder.style.display = 'none';
-                const pos = getCoordinates(e);
+                const pos = getPos(e);
                 ctx.beginPath();
                 ctx.moveTo(pos.x, pos.y);
             }
-            function draw(e) {
+
+            function move(e) {
                 if (!isDrawing) return;
-                const pos = getCoordinates(e);
+                e.preventDefault();
+                const pos = getPos(e);
                 ctx.lineTo(pos.x, pos.y);
                 ctx.stroke();
             }
-            function stopDraw() { isDrawing = false; }
 
-            canvas.addEventListener('mousedown', startDraw);
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', stopDraw);
-            canvas.addEventListener('mouseleave', stopDraw);
-            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDraw(e.touches[0]); }, { passive: false });
-            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e.touches[0]); }, { passive: false });
-            canvas.addEventListener('touchend', stopDraw);
+            function end(e) {
+                if (!isDrawing) return;
+                isDrawing = false;
+            }
+
+            canvas.addEventListener('mousedown', start);
+            canvas.addEventListener('mousemove', move);
+            window.addEventListener('mouseup', end);
+
+            canvas.addEventListener('touchstart', start, { passive: false });
+            canvas.addEventListener('touchmove', move, { passive: false });
+            canvas.addEventListener('touchend', end);
         }
 
         attachDrawingEvents(canvasClient, ctxClient, placeholderClient, true);
@@ -733,10 +715,10 @@
             ];
 
             for (let field of fields) {
-                const val = document.getElementById(field.id).value.trim();
-                if (!val) {
+                const el = document.getElementById(field.id);
+                if (!el || !el.value.trim()) {
                     alert(`እባክዎን "${field.name}" የሚለውን ባዶ ቦታ ይሙሉ!`);
-                    document.getElementById(field.id).focus();
+                    if (el) el.focus();
                     return false;
                 }
             }
@@ -786,6 +768,10 @@
             document.getElementById('loginModal').classList.remove('hidden');
         }
 
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+
         async function handleAdminLogin() {
             const email = document.getElementById('adminEmail').value.trim();
             const password = document.getElementById('adminPassword').value.trim();
@@ -793,7 +779,7 @@
             try {
                 await window.signInWithEmailAndPassword(window.auth, email, password);
                 alert("በተሳካ ሁኔታ ገብተዋል!");
-                document.getElementById('loginModal').classList.add('hidden');
+                closeLoginModal();
                 showAdminDashboard();
             } catch (error) {
                 alert("ግባ ማለት አልተቻለም: ኢሜይል ወይም ፓስዎርድ ስህተት ነው። (" + error.message + ")");
@@ -840,11 +826,11 @@
             const approvedBtn = document.getElementById('tabApprovedBtn');
 
             if (tab === 'pending') {
-                pendingBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md";
-                approvedBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700";
+                pendingBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md cursor-pointer";
+                approvedBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700 cursor-pointer";
             } else {
-                approvedBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md";
-                pendingBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700";
+                approvedBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md cursor-pointer";
+                pendingBtn.className = "px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700 cursor-pointer";
             }
             renderAdminCards();
         }
@@ -1021,4 +1007,90 @@
                             document.getElementById('eventLocation').value = data.eventLocation || '';
                             
                             if (data.startTime) {
-                                const parts
+                                const parts = data.startTime.split(' ');
+                                if (parts.length >= 2) {
+                                    document.getElementById('startPeriod').value = parts[0];
+                                    document.getElementById('startTimeVal').value = parts.slice(1).join(' ');
+                                } else {
+                                    document.getElementById('startTimeVal').value = data.startTime;
+                                }
+                            }
+
+                            if (data.endTime) {
+                                const parts = data.endTime.split(' ');
+                                if (parts.length >= 2) {
+                                    document.getElementById('endPeriod').value = parts[0];
+                                    document.getElementById('endTimeVal').value = parts.slice(1).join(' ');
+                                } else {
+                                    document.getElementById('endTimeVal').value = data.endTime;
+                                }
+                            }
+
+                            document.getElementById('advancePayment').value = data.advancePayment || '';
+
+                            if (data.services && Array.isArray(data.services)) {
+                                data.services.forEach(srv => {
+                                    if (srv.name === "ሰርግ አጃቢ") {
+                                        const weddingChk = document.getElementById('weddingCheck');
+                                        weddingChk.checked = true;
+                                        toggleWeddingPackage();
+                                        if (srv.packagePrice) {
+                                            document.getElementById('weddingPackage').value = srv.packagePrice;
+                                        }
+                                    } else {
+                                        document.querySelectorAll('input[name="service"]').forEach(box => {
+                                            if (box.value === srv.name) {
+                                                box.checked = true;
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                            calculateTotal();
+                            syncPrintNames();
+
+                            if (data.clientSignature) {
+                                const img = new Image();
+                                img.onload = () => { 
+                                    ctxClient.drawImage(img, 0, 0); 
+                                    placeholderClient.style.display = 'none'; 
+                                    hasSignedClient = true; 
+                                };
+                                img.src = data.clientSignature;
+                            }
+
+                            if (data.sabelSignature) {
+                                const img2 = new Image();
+                                img2.onload = () => { 
+                                    ctxSabel.drawImage(img2, 0, 0); 
+                                    placeholderSabel.style.display = 'none'; 
+                                    hasSignedSabel = true; 
+                                };
+                                img2.src = data.sabelSignature;
+                            }
+
+                            if (data.sabelRepName) {
+                                document.getElementById('sabelRepName').value = data.sabelRepName;
+                            }
+
+                            document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-shield text-gold-400 mr-1"></i> [የሳቤል ሰብሳቢ ማረጋገጫ ገጽ]`;
+                            document.getElementById('workflowStatusBadge').className = "bg-green-500/20 text-green-300 px-2.5 py-1 rounded border border-green-500/30 text-xs font-semibold";
+                            document.getElementById('workflowStatusBadge').innerText = data.status;
+
+                            document.getElementById('saveDraftBtn').style.display = 'none';
+                            document.getElementById('backToDashBtn').style.display = 'inline-block';
+                            
+                            if (window.auth.currentUser) {
+                                document.getElementById('sabelLockOverlay').style.display = 'none';
+                                document.getElementById('sabelApproveBtn').style.display = 'flex';
+                            }
+                        }
+                    } catch (e) {
+                        console.error(e);
+                    }
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>
