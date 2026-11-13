@@ -35,6 +35,36 @@
         .gold-gradient-bg:hover { background: linear-gradient(135deg, #ebd06a 0%, #d4af37 100%); }
         .card-shadow { box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.7), 0 0 15px 0 rgba(212, 175, 55, 0.1); }
         canvas { touch-action: none; background: #ffffff; width: 100%; height: 95px; display: block; cursor: crosshair; }
+        
+        /* Custom Checkbox Design */
+        .custom-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d4af37;
+            border-radius: 4px;
+            background-color: #050b14;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .custom-checkbox:checked {
+            background-color: #d4af37;
+            border-color: #d4af37;
+        }
+        .custom-checkbox:checked::after {
+            content: "✔";
+            font-size: 14px;
+            color: #050b14;
+            font-weight: bold;
+            position: absolute;
+        }
+
         @media print {
             body { background: #ffffff !important; color: #000000 !important; }
             .no-print { display: none !important; }
@@ -47,6 +77,22 @@
             .print-logo { display: block !important; margin: 0 auto 15px auto !important; width: 100px !important; height: 100px !important; object-fit: contain !important; }
             .print-grid-horizontal { display: flex !important; flex-direction: row !important; gap: 20px !important; width: 100% !important; }
             .print-col-half { flex: 1 !important; width: 50% !important; }
+            
+            /* Print style for custom checkboxes */
+            .custom-checkbox {
+                border: 1px solid #000 !important;
+                background-color: #fff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .custom-checkbox:checked {
+                background-color: #000 !important;
+                border-color: #000 !important;
+            }
+            .custom-checkbox:checked::after {
+                content: "✔" !important;
+                color: #fff !important;
+            }
         }
     </style>
 </head>
@@ -255,7 +301,7 @@
                     <div class="p-3 bg-navy-900 border border-gray-700 rounded-lg space-y-2">
                         <div class="flex items-center justify-between">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="weddingCheck" name="service" value="ሰርግ አጃቢ" onchange="toggleWeddingPackage()" class="accent-gold-500 w-4 h-4">
+                                <input type="checkbox" id="weddingCheck" name="service" value="ሰርግ አጃቢ" onchange="toggleWeddingPackage()" class="custom-checkbox">
                                 <span class="text-sm font-medium text-gold-300 font-bold">ሰርግ አጃቢ</span>
                             </label>
                             <span id="weddingDisplayPrice" class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">15,000 ETB</span>
@@ -274,7 +320,7 @@
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ልደት አጃቢ" data-price="7000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
+                            <input type="checkbox" name="service" value="ልደት አጃቢ" data-price="7000" onchange="calculateTotal()" class="custom-checkbox">
                             <span class="text-sm font-medium">ልደት አጃቢ</span>
                         </label>
                         <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">7,000 ETB</span>
@@ -282,7 +328,7 @@
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ክርስትና አጃቢ" data-price="7000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
+                            <input type="checkbox" name="service" value="ክርስትና አጃቢ" data-price="7000" onchange="calculateTotal()" class="custom-checkbox">
                             <span class="text-sm font-medium">ክርስትና አጃቢ</span>
                         </label>
                         <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">7,000 ETB</span>
@@ -290,7 +336,7 @@
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ሸምግልና ስነ-ስርዓት" data-price="6000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
+                            <input type="checkbox" name="service" value="ሸምግልና ስነ-ስርዓት" data-price="6000" onchange="calculateTotal()" class="custom-checkbox">
                             <span class="text-sm font-medium">ሸምግልና ስነ-ስርዓት</span>
                         </label>
                         <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">6,000 ETB</span>
@@ -298,7 +344,7 @@
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ምረቃ ፕሮግራም" data-price="8000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
+                            <input type="checkbox" name="service" value="ምረቃ ፕሮግራም" data-price="8000" onchange="calculateTotal()" class="custom-checkbox">
                             <span class="text-sm font-medium">ምረቃ ፕሮግራም</span>
                         </label>
                         <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">8,000 ETB</span>
@@ -306,7 +352,7 @@
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ሰርፕራይዝ ፕሮግራም" data-price="5000" onchange="calculateTotal()" class="accent-gold-500 w-4 h-4">
+                            <input type="checkbox" name="service" value="ሰርፕራይዝ ፕሮግራም" data-price="5000" onchange="calculateTotal()" class="custom-checkbox">
                             <span class="text-sm font-medium">ሰርፕራይዝ ፕሮግራም</span>
                         </label>
                         <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">5,000 ETB</span>
@@ -633,7 +679,6 @@
             toggleSigMode();
             checkUrlForContract();
             
-            // Set current signature dates automatically on load
             const todayStr = new Date().toLocaleDateString();
             if(!document.getElementById('clientSignDate').value) {
                 document.getElementById('clientSignDate').value = todayStr;
