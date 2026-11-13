@@ -78,7 +78,6 @@
             .print-grid-horizontal { display: flex !important; flex-direction: row !important; gap: 20px !important; width: 100% !important; }
             .print-col-half { flex: 1 !important; width: 50% !important; }
             
-            /* Print style for custom checkboxes */
             .custom-checkbox {
                 border: 1px solid #000 !important;
                 background-color: #fff !important;
@@ -97,6 +96,20 @@
     </style>
 </head>
 <body class="min-h-screen py-6 px-3 sm:px-6 lg:px-8">
+
+    <!-- Modern Custom Alert Modal -->
+    <div id="customAlertModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50 no-print">
+        <div class="bg-navy-800 border gold-border rounded-2xl max-w-sm w-full p-6 text-center card-shadow relative">
+            <div id="alertIconWrapper" class="w-14 h-14 bg-gold-500/20 text-gold-400 rounded-full flex items-center justify-center mx-auto mb-3 border border-gold-500">
+                <i id="alertIcon" class="fa-solid fa-circle-info text-2xl"></i>
+            </div>
+            <h3 id="alertTitle" class="text-lg font-bold gold-gradient-text mb-2">ማስታወሻ</h3>
+            <p id="alertMessage" class="text-gray-300 text-xs sm:text-sm mb-5 leading-relaxed">መልዕክት እዚህ ይገባል...</p>
+            <button type="button" onclick="closeCustomAlert()" class="w-full gold-gradient-bg text-navy-950 font-extrabold py-2.5 rounded-xl shadow-lg transition cursor-pointer text-xs">
+                እሺ (OK)
+            </button>
+        </div>
+    </div>
 
     <!-- Login Modal for Sabel Admin -->
     <div id="loginModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50 no-print">
@@ -595,6 +608,35 @@
 
     <!-- JavaScript Logic -->
     <script>
+        // Modern Custom Alert Function replacing native alert()
+        function showCustomAlert(message, title = "ማስታወሻ", type = "info") {
+            const modal = document.getElementById('customAlertModal');
+            const titleEl = document.getElementById('alertTitle');
+            const msgEl = document.getElementById('alertMessage');
+            const iconEl = document.getElementById('alertIcon');
+            const iconWrapper = document.getElementById('alertIconWrapper');
+
+            titleEl.innerText = title;
+            msgEl.innerText = message;
+
+            if (type === 'success') {
+                iconEl.className = "fa-solid fa-check text-2xl";
+                iconWrapper.className = "w-14 h-14 bg-green-500/20 text-green-400 rounded-full flex items-center justify-center mx-auto mb-3 border border-green-500";
+            } else if (type === 'error') {
+                iconEl.className = "fa-solid fa-triangle-exclamation text-2xl";
+                iconWrapper.className = "w-14 h-14 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center mx-auto mb-3 border border-red-500";
+            } else {
+                iconEl.className = "fa-solid fa-circle-info text-2xl";
+                iconWrapper.className = "w-14 h-14 bg-gold-500/20 text-gold-400 rounded-full flex items-center justify-center mx-auto mb-3 border border-gold-500";
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlertModal').classList.add('hidden');
+        }
+
         function toggleWeddingPackage() {
             const checkbox = document.getElementById('weddingCheck');
             const wrapper = document.getElementById('weddingPackageWrapper');
@@ -763,7 +805,7 @@
             for (let field of fields) {
                 const el = document.getElementById(field.id);
                 if (!el || !el.value.trim()) {
-                    alert(`እባክዎን "${field.name}" የሚለውን ባዶ ቦታ ይሙሉ!`);
+                    showCustomAlert(`እባክዎን "${field.name}" የሚለውን ባዶ ቦታ ይሙሉ!`, "ባዶ ቦታ", "error");
                     if (el) el.focus();
                     return false;
                 }
@@ -773,7 +815,7 @@
             const dateMatch = dateInput.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
 
             if (!dateMatch) {
-                alert("እባክዎን ቀኑን በኢትዮጵያ ካላንደር ትክክለኛ ቅርጸት ያስገቡ (ለምሳሌ፡ 20/03/2018 ዓ.ም)");
+                showCustomAlert("እባክዎን ቀኑን በኢትዮጵያ ካላንደር ትክክለኛ ቅርጸት ያስገቡ (ለምሳሌ፡ 20/03/2018 ዓ.ም)", "የቀን ስህተት", "error");
                 document.getElementById('eventDate').focus();
                 return false;
             }
@@ -782,13 +824,13 @@
             const month = parseInt(dateMatch[2], 10);
 
             if (day < 1 || day > 30) {
-                alert("የኢትዮጵያ ወር ቀናት ከ 1 እስከ 30 ብቻ ሊሆኑ ይችላሉ!");
+                showCustomAlert("የኢትዮጵያ ወር ቀናት ከ 1 እስከ 30 ብቻ ሊሆኑ ይችላሉ!", "የቀን ስህተት", "error");
                 document.getElementById('eventDate').focus();
                 return false;
             }
 
             if (month < 1 || month > 13) {
-                alert("የኢትዮጵያ ካላንደር ወር ከ 1 እስከ 13 ብቻ ነው!");
+                showCustomAlert("የኢትዮጵያ ካላንደር ወር ከ 1 እስከ 13 ብቻ ነው!", "የወር ስህተት", "error");
                 document.getElementById('eventDate').focus();
                 return false;
             }
@@ -796,7 +838,7 @@
             const phone = document.getElementById('clientPhone').value.trim();
             const phoneRegex = /^(09|07)\d{8}$/;
             if (!phoneRegex.test(phone)) {
-                alert("እባክዎን ትክክለኛ የኢትዮጵያ ስልክ ቁጥር ያስገቡ (በ 09 ወይም 07 የሚጀምር 10 አኃዝ)");
+                showCustomAlert("እባክዎን ትክክለኛ የኢትዮጵያ ስልክ ቁጥር ያስገቡ (በ 09 ወይም 07 የሚጀምር 10 አኃዝ)", "የስልክ ቁጥር ስህተት", "error");
                 document.getElementById('clientPhone').focus();
                 return false;
             }
@@ -823,11 +865,11 @@
 
             try {
                 await window.signInWithEmailAndPassword(window.auth, email, password);
-                alert("በተሳካ ሁኔታ ገብተዋል!");
+                showCustomAlert("በተሳካ ሁኔታ ገብተዋል!", "እንኳን ደህና መጡ", "success");
                 closeLoginModal();
                 showAdminDashboard();
             } catch (error) {
-                alert("ግባ ማለት አልተቻለም: ኢሜይል ወይም ፓስዎርድ ስህተት ነው። (" + error.message + ")");
+                showCustomAlert("ግባ ማለት አልተቻለም: ኢሜይል ወይም ፓስዎርድ ስህተት ነው።", "የመግቢያ ስህተት", "error");
             }
         }
 
@@ -937,7 +979,7 @@
             const fullEndTime = `${document.getElementById('endPeriod').value} ${document.getElementById('endTimeVal').value.trim()}`;
 
             if (!hasSignedClient) {
-                alert("እባክዎን በደንበኛው ፊርማ ሳጥን ውስጥ በመፈረም ውሉን ያረጋግጡ!");
+                showCustomAlert("እባክዎን በደንበኛው ፊርማ ሳጥን ውስጥ በመፈረም ውሉን ያረጋግጡ!", "ፊርማጎደለ", "error");
                 return;
             }
 
@@ -956,7 +998,7 @@
             });
 
             if (selectedServices.length === 0) {
-                alert("እባክዎን ቢያንስ አንድ የአገልግሎት ዓይነት ይምረጡ!");
+                showCustomAlert("እባክዎን ቢያንስ አንድ የአገልግሎት ዓይነት ይምረጡ!", "አገልግሎት አልተመረጠም", "error");
                 return;
             }
 
@@ -989,7 +1031,7 @@
                 document.getElementById('contractLinkInput').value = shareLink;
                 document.getElementById('linkModal').classList.remove('hidden');
             } catch (error) {
-                alert("መረጃውን ማስቀመጥ አልተቻለም: " + error.message);
+                showCustomAlert("መረጃውን ማስቀመጥ አልተቻለም: "  + error.message, "የስህተት ገጠመኝ", "error");
             }
         }
 
@@ -997,18 +1039,18 @@
             const input = document.getElementById('contractLinkInput');
             input.select();
             navigator.clipboard.writeText(input.value);
-            alert("ሊንኩ ተኮርጇል!");
+            showCustomAlert("ሊንኩ በተሳካ ሁኔታ ተኮርጇል!", "ተሳክቷል", "success");
         }
 
         async function sabelApproveContract() {
             if (!window.auth.currentUser) {
-                alert("እባክዎን መጀመሪያ 'አድሚን ግባ' የሚለውን በመጫን ይግቡ!");
+                showCustomAlert("እባክዎን መጀመሪያ 'አድሚን ግባ' የሚለውን በመጫን ይግቡ!", "ማረጋገጫ ያስፈልጋል", "error");
                 openLoginModal();
                 return;
             }
 
             if (!hasSignedSabel) {
-                alert("እባክዎን በሳቤል ሰብሳቢ ፊርማ ሳጥን ውስጥ ይፈረሙ!");
+                showCustomAlert("እባክዎን በሳቤል ሰብሳቢ ፊርማ ሳጥን ውስጥ ይፈረሙ!", "ፊርማ ጎደለ", "error");
                 return;
             }
 
@@ -1029,10 +1071,10 @@
                     status: "Fully Approved & Signed"
                 });
 
-                alert("ውሉ በሳቤል ሰብሳቢ ጸድቆ ተፈርሟል!");
+                showCustomAlert("ውሉ በሳቤል ሰብሳቢ ጸድቆ ተፈርሟል!", "ተሳክቷል", "success");
                 window.print();
             } catch (error) {
-                alert("ማጽደቅ አልተቻለም: " + error.message);
+                showCustomAlert("ማጽደቅ አልተቻለም: " + error.message, "የስህተት ገጠመኝ", "error");
             }
         }
 
