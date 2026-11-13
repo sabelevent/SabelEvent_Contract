@@ -118,8 +118,8 @@
                 <div class="w-14 h-14 bg-gold-500/20 text-gold-400 rounded-full flex items-center justify-center mx-auto mb-3 border border-gold-500">
                     <i class="fa-solid fa-lock text-2xl"></i>
                 </div>
-                <h3 class="text-xl font-bold gold-gradient-text"> Admin Login</h3>
-                <p class="text-gray-300 text-xs mt-1">የውል ዝርዝሮችን ለማየት እና ለማጽደቅ ይግቡ።</p>
+                <h3 class="text-xl font-bold gold-gradient-text">የሳቤል አድሚን መግቢያ (Login)</h3>
+                <p class="text-gray-300 text-xs mt-1">የውል ዝርዝሮችን በካርድ ለማየት እና ለማጽደቅ ይግቡ።</p>
             </div>
             
             <form id="loginForm" onsubmit="event.preventDefault(); handleAdminLogin();" class="space-y-4">
@@ -153,22 +153,29 @@
                 </div>
                 <div class="flex items-center gap-3">
                     <button type="button" onclick="loadAdminContracts()" class="bg-navy-700 text-gold-300 px-4 py-2 rounded-lg text-xs font-bold border border-gold-500/30 hover:bg-navy-600 cursor-pointer">
-                        <i class="fa-solid fa-rotate mr-1"></i> Refresh
+                        <i class="fa-solid fa-rotate mr-1"></i> አድስ (Refresh)
                     </button>
                     <button type="button" onclick="logoutAdmin()" class="bg-red-500/20 text-red-300 px-4 py-2 rounded-lg text-xs font-bold border border-red-500/30 hover:bg-red-500/30 cursor-pointer">
-                        <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+                        <i class="fa-solid fa-right-from-bracket mr-1"></i> ውጣ (Logout)
                     </button>
                 </div>
             </div>
 
-            <!-- Tabs Filter -->
-            <div class="flex gap-4 mt-6 mb-6">
-                <button type="button" onclick="switchAdminTab('pending')" id="tabPendingBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md cursor-pointer">
-                    Pending
-                </button>
-                <button type="button" onclick="switchAdminTab('approved')" id="tabApprovedBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700 cursor-pointer">
-                    Approved
-                </button>
+            <!-- Search and Filter Bar -->
+            <div class="flex flex-col sm:flex-row gap-4 mt-6 mb-6 justify-between items-center">
+                <div class="flex gap-4">
+                    <button type="button" onclick="switchAdminTab('pending')" id="tabPendingBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-gold-500 text-navy-950 shadow-md cursor-pointer">
+                        ገና ያልተፈረሙላቸው (Pending)
+                    </button>
+                    <button type="button" onclick="switchAdminTab('approved')" id="tabApprovedBtn" class="px-5 py-2 rounded-xl text-xs font-bold bg-navy-900 text-gray-300 border border-gray-700 cursor-pointer">
+                        ጸድቀው የተፈረሙ (Approved)
+                    </button>
+                </div>
+                <div class="w-full sm:w-72">
+                    በደንበኛ ስም ወይም ስልክ መፈለጊያ...
+                    <input type="text" id="adminSearchInput" oninput="renderAdminCards()" placeholder="🔍 ፈልግ..." 
+                        class="w-full bg-navy-900 border border-gray-700 rounded-xl px-3 py-2 text-white text-xs focus:outline-none focus:border-gold-500">
+                </div>
             </div>
 
             <!-- Cards Container -->
@@ -188,17 +195,25 @@
             </span>
             <div class="flex items-center gap-3">
                 <button type="button" onclick="backToDashboard()" id="backToDashBtn" style="display: none;" class="text-xs bg-navy-700 text-gold-300 px-2.5 py-1 rounded border border-gold-500/30 hover:bg-navy-600 cursor-pointer">
-                    <i class="fa-solid fa-arrow-left mr-1"></i> Dashboard 
+                    <i class="fa-solid fa-arrow-left mr-1"></i> ወደ ዳሽቦርድ ተመለስ
                 </button>
-                
+                <span id="workflowStatusBadge" class="bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded border border-amber-500/30 text-xs font-semibold">
+                    እየተሞላ ነው...
+                </span>
                 <button type="button" onclick="openLoginModal()" id="openLoginBtn" class="text-xs bg-gold-500/20 text-gold-300 px-2 py-1 rounded border border-gold-500/40 hover:bg-gold-500/30 cursor-pointer">
-                    <i class="fa-solid fa-right-to-bracket mr-1"></i> admin
+                    <i class="fa-solid fa-right-to-bracket mr-1"></i> አድሚን ግባ
                 </button>
             </div>
         </div>
 
         <!-- Header Logo & Title -->
         <div class="text-center mb-6 border-b gold-border pb-6 relative">
+            <div class="flex justify-between items-start mb-2 no-print">
+                <div class="bg-navy-900 border border-gold-500/30 px-3 py-1 rounded-lg text-xs text-gold-300 font-bold">
+                    የውል ቁጥር: <span id="displayContractId">SBL-2026-XXXX</span>
+                </div>
+            </div>
+
             <div class="flex justify-center mb-3">
                 <img src="sabel_logo.png" alt="ሳቤል EVENT Logo" class="w-32 h-32 sm:w-36 sm:h-36 object-contain rounded-full border-2 border-gold-500 shadow-xl bg-black print-logo">
             </div>
@@ -252,19 +267,19 @@
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 mb-1">ሁለተኛ ስልክ ቁጥር (አማራጭ)</label>
-                        <input type="tel" id="clientPhone2"  maxlength="10"
+                        <input type="tel" id="clientPhone2" placeholder="0922XXXXXX" maxlength="10"
                             class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 mb-1">የዝግጅቱ ቀን (የኢትዮጵያ ካላንደር) <span class="text-red-400">*</span></label>
-                        <input type="text" id="eventDate" required placeholder="ቀን/ወር/ዓ.ም"
+                        <input type="text" id="eventDate" required placeholder="ለምሳሌ፡ 20/03/2018 ዓ.ም"
                             class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
                     </div>
 
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 mb-1">የዝግጅቱ ቦታ / አድራሻ <span class="text-red-400">*</span></label>
-                        <input type="text" id="eventLocation" required placeholder="ለምሳሌ፡ አዲስ አበባ,መገናኛ(ህዳሴ ህንጻ) "
+                        <input type="text" id="eventLocation" required placeholder="ለምሳሌ፡ አዲስ አበባ (ሆቴል / አዳራሽ)"
                             class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition">
                     </div>
 
@@ -279,7 +294,7 @@
                                 <option value="ከምሽቱ">ከምሽቱ</option>
                                 <option value="ከሌሊቱ">ከሌሊቱ</option>
                             </select>
-                            <input type="text" id="startTimeVal" required placeholder="7:00 ሰዓት"
+                            <input type="text" id="startTimeVal" required placeholder="ለምሳሌ፡ 7:00 ሰዓት"
                                 class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition text-sm">
                         </div>
                     </div>
@@ -295,7 +310,7 @@
                                 <option value="ከምሽቱ" selected>ከምሽቱ</option>
                                 <option value="ከሌሊቱ">ከሌሊቱ</option>
                             </select>
-                            <input type="text" id="endTimeVal" required placeholder="11:30 ሰዓት"
+                            <input type="text" id="endTimeVal" required placeholder="ለምሳሌ፡ 11:30 ሰዓት"
                                 class="w-full bg-navy-900 border border-gray-700 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-gold-500 transition text-sm">
                         </div>
                     </div>
@@ -321,52 +336,52 @@
                         <div id="weddingPackageWrapper" class="hidden pt-2 border-t border-gray-800">
                             <label class="block text-[11px] text-gray-400 mb-1">የሰርግ ፓኬጅ ይምረጡ:</label>
                             <select id="weddingPackage" onchange="calculateTotal()" class="w-full bg-navy-950 border border-gold-500/40 rounded px-2 py-1.5 text-xs text-white focus:outline-none focus:border-gold-500">
-                                <option value="23000">ሙሉ ቀን 23000 ETB</option>
-                                <option value="27000">ከሌሊት - ማታ 27,000 ETB</option>
-                                <option value="25000">ከሌሊት - ግማሽ ቀን 25,000 ETB</option>
-                                <option value="23000">ግማሽ ቀን 23,000 ETB</option>
+                                <option value="15000">ሙሉ ቀን (15,000 ETB)</option>
+                                <option value="12000">ከሌሊት - ማታ (12,000 ETB)</option>
+                                <option value="10000">ከሌሊት - ግማሽ ቀን (10,000 ETB)</option>
+                                <option value="8000">ግማሽ ቀን (8,000 ETB)</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ልደት አጃቢ" data-price="20000" onchange="calculateTotal()" class="custom-checkbox">
+                            <input type="checkbox" name="service" value="ልደት አጃቢ" data-price="7000" onchange="calculateTotal()" class="custom-checkbox">
                             <span class="text-sm font-medium">ልደት አጃቢ</span>
                         </label>
-                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">20,000 ETB</span>
+                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">7,000 ETB</span>
                     </div>
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ክርስትና አጃቢ" data-price="20000" onchange="calculateTotal()" class="custom-checkbox">
+                            <input type="checkbox" name="service" value="ክርስትና አጃቢ" data-price="7000" onchange="calculateTotal()" class="custom-checkbox">
                             <span class="text-sm font-medium">ክርስትና አጃቢ</span>
                         </label>
-                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">20,000 ETB</span>
+                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">7,000 ETB</span>
                     </div>
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ሸምግልና ስነ-ስርዓት" data-price="20000" onchange="calculateTotal()" class="custom-checkbox">
+                            <input type="checkbox" name="service" value="ሸምግልና ስነ-ስርዓት" data-price="6000" onchange="calculateTotal()" class="custom-checkbox">
                             <span class="text-sm font-medium">ሸምግልና ስነ-ስርዓት</span>
                         </label>
-                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">20,000 ETB</span>
+                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">6,000 ETB</span>
                     </div>
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ምረቃ ፕሮግራም" data-price="18000" onchange="calculateTotal()" class="custom-checkbox">
+                            <input type="checkbox" name="service" value="ምረቃ ፕሮግራም" data-price="8000" onchange="calculateTotal()" class="custom-checkbox">
                             <span class="text-sm font-medium">ምረቃ ፕሮግራም</span>
                         </label>
-                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">18,000 ETB</span>
+                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">8,000 ETB</span>
                     </div>
 
                     <div class="flex items-center justify-between p-3 bg-navy-900 border border-gray-700 rounded-lg">
                         <label class="flex items-center gap-2 cursor-pointer">
-                            <input type="checkbox" name="service" value="ሰርፕራይዝ ፕሮግራም" data-price="18000" onchange="calculateTotal()" class="custom-checkbox">
+                            <input type="checkbox" name="service" value="ሰርፕራይዝ ፕሮግራም" data-price="5000" onchange="calculateTotal()" class="custom-checkbox">
                             <span class="text-sm font-medium">ሰርፕራይዝ ፕሮግራም</span>
                         </label>
-                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">18,000 ETB</span>
+                        <span class="text-xs text-gold-400 font-bold bg-navy-950 px-2.5 py-1 rounded border border-gold-500/30">5,000 ETB</span>
                     </div>
                 </div>
 
@@ -374,8 +389,8 @@
                     <i class="fa-solid fa-circle-exclamation text-amber-400 text-lg mt-0.5"></i>
                     <div class="text-xs sm:text-sm text-amber-200">
                         <strong class="font-bold text-amber-300">አስፈላጊ ማስታወሻ፡</strong> 
-                        ሳቤል EVENT የዝማሬ አገልግሎት ብቻ ይሰጣል። 
-                        <span class="underline font-bold text-gold-300">ድርጅታችን የዲኮር አገልግሎት እንደማይሰጥ</span> በውሉ እንገልጻለን።
+                        ሳቤል EVENT የዝግጅት ማስተባበር አገልግሎት ብቻ ይሰጣል። 
+                        <span class="underline font-bold text-gold-300">ድርጅታችን የዲኮር (የጌጣጌጥ) አገልግሎት እንደማይሰጥ</span> በውሉ እንገልጻለን።
                     </div>
                 </div>
             </div>
@@ -425,7 +440,7 @@
                 <div class="terms-box bg-navy-900/60 p-4 rounded-xl border border-gray-800 text-xs sm:text-sm text-gray-300 space-y-2.5 max-h-48 overflow-y-auto pr-2">
                     <p><strong>፩. ቅድመ ክፍያ፡</strong> ውሉ ህጋዊ የሚሆነው ቅድመ ክፍያ (Deposit) ሲፈጸም ነው።</p>
                     <p><strong>፪. የሰዓት አከባበር፡</strong> አገልግሎት ሰጪው በተስማሙበት ሰዓት ይገኛል፤ ደንበኛውም ዝግጅቱን በሰዓቱ ማስጀመር አለበት።</p>
-                    <p><strong>፫. የመጨረሻ ክፍያ፡</strong> ቀሪው ክፍያ ዝግጅቱ ከመጀመሩ 18 ሰዓት አስቀድሞ መፈጸም አለበት።</p>
+                    <p><strong>፫. የመጨረሻ ክፍያ፡</strong> ቀሪው ክፍያ ዝግጅቱ ከመጀመሩ 1 ሰዓት አስቀድሞ መፈጸም አለበት።</p>
                     <p><strong>፬. የማስተዋወቂያ መብት፡</strong> ሳቤል EVENT በዝግጅቱ ላይ የሚነሱ ፎቶ/ቪዲዮዎችን ለሶሻል ሚዲያ (@sabel_event) የመጠቀም መብት አለው።</p>
                     <p><strong>፭. የውል ስረዛ፡</strong> ውሉ ከተፈረመ በኋላ ደንበኛው ፕሮግራሙን ቢሰርዝ ቅድመ ክፍያው አይመለስም።</p>
                     <p><strong>፮. የአገልግሎት ወሰን፡</strong> የሙዚቃ እና ድምፅ ማስተባበር ብቻ ሲሆን ዲኮርን አይጨምርም።</p>
@@ -469,7 +484,7 @@
                             <!-- Text & Details -->
                             <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-2 pt-1">
                                 <div>የደንበኛው/ዋ ስም፡- <input type="text" id="clientNameInputDisplay" readonly class="bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36 font-bold" placeholder="ስም ይገባል..."></div>
-                                <div>ቀን ፡- <input type="text" id="clientSignDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36" placeholder="ለምሳሌ፡ 22/07/2018"></div>
+                                <div>ቀን (የተፈረመበት)፡- <input type="text" id="clientSignDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36" placeholder="ለምሳሌ፡ 22/07/2018"></div>
                                 <!-- Physical Signature Line -->
                                 <div id="physicalClientLine" class="hidden font-bold pt-1">
                                     ፊርማ፡- _________________________________
@@ -481,7 +496,7 @@
                         <div id="sabelSectionWrapper" class="space-y-3 bg-navy-950/50 p-3 rounded-lg border border-amber-500/30 relative print-col-half">
                             <div id="sabelLockOverlay" class="absolute inset-0 bg-navy-950/85 z-10 flex flex-col items-center justify-center text-center p-4 rounded-lg no-print">
                                 <i class="fa-solid fa-lock text-amber-400 text-2xl mb-1"></i>
-                                <p class="text-xs text-amber-200 font-semibold">ይህ የሳቤል ሰብሳቢ ፊርማ ሳጥን ነው።<span class="text-gold-300 underline cursor-pointer" onclick="openLoginModal()">"አድሚን ግባ"</span> የሚለውን ይጫኑ።</p>
+                                <p class="text-xs text-amber-200 font-semibold">ይህ የሳቤል ሰብሳቢ ፊርማ ሳጥን የተቆለፈ ነው። አድሚን ገብቶ ለማጽደቅ ከላይ ያለውን <span class="text-gold-300 underline cursor-pointer" onclick="openLoginModal()">"አድሚን ግባ"</span> የሚለውን ይጫኑ።</p>
                             </div>
 
                             <div class="flex justify-between items-center no-print">
@@ -499,10 +514,10 @@
                             <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-2 pt-1">
                                 <div class="flex items-center gap-1">
                                     <span>የሳቤል ሰብሳቢ ስም፡-</span>
-                                    <input type="text" id="sabelRepName" value="ህይወት ተስፋዬ" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36">
+                                    <input type="text" id="sabelRepName" value="ሳቤል EVENT ሰብሳቢ" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36">
                                 </div>
                                 <div class="flex items-center gap-1">
-                                    <span>ቀን ፡-</span>
+                                    <span>ቀን (የተፈረመበት)፡-</span>
                                     <input type="text" id="sabelRepDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36" placeholder="ለምሳሌ፡ 22/07/2018">
                                 </div>
                                 <!-- Physical Signature Line -->
@@ -516,7 +531,7 @@
 
                     <!-- Physical Notice -->
                     <div id="physicalSigNotice" class="hidden text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg no-print">
-                        <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም ስለተመረጠ፣ print አድርገው ይጠቀሙ ።
+                        <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም ስለተመረጠ፣ ዲጂታል ፊርማው ተደብቆ በወረቀት ላይ በእጅ ለመፈረም የሚያስችል መስመር ታይቷል።
                     </div>
                 </div>
             </div>
@@ -547,26 +562,38 @@
 
     </div>
 
-    <!-- Link Modal -->
+    <!-- Link Modal (With WhatsApp & Telegram Direct Share Buttons) -->
     <div id="linkModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-navy-800 border gold-border rounded-2xl max-w-md w-full p-6 text-center card-shadow relative">
             <div class="w-14 h-14 bg-gold-500/20 text-gold-400 rounded-full flex items-center justify-center mx-auto mb-3 border border-gold-500">
                 <i class="fa-solid fa-check text-2xl"></i>
             </div>
             <h3 class="text-xl font-bold gold-gradient-text mb-1">ውሉ ለሳቤል ተልኳል!</h3>
-            <p class="text-gray-300 text-xs mb-4">ይህንን ሊንክ ኮፒ አድርገው ለሳቤል ሰብሳቢ ይላኩለት።</p>
+            <p class="text-gray-300 text-xs mb-4">ይህንን ሊንክ ኮፒ አድርገው ወይም በቀጥታ በ WhatsApp/Telegram ይላኩ።</p>
+            
             <div class="bg-navy-900 p-2 rounded mb-4 flex items-center gap-2">
                 <input type="text" id="contractLinkInput" readonly class="w-full bg-navy-950 text-gold-300 text-xs px-2 py-1.5 rounded border border-gray-700">
                 <button type="button" onclick="copyLink()" class="gold-gradient-bg text-navy-950 text-xs px-3 py-1.5 rounded font-bold cursor-pointer">ኮፒ</button>
             </div>
-            <button type="button" onclick="document.getElementById('linkModal').classList.add('hidden')" class="bg-navy-700 text-white text-xs px-6 py-2 rounded cursor-pointer">ዝጋ</button>
+
+            <!-- Direct Social Share Buttons -->
+            <div class="grid grid-cols-2 gap-3 mb-4">
+                <a id="whatsappShareBtn" href="#" target="_blank" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition">
+                    <i class="fa-brands fa-whatsapp text-base"></i> በዋትስአፕ (WhatsApp)
+                </a>
+                <a id="telegramShareBtn" href="#" target="_blank" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition">
+                    <i class="fa-brands fa-telegram text-base"></i> በቴሌግራም (Telegram)
+                </a>
+            </div>
+
+            <button type="button" onclick="document.getElementById('linkModal').classList.add('hidden')" class="w-full bg-navy-700 text-white text-xs py-2 rounded-lg cursor-pointer">ዝጋ</button>
         </div>
     </div>
 
     <!-- Firebase SDKs -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, getDoc, updateDoc, deleteDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -591,6 +618,7 @@
         window.doc = doc;
         window.getDoc = getDoc;
         window.updateDoc = updateDoc;
+        window.deleteDoc = deleteDoc;
         window.getDocs = getDocs;
 
         onAuthStateChanged(auth, (user) => {
@@ -606,7 +634,13 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // Modern Custom Alert Function replacing native alert()
+        function generateAutoContractId() {
+            const randomNum = Math.floor(1000 + Math.random() * 9000);
+            const contractId = `SBL-2026-${randomNum}`;
+            document.getElementById('displayContractId').innerText = contractId;
+            return contractId;
+        }
+
         function showCustomAlert(message, title = "ማስታወሻ", type = "info") {
             const modal = document.getElementById('customAlertModal');
             const titleEl = document.getElementById('alertTitle');
@@ -660,6 +694,11 @@
         function calculateBalance() {
             const total = parseFloat(document.getElementById('totalPrice').value) || 0;
             const advance = parseFloat(document.getElementById('advancePayment').value) || 0;
+            if (advance > total) {
+                showCustomAlert("ቅድመ ክፍያው ከጠቅላላው ዋጋ ሊበልጥ አይችልም!", "የክፍያ ስህተት", "error");
+                document.getElementById('advancePayment').value = total;
+                return;
+            }
             document.getElementById('remainingBalance').innerText = `${Math.max(0, total - advance).toLocaleString()} ETB`;
         }
 
@@ -715,6 +754,7 @@
         window.addEventListener('load', () => {
             initCanvas(canvasClient, ctxClient);
             initCanvas(canvasSabel, ctxSabel);
+            generateAutoContractId();
             calculateTotal();
             toggleSigMode();
             checkUrlForContract();
@@ -924,10 +964,18 @@
             const container = document.getElementById('contractsCardsContainer');
             container.innerHTML = '';
 
+            const searchQuery = document.getElementById('adminSearchInput') ? document.getElementById('adminSearchInput').value.toLowerCase().trim() : '';
+
             const filtered = allContractsData.filter(item => {
                 const isApproved = item.status === "Fully Approved & Signed";
-                if (currentAdminTab === 'approved') return isApproved;
-                return !isApproved;
+                const matchesTab = (currentAdminTab === 'approved') ? isApproved : !isApproved;
+                
+                const matchesSearch = !searchQuery || 
+                    (item.clientName && item.clientName.toLowerCase().includes(searchQuery)) || 
+                    (item.clientPhone && item.clientPhone.includes(searchQuery)) ||
+                    (item.contractId && item.contractId.toLowerCase().includes(searchQuery));
+
+                return matchesTab && matchesSearch;
             });
 
             if (filtered.length === 0) {
@@ -945,9 +993,10 @@
                 card.innerHTML = `
                     <div>
                         <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-bold text-gold-300 text-sm">${item.clientName || 'ስም የሌለው'}</h3>
+                            <span class="text-gold-400 font-bold text-xs">${item.contractId || 'SBL-2026'}</span>
                             <span class="px-2 py-0.5 rounded border text-[10px] font-semibold ${badgeColor}">${badgeText}</span>
                         </div>
+                        <h3 class="font-bold text-white text-sm mb-1">${item.clientName || 'ስም የሌለው'}</h3>
                         <div class="text-xs text-gray-300 space-y-1">
                             <p><i class="fa-solid fa-phone mr-1 text-gold-400"></i> ስልክ: ${item.clientPhone || '-'}</p>
                             <p><i class="fa-solid fa-calendar mr-1 text-gold-400"></i> ቀን: ${item.eventDate || '-'}</p>
@@ -955,14 +1004,29 @@
                             <p><i class="fa-solid fa-money-bill mr-1 text-gold-400"></i> ጠቅላላ ዋጋ: <span class="text-gold-300 font-bold">${item.totalPrice || '0'} ETB</span></p>
                         </div>
                     </div>
-                    <div class="pt-3 border-t border-gray-800 flex justify-end gap-2">
+                    <div class="pt-3 border-t border-gray-800 flex justify-between items-center">
+                        <button type="button" onclick="deleteContract('${item.id}')" class="text-red-400 hover:text-red-300 text-xs cursor-pointer flex items-center gap-1">
+                            <i class="fa-solid fa-trash"></i> ሰርዝ
+                        </button>
                         <a href="${window.location.pathname}?id=${item.id}" class="gold-gradient-bg text-navy-950 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1">
-                            <i class="fa-solid fa-eye"></i> ውሉን ከፍተው ይመልከቱ
+                            <i class="fa-solid fa-eye"></i> ውሉን ይመልከቱ
                         </a>
                     </div>
                 `;
                 container.appendChild(card);
             });
+        }
+
+        async function deleteContract(id) {
+            if (confirm("ይህንን ውል በእርግጥ መሰረዝ ይፈልጋሉ?")) {
+                try {
+                    await window.deleteDoc(window.doc(window.db, "contracts", id));
+                    showCustomAlert("ውሉ በተሳካ ሁኔታ ተሰርዟል!", "ተሰርዟል", "success");
+                    await loadAdminContracts();
+                } catch (e) {
+                    showCustomAlert("መሰረዝ አልተቻለም: " + e.message, "የስህተት ገጠመኝ", "error");
+                }
+            }
         }
 
         async function saveContractToFirebase() {
@@ -972,12 +1036,13 @@
             const phone = document.getElementById('clientPhone').value.trim();
             const date = document.getElementById('eventDate').value.trim();
             const location = document.getElementById('eventLocation').value.trim();
+            const contractIdStr = document.getElementById('displayContractId').innerText;
             
             const fullStartTime = `${document.getElementById('startPeriod').value} ${document.getElementById('startTimeVal').value.trim()}`;
             const fullEndTime = `${document.getElementById('endPeriod').value} ${document.getElementById('endTimeVal').value.trim()}`;
 
             if (!hasSignedClient) {
-                showCustomAlert("እባክዎን በደንበኛው ፊርማ ሳጥን ውስጥ በመፈረም ውሉን ያረጋግጡ!", "ፊርማጎደለ", "error");
+                showCustomAlert("እባክዎን በደንበኛው ፊርማ ሳጥን ውስጥ በመፈረም ውሉን ያረጋግጡ!", "ፊርማ ጎደለ", "error");
                 return;
             }
 
@@ -1005,6 +1070,7 @@
 
             try {
                 const contractData = {
+                    contractId: contractIdStr,
                     clientName: name,
                     clientPhone: phone,
                     clientPhone2: document.getElementById('clientPhone2').value,
@@ -1027,6 +1093,12 @@
                 const docRef = await window.addDoc(window.collection(window.db, "contracts"), contractData);
                 const shareLink = `${window.location.origin}${window.location.pathname}?id=${docRef.id}`;
                 document.getElementById('contractLinkInput').value = shareLink;
+
+                // Setup WhatsApp and Telegram share links
+                const shareText = encodeURIComponent(`ሰላም! የሳቤል EVENT የውል ማረጋገጫ ሊንክ ከዚህ በታች ተያይዟል:\n${shareLink}`);
+                document.getElementById('whatsappShareBtn').href = `https://wa.me/?text=${shareText}`;
+                document.getElementById('telegramShareBtn').href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent("የሳቤል EVENT ውል ማረጋገጫ")}`;
+
                 document.getElementById('linkModal').classList.remove('hidden');
             } catch (error) {
                 showCustomAlert("መረጃውን ማስቀመጥ አልተቻለም: "  + error.message, "የስህተት ገጠመኝ", "error");
@@ -1088,6 +1160,11 @@
                         const docSnap = await window.getDoc(window.doc(window.db, "contracts", contractId));
                         if (docSnap.exists()) {
                             const data = docSnap.data();
+                            
+                            if (data.contractId) {
+                                document.getElementById('displayContractId').innerText = data.contractId;
+                            }
+
                             document.getElementById('clientName').value = data.clientName || '';
                             document.getElementById('clientNameInputDisplay').value = data.clientName || '';
                             document.getElementById('clientPhone').value = data.clientPhone || '';
