@@ -78,6 +78,9 @@
             .print-grid-horizontal { display: flex !important; flex-direction: row !important; gap: 20px !important; width: 100% !important; }
             .print-col-half { flex: 1 !important; width: 50% !important; }
             
+            body.physical-mode .no-print-textarea { display: none !important; }
+            body.physical-mode #physicalNotesLines { display: block !important; }
+
             .custom-checkbox {
                 border: 1px solid #000 !important;
                 background-color: #fff !important;
@@ -390,7 +393,14 @@
                         <i class="fa-solid fa-pen-to-square"></i> ተጨማሪ ፍላጎቶች / ልዩ ጥያቄዎች (አማራጭ)
                     </label>
                     <textarea id="customNeeds" rows="2" placeholder="እዚህ ላይ ተጨማሪ የሚፈልጉትን ነገር መጻፍ ይችላሉ..."
-                        class="w-full bg-navy-950 border border-gray-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-gold-500"></textarea>
+                        class="w-full bg-navy-950 border border-gray-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-gold-500 no-print-textarea"></textarea>
+                    
+                    <!-- 3 Horizontal Lines for Physical Print Mode -->
+                    <div id="physicalNotesLines" class="hidden space-y-4 mt-2 pt-2">
+                        <div class="border-b border-black h-4 w-full"></div>
+                        <div class="border-b border-black h-4 w-full"></div>
+                        <div class="border-b border-black h-4 w-full"></div>
+                    </div>
                 </div>
 
                 <div class="mt-4 bg-amber-950/40 border border-amber-500/40 rounded-xl p-3.5 flex items-start gap-3">
@@ -584,11 +594,10 @@
                 <button type="button" onclick="copyLink()" class="gold-gradient-bg text-navy-950 text-xs px-3 py-1.5 rounded font-bold cursor-pointer">ኮፒ</button>
             </div>
 
-            <!-- Direct Social Share Buttons -->
-   
-                
-                <a id="telegramShareBtn" href="#" target="_blank" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition">
-                    <i class="fa-brands fa-telegram text-base"></i> በቴሌግራም (Telegram)
+            <!-- Direct Telegram Share Button -->
+            <div class="mb-4">
+                <a id="telegramShareBtn" href="#" target="_blank" class="w-full bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition">
+                    <i class="fa-brands fa-telegram text-base"></i> በቴሌግራም (Telegram) ለሳቤል ላክ
                 </a>
             </div>
 
@@ -727,12 +736,14 @@
                 physicalClientLine.classList.remove('hidden');
                 physicalSabelLine.classList.remove('hidden');
                 saveDraftBtn.style.display = 'none';
+                document.body.classList.add('physical-mode');
             } else {
                 digitalElements.forEach(el => el.classList.remove('hidden'));
                 physicalNotice.classList.add('hidden');
                 physicalClientLine.classList.add('hidden');
                 physicalSabelLine.classList.add('hidden');
                 saveDraftBtn.style.display = 'flex';
+                document.body.classList.remove('physical-mode');
             }
         }
 
@@ -1102,9 +1113,8 @@
                 const shareLink = `${window.location.origin}${window.location.pathname}?id=${docRef.id}`;
                 document.getElementById('contractLinkInput').value = shareLink;
 
-                const shareText = encodeURIComponent(`ሰላም! የሳቤል EVENT የውል ማረጋገጫ ሊንክ ከዚህ በታች ተያይዟል:\n${shareLink}`);
-                document.getElementById('whatsappShareBtn').href = `https://wa.me/?text=${shareText}`;
-                document.getElementById('telegramShareBtn').href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${encodeURIComponent("የሳቤል EVENT ውል ማረጋገጫ")}`;
+                const shareText = encodeURIComponent(`ሰላም ሳቤል EVENT፣ አዲስ የውል ስምምነት ሞልቻለሁ።\nየውል ቁጥር: ${contractIdStr}\nስም: ${name}\nሊንክ: ${shareLink}`);
+                document.getElementById('telegramShareBtn').href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${shareText}`;
 
                 document.getElementById('linkModal').classList.remove('hidden');
             } catch (error) {
