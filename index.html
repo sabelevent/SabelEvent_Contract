@@ -79,7 +79,7 @@
             .print-col-half { flex: 1 !important; width: 50% !important; }
             
             body.physical-mode .no-print-textarea { display: none !important; }
-            body.physical-mode #physicalNotesLines { display: block !important; }
+            #physicalNotesLines { display: none !important; }
 
             .custom-checkbox {
                 border: 1px solid #000 !important;
@@ -393,14 +393,7 @@
                         <i class="fa-solid fa-pen-to-square"></i> ተጨማሪ ፍላጎቶች / ልዩ ጥያቄዎች (አማራጭ)
                     </label>
                     <textarea id="customNeeds" rows="2" placeholder="እዚህ ላይ ተጨማሪ የሚፈልጉትን ነገር መጻፍ ይችላሉ..."
-                        class="w-full bg-navy-950 border border-gray-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-gold-500 no-print-textarea"></textarea>
-                    
-                    <!-- 3 Horizontal Lines for Physical Print Mode -->
-                    <div id="physicalNotesLines" class="hidden space-y-4 mt-2 pt-2">
-                        <div class="border-b border-black h-4 w-full"></div>
-                        <div class="border-b border-black h-4 w-full"></div>
-                        <div class="border-b border-black h-4 w-full"></div>
-                    </div>
+                        class="w-full bg-navy-950 border border-gray-700 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-gold-500"></textarea>
                 </div>
 
                 <div class="mt-4 bg-amber-950/40 border border-amber-500/40 rounded-xl p-3.5 flex items-start gap-3">
@@ -490,7 +483,7 @@
                         <div class="space-y-3 bg-navy-950/50 p-3 rounded-lg border border-gray-800 print-col-half">
                             <div class="flex justify-between items-center no-print">
                                 <span class="text-xs text-gold-300 font-semibold"><i class="fa-solid fa-user mr-1"></i> የደንበኛ ፊርማ:</span>
-                                <button type="button" onclick="clearSignature('client')" class="text-xs text-red-400 underline no-print cursor-pointer digital-only">አጽዳ</button>
+                                <button type="button" onclick="clearSignature('client')" id="clearClientSigBtn" class="text-xs text-red-400 underline no-print cursor-pointer digital-only">አጽዳ</button>
                             </div>
                             
                             <!-- Digital Canvas View -->
@@ -503,10 +496,6 @@
                             <div class="text-xs sm:text-sm text-gray-200 print:text-black space-y-2 pt-1">
                                 <div>የደንበኛው/ዋ ስም፡- <input type="text" id="clientNameInputDisplay" readonly class="bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36 font-bold" placeholder="ስም ይገባል..."></div>
                                 <div>ቀን ፡- <input type="text" id="clientSignDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36" placeholder="ለምሳሌ፡ 22/07/2018"></div>
-                                <!-- Physical Signature Line -->
-                                <div id="physicalClientLine" class="hidden font-bold pt-1">
-                                    ፊርማ፡- _________________________________
-                                </div>
                             </div>
                         </div>
 
@@ -538,18 +527,9 @@
                                     <span>ቀን ፡-</span>
                                     <input type="text" id="sabelRepDate" class="bg-navy-900 print:bg-transparent border-b border-gray-600 px-1 py-0.5 text-xs text-white print:text-black focus:outline-none w-36" placeholder="ለምሳሌ፡ 22/07/2018">
                                 </div>
-                                <!-- Physical Signature Line -->
-                                <div id="physicalSabelLine" class="hidden font-bold pt-1">
-                                    ፊርማ፡- _________________________________
-                                </div>
                             </div>
                         </div>
 
-                    </div>
-
-                    <!-- Physical Notice -->
-                    <div id="physicalSigNotice" class="hidden text-xs text-amber-300 bg-amber-950/30 border border-amber-500/30 p-3 rounded-lg no-print">
-                        <i class="fa-solid fa-info-circle mr-1"></i> በአካል መፈረም ስለተመረጠ print አድርገው በአካል ይፈራረሙ።
                     </div>
                 </div>
             </div>
@@ -558,7 +538,7 @@
             <div class="no-print flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-800">
                 <button type="button" id="saveDraftBtn" onclick="saveContractToFirebase()" 
                     class="flex-1 gold-gradient-bg text-navy-950 font-extrabold py-3.5 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 hover:opacity-95 transition cursor-pointer">
-                    <i class="fa-solid fa-cloud-arrow-up text-lg"></i> ውሉን ለሳቤል ላክ (Customer Submit)
+                    <i class="fa-solid fa-cloud-arrow-up text-lg"></i> <span id="submitBtnText">ውሉን ለሳቤል ላክ (Customer Submit)</span>
                 </button>
 
                 <button type="button" id="sabelApproveBtn" onclick="sabelApproveContract()" style="display: none;"
@@ -568,7 +548,7 @@
 
                 <button type="button" id="printFinalBtn" onclick="faceToFacePrint()" 
                     class="flex-1 bg-navy-700 hover:bg-navy-600 text-white font-extrabold py-3.5 px-6 rounded-xl shadow-lg flex items-center justify-center gap-2 transition cursor-pointer">
-                    <i class="fa-solid fa-print text-lg"></i> በአካል ፕሪንት / PDF አድርግ (Print)
+                    <i class="fa-solid fa-print text-lg"></i> ውሉን ፕሪንት / PDF አድርግ (Print)
                 </button>
             </div>
 
@@ -594,10 +574,10 @@
                 <button type="button" onclick="copyLink()" class="gold-gradient-bg text-navy-950 text-xs px-3 py-1.5 rounded font-bold cursor-pointer">ኮፒ</button>
             </div>
 
-            <!-- Direct Telegram Share Button -->
+            <!-- Direct Telegram Share Button to @emge13 -->
             <div class="mb-4">
                 <a id="telegramShareBtn" href="#" target="_blank" class="w-full bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2.5 px-3 rounded-xl flex items-center justify-center gap-2 transition">
-                    <i class="fa-brands fa-telegram text-base"></i> በቴሌግራም (Telegram) ለሳቤል ላክ
+                    <i class="fa-brands fa-telegram text-base"></i> በቴሌግራም (@emge13) ለሳቤል ላክ
                 </a>
             </div>
 
@@ -725,23 +705,14 @@
         function toggleSigMode() {
             const sigType = document.querySelector('input[name="sigType"]:checked').value;
             const digitalElements = document.querySelectorAll('.digital-only');
-            const physicalNotice = document.getElementById('physicalSigNotice');
-            const physicalClientLine = document.getElementById('physicalClientLine');
-            const physicalSabelLine = document.getElementById('physicalSabelLine');
             const saveDraftBtn = document.getElementById('saveDraftBtn');
 
             if (sigType === 'physical') {
                 digitalElements.forEach(el => el.classList.add('hidden'));
-                physicalNotice.classList.remove('hidden');
-                physicalClientLine.classList.remove('hidden');
-                physicalSabelLine.classList.remove('hidden');
                 saveDraftBtn.style.display = 'none';
                 document.body.classList.add('physical-mode');
             } else {
                 digitalElements.forEach(el => el.classList.remove('hidden'));
-                physicalNotice.classList.add('hidden');
-                physicalClientLine.classList.add('hidden');
-                physicalSabelLine.classList.add('hidden');
                 saveDraftBtn.style.display = 'flex';
                 document.body.classList.remove('physical-mode');
             }
@@ -871,21 +842,6 @@
 
             if (!dateMatch) {
                 showCustomAlert("እባክዎን ቀኑን በኢትዮጵያ ካላንደር ትክክለኛ ቅርጸት ያስገቡ (ለምሳሌ፡ 20/03/2018 ዓ.ም)", "የቀን ስህተት", "error");
-                document.getElementById('eventDate').focus();
-                return false;
-            }
-
-            const day = parseInt(dateMatch[1], 10);
-            const month = parseInt(dateMatch[2], 10);
-
-            if (day < 1 || day > 30) {
-                showCustomAlert("የኢትዮጵያ ወር ቀናት ከ 1 እስከ 30 ብቻ ሊሆኑ ይችላሉ!", "የቀን ስህተት", "error");
-                document.getElementById('eventDate').focus();
-                return false;
-            }
-
-            if (month < 1 || month > 13) {
-                showCustomAlert("የኢትዮጵያ ካላንደር ወር ከ 1 እስከ 13 ብቻ ነው!", "የወር ስህተት", "error");
                 document.getElementById('eventDate').focus();
                 return false;
             }
@@ -1086,6 +1042,9 @@
             const clientSig = canvasClient.toDataURL();
             const clientSignDateVal = document.getElementById('clientSignDate').value.trim();
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const existingId = urlParams.get('id');
+
             try {
                 const contractData = {
                     contractId: contractIdStr,
@@ -1109,12 +1068,23 @@
                     createdAt: new Date().toISOString()
                 };
 
-                const docRef = await window.addDoc(window.collection(window.db, "contracts"), contractData);
-                const shareLink = `${window.location.origin}${window.location.pathname}?id=${docRef.id}`;
+                let targetId = existingId;
+                if (existingId) {
+                    // Update existing contract if not approved yet
+                    const docRef = window.doc(window.db, "contracts", existingId);
+                    await window.updateDoc(docRef, contractData);
+                    showCustomAlert("ውሉ በተሳካ ሁኔታ ተሻሽሏል (Updated)!", "ተሳክቷል", "success");
+                } else {
+                    // Create new contract
+                    const docRef = await window.addDoc(window.collection(window.db, "contracts"), contractData);
+                    targetId = docRef.id;
+                }
+
+                const shareLink = `${window.location.origin}${window.location.pathname}?id=${targetId}`;
                 document.getElementById('contractLinkInput').value = shareLink;
 
-                const shareText = encodeURIComponent(`ሰላም ሳቤል EVENT፣ አዲስ የውል ስምምነት ሞልቻለሁ።\nየውል ቁጥር: ${contractIdStr}\nስም: ${name}\nሊንክ: ${shareLink}`);
-                document.getElementById('telegramShareBtn').href = `https://t.me/share/url?url=${encodeURIComponent(shareLink)}&text=${shareText}`;
+                const shareText = encodeURIComponent(`ሰላም ሳቤል EVENT (@emge13)፥ አዲስ የውል ስምምነት ሞልቻለሁ/አስተካክያለሁ።\nየውል ቁጥር: ${contractIdStr}\nስም: ${name}\nሊንክ: ${shareLink}`);
+                document.getElementById('telegramShareBtn').href = `https://t.me/emge13?text=${shareText}`;
 
                 document.getElementById('linkModal').classList.remove('hidden');
             } catch (error) {
@@ -1159,7 +1129,9 @@
                 });
 
                 showCustomAlert("ውሉ በሳቤል ሰብሳቢ ጸድቆ ተፈርሟል!", "ተሳክቷል", "success");
-                window.print();
+                setTimeout(() => {
+                    window.print();
+                }, 1000);
             } catch (error) {
                 showCustomAlert("ማጽደቅ አልተቻለም: " + error.message, "የስህተት ገጠመኝ", "error");
             }
@@ -1267,11 +1239,27 @@
                                 document.getElementById('sabelRepDate').value = data.sabelRepDate;
                             }
 
-                            document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-shield text-gold-400 mr-1"></i> [የሳቤል ሰብሳቢ ማረጋገጫ ገጽ]`;
-                            document.getElementById('workflowStatusBadge').className = "bg-green-500/20 text-green-300 px-2.5 py-1 rounded border border-green-500/30 text-xs font-semibold";
-                            document.getElementById('workflowStatusBadge').innerText = data.status;
+                            const isFullyApproved = data.status === "Fully Approved & Signed";
 
-                            document.getElementById('saveDraftBtn').style.display = 'none';
+                            if (isFullyApproved) {
+                                document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-circle-check text-green-400 mr-1"></i> [ውሉ ጸድቆ ተፈርሟል - ሊቀየር አይችልም]`;
+                                document.getElementById('workflowStatusBadge').className = "bg-green-500/20 text-green-300 px-2.5 py-1 rounded border border-green-500/30 text-xs font-semibold";
+                                document.getElementById('workflowStatusBadge').innerText = data.status;
+
+                                // Lock form inputs so client cannot edit after approval
+                                document.querySelectorAll('#contractForm input, #contractForm select, #contractForm textarea').forEach(el => {
+                                    el.disabled = true;
+                                });
+                                document.getElementById('clearClientSigBtn').style.display = 'none';
+                                document.getElementById('saveDraftBtn').style.display = 'none';
+                            } else {
+                                document.getElementById('modeBannerText').innerHTML = `<i class="fa-solid fa-user-pen text-gold-400 mr-1"></i> [የውል ማሻሻያ/ኤዲት ገጽ]`;
+                                document.getElementById('workflowStatusBadge').className = "bg-amber-500/20 text-amber-300 px-2.5 py-1 rounded border border-amber-500/30 text-xs font-semibold";
+                                document.getElementById('workflowStatusBadge').innerText = data.status || "Waiting for Sabel Approval";
+
+                                document.getElementById('submitBtnText').innerText = "ውሉን አስተካክሎ ማዘመን (Update Contract)";
+                            }
+
                             document.getElementById('backToDashBtn').style.display = 'inline-block';
                             
                             if (window.auth.currentUser) {
